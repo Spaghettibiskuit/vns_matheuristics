@@ -5,8 +5,6 @@ from time import time
 from gurobipy import GRB
 
 from model_wrappers.assignment_fixer import AssignmentFixer
-
-# from model_wrappers.assignment_and_group_size_fixer import AssignmentAndGroupSizeFixer
 from model_wrappers.local_brancher import LocalBrancher
 from model_wrappers.thin_wrappers import GurobiDuck, Initializer
 from modeling.configuration import Configuration
@@ -64,6 +62,7 @@ class VariableNeighborhoodSearch:
         shake_patience: float | int = 6,
         min_optimization_patience: int | float = 6,
         step_optimization_patience: int | float = 6,
+        required_initial_solutions: int = 5,
         drop_branching_constrs_before_shake: bool = False,
     ):
         max_num_assignment_changes = self.config.number_of_students * 2
@@ -72,7 +71,9 @@ class VariableNeighborhoodSearch:
             round(percentage / 100 * max_num_assignment_changes) for percentage in percentages
         )
 
-        initial_model = Initializer(config=self.config, derived=self.derived)
+        initial_model = Initializer(
+            config=self.config, derived=self.derived, required_sol_count=required_initial_solutions
+        )
         start_time = initial_model.start_time
 
         k_cur = k_min - k_step  # lets shake begin at k_min even if no better sol found during VND
@@ -158,10 +159,11 @@ class VariableNeighborhoodSearch:
         min_shake_perc: int = 10,
         step_shake_perc: int = 10,
         max_shake_perc: int = 80,
-        initial_patience: int | float = 6,
-        shake_patience: int | float = 20,
-        min_optimization_patience: int | float = 3,
-        step_optimization_patience: int | float = 3,
+        initial_patience: int | float = 9,
+        shake_patience: int | float = 9,
+        min_optimization_patience: int | float = 6,
+        step_optimization_patience: int | float = 6,
+        required_initial_solutions: int = 5,
     ):
         min_shake, step_shake, max_shake = (
             round(percentage / 100 * self.config.number_of_students)
@@ -170,7 +172,7 @@ class VariableNeighborhoodSearch:
 
         k = min_shake - step_shake
 
-        initial_model = Initializer(self.config, self.derived)
+        initial_model = Initializer(self.config, self.derived, required_initial_solutions)
         start_time = initial_model.start_time
 
         initial_model.set_time_limit(total_time_limit, start_time)
@@ -285,5 +287,5 @@ class VariableNeighborhoodSearch:
 
 if __name__ == "__main__":
     random.seed(0)
-    vns = VariableNeighborhoodSearch(30, 300, 0)
-    vns.local_branching(total_time_limit=60)
+    vns = VariableNeighborhoodSearch(100, 1000, 0)
+    vns.assignment_fixing(total_time_limit=10_000)

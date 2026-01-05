@@ -4,7 +4,7 @@ import time
 import gurobipy
 
 from modeling.model_components import ModelComponents
-from solving_utilities.callbacks import PatienceShake, PatienceVND
+from solving_utilities.callbacks import Patience
 from solving_utilities.solution_reminder import SolutionReminder
 from utilities import Stations, gurobi_round
 
@@ -49,15 +49,16 @@ class ModelWrapper(abc.ABC):
     def set_time_limit(self, total_time_limit: int | float, start_time: float):
         self.model.Params.TimeLimit = max(0, total_time_limit - (time.time() - start_time))
 
-    def optimize(self, patience: int | float, shake: bool = False):
-        cb_class = PatienceShake if shake else PatienceVND
-        callback = cb_class(
+    def optimize(self, patience: int | float, required_sol_count: int = 0, shake: bool = False):
+        callback = Patience(
             patience=patience,
             start_time=self.start_time,
             best_obj=max(
                 self.best_found_solution.objective_value, self.current_solution.objective_value
             ),
             solution_summaries=self.solution_summaries,
+            station=Stations.SHAKE if shake else Stations.VND,
+            required_sol_count=required_sol_count,
         )
         self.model.optimize(callback)
         if self.solution_count > 0 and self.objective_value > callback.best_obj:

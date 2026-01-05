@@ -5,17 +5,16 @@ from modeling.base_model_builder import BaseModelBuilder
 from modeling.configuration import Configuration
 from modeling.derived_modeling_data import DerivedModelingData
 from solving_utilities.assignment_fixing_data import AssignmentFixingData
-from solving_utilities.callbacks import (
-    GurobiAloneProgressTracker,
-    InitialOptimizationTracker,
-)
+from solving_utilities.callbacks import GurobiAloneProgressTracker, Patience
 from solving_utilities.solution_reminder import SolutionReminder
 from utilities import Stations, gurobi_round, var_values
 
 
 class Initializer:
 
-    def __init__(self, config: Configuration, derived: DerivedModelingData):
+    def __init__(
+        self, config: Configuration, derived: DerivedModelingData, required_sol_count: int
+    ):
         self.config = config
         self.derived = derived
         self.model_components, self.model = BaseModelBuilder(
@@ -23,12 +22,19 @@ class Initializer:
         ).get_base_model()
         self.start_time = time()
         self.solution_summaries: list[dict[str, int | float | str]] = []
+        self.required_sol_count = required_sol_count
 
     def set_time_limit(self, total_time_limit: int | float, start_time: float):
         self.model.Params.TimeLimit = max(0, total_time_limit - (time() - start_time))
 
     def optimize(self, patience: int | float):
-        callback = InitialOptimizationTracker(patience, self.solution_summaries, self.start_time)
+        callback = Patience(
+            patience=patience,
+            solution_summaries=self.solution_summaries,
+            start_time=self.start_time,
+            station=Stations.INITIAL_OPTIMIZATION,
+            required_sol_count=self.required_sol_count,
+        )
         self.model.optimize(callback)
         if (obj := gurobi_round(self.model.ObjVal)) > callback.best_obj:
             summary: dict[str, int | float | str] = {

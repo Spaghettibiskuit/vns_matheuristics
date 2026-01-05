@@ -24,7 +24,7 @@ class PatienceShake:
         self.best_obj = best_obj
         self.solution_summaries = solution_summaries
 
-    def __call__(self, model: gurobipy.Model, where: int):  # intenum oder typedef z.B gurobidef
+    def __call__(self, model: gurobipy.Model, where: int):
         if where == GRB.Callback.MIPSOL:
             self.reference_time = time()
             _update_callback_class_state(self, model, Stations.SHAKE)
@@ -107,6 +107,54 @@ class InitialOptimizationTracker:
             return
 
         elif time() - self.reference_time > self.patience:
+            model.terminate()
+
+
+class Patience:
+    def __init__(
+        self,
+        patience: float | int,
+        start_time: float,
+        solution_summaries: list[dict[str, int | float | str]],
+        station: Stations,
+        best_obj: int = -GRB.MAXINT,
+        required_sol_count: int = 0,
+    ):
+        self.reference_time: float | None = None
+        self.patience = patience
+        self.start_time = start_time
+        self.solution_summaries = solution_summaries
+        self.station = station
+        self.best_obj = best_obj
+        self.required_sol_count = required_sol_count
+        self.sol_count = 0
+
+    def __call__(self, model: gurobipy.Model, where: int):
+        if not self.reference_time:
+            if where == GRB.Callback.MESSAGE and model.cbGet(GRB.Callback.MSG_STRING).startswith(
+                "    Nodes"
+            ):
+                self.reference_time = time()
+
+        elif where == GRB.Callback.MIPSOL:
+            self.reference_time = time()
+            current_objective = gurobi_round(model.cbGet(GRB.Callback.MIPSOL_OBJ))
+
+            if current_objective > self.best_obj:
+                self.best_obj = current_objective
+                summary: dict[str, int | float | str] = {
+                    "objective": current_objective,
+                    "runtime": self.reference_time - self.start_time,
+                    "station": self.station,
+                }
+                self.solution_summaries.append(summary)
+
+            self.sol_count += 1
+
+        elif (
+            self.sol_count >= self.required_sol_count
+            and time() - self.reference_time > self.patience
+        ):
             model.terminate()
 
 
