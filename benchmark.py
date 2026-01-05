@@ -25,10 +25,10 @@ class LocalBranchingParameters:
     l_min_perc: int | float = 10
     l_step_perc: int | float = 10
     l_max_perc: int | float = 40
-    initial_patience: float | int = 4
-    shake_patience: float | int = 4
-    min_optimization_patience: int | float = 2
-    step_optimization_patience: int | float = 2
+    initial_patience: float | int = 6
+    shake_patience: float | int = 6
+    min_optimization_patience: int | float = 6
+    step_optimization_patience: int | float = 6
     drop_branching_constrs_before_shake: bool = False
 
 
@@ -42,10 +42,10 @@ class VariableFixingParamters:
     min_shake_perc: int = 10
     step_shake_perc: int = 10
     max_shake_perc: int = 80
-    initial_patience: int | float = 4
-    shake_patience: int | float = 4
-    min_optimization_patience: int | float = 2
-    step_optimization_patience: int | float = 2
+    initial_patience: int | float = 6
+    shake_patience: int | float = 6
+    min_optimization_patience: int | float = 3
+    step_optimization_patience: int | float = 3
 
 
 @dataclasses.dataclass
@@ -77,14 +77,14 @@ def benchmark_instance_local_branching(
     instance: tuple[int, int, int], parameters: LocalBranchingParameters
 ) -> list[dict[str, int | float | str]]:
     vns = VariableNeighborhoodSearch(*instance)
-    return vns.run_vns_with_lb(**dataclasses.asdict(parameters))
+    return vns.local_branching(**dataclasses.asdict(parameters))
 
 
 def benchmark_instance_variable_fixing(
     instance: tuple[int, int, int], parameters: VariableFixingParamters
 ) -> list[dict[str, int | float | str]]:
     vns = VariableNeighborhoodSearch(*instance)
-    return vns.run_vns_with_var_fixing(**dataclasses.asdict(parameters))
+    return vns.assignment_fixing(**dataclasses.asdict(parameters))
 
 
 def benchmark(
@@ -148,12 +148,12 @@ def benchmark(
 
 if __name__ == "__main__":
     benchmark(
-        name="20_60s_5",
-        run_gurobi=False,
-        run_local_branching=False,
+        name="30_720s",
+        run_gurobi=True,
+        run_local_branching=True,
         run_variable_fixing=True,
-        instances=[(i * 10, i * 100, j) for i in range(2, 3) for j in range(3)],
-        # gurobi_alone_parameters=GurobiAloneParameters(time_limit=300),
-        # local_branching_parameters=LocalBranchingParameters(total_time_limit=300),
-        # variable_fixing_paramters=VariableFixingParamters(total_time_limit=60),
+        instances=[(i * 10, i * 100, j) for i in range(10, 11) for j in range(3)],
+        gurobi_alone_parameters=GurobiAloneParameters(time_limit=720),
+        local_branching_parameters=LocalBranchingParameters(total_time_limit=720),
+        variable_fixing_paramters=VariableFixingParamters(total_time_limit=720),
     )

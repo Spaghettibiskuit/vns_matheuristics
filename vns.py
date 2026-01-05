@@ -4,8 +4,10 @@ from time import time
 
 from gurobipy import GRB
 
+from model_wrappers.assignment_fixer import AssignmentFixer
+
+# from model_wrappers.assignment_and_group_size_fixer import AssignmentAndGroupSizeFixer
 from model_wrappers.local_brancher import LocalBrancher
-from model_wrappers.only_assignment_fixer import OnlyAssignmentFixer
 from model_wrappers.thin_wrappers import (
     AssignmentFixerInitializer,
     GurobiDuck,
@@ -53,19 +55,19 @@ class VariableNeighborhoodSearch:
         self._post_processing(start_time)
         return model.solution_summaries
 
-    def run_vns_with_lb(
+    def local_branching(
         self,
         total_time_limit: int | float = 60,
         k_min_perc: int | float = 10,
         k_step_perc: int | float = 10,
         k_max_perc: int | float = 80,
-        l_min_perc: int | float = 10,
-        l_step_perc: int | float = 10,
+        l_min_perc: int | float = 5,
+        l_step_perc: int | float = 5,
         l_max_perc: int | float = 40,
         initial_patience: float | int = 6,
         shake_patience: float | int = 6,
-        min_optimization_patience: int | float = 3,
-        step_optimization_patience: int | float = 3,
+        min_optimization_patience: int | float = 6,
+        step_optimization_patience: int | float = 6,
         drop_branching_constrs_before_shake: bool = False,
     ):
         max_num_assignment_changes = self.config.number_of_students * 2
@@ -150,20 +152,20 @@ class VariableNeighborhoodSearch:
         self._post_processing(start_time)
         return model.solution_summaries
 
-    def run_vns_with_var_fixing(
+    def assignment_fixing(
         self,
         total_time_limit: int | float = 60,
         min_num_zones: int = 4,
-        step_num_zones: int = 1,
-        max_num_zones: int = 6,
+        step_num_zones: int = 2,
+        max_num_zones: int = 8,
         max_iterations_per_num_zones: int = 20,
         min_shake_perc: int = 10,
         step_shake_perc: int = 10,
         max_shake_perc: int = 80,
         initial_patience: int | float = 6,
-        shake_patience: int | float = 6,
-        min_optimization_patience: int | float = 2,
-        step_optimization_patience: int | float = 2,
+        shake_patience: int | float = 20,
+        min_optimization_patience: int | float = 3,
+        step_optimization_patience: int | float = 3,
     ):
         min_shake, step_shake, max_shake = (
             round(percentage / 100 * self.config.number_of_students)
@@ -178,7 +180,7 @@ class VariableNeighborhoodSearch:
         initial_model.set_time_limit(total_time_limit, start_time)
         initial_model.optimize(initial_patience)
 
-        model = OnlyAssignmentFixer.get(initial_model)
+        model = AssignmentFixer.get(initial_model)
 
         while not self._time_over(start_time, total_time_limit):
             current_num_zones = max_num_zones
@@ -207,9 +209,7 @@ class VariableNeighborhoodSearch:
                     continue
 
                 iterations_current_num_zones += 1
-                # before = time()
                 model.fix_rest(*free_zones_pair, current_num_zones)
-                # after = time()
                 model.set_time_limit(total_time_limit, start_time)
                 model.optimize(patience)
 
@@ -290,4 +290,4 @@ class VariableNeighborhoodSearch:
 if __name__ == "__main__":
     random.seed(0)
     vns = VariableNeighborhoodSearch(30, 300, 0)
-    vns.run_vns_with_var_fixing(total_time_limit=1800)
+    vns.assignment_fixing(total_time_limit=600)

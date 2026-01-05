@@ -1,16 +1,17 @@
 """A class that contains a model which it reduces according to VNS rules."""
 
-import abc
 import functools
 import random
 
 import gurobipy
 
 from model_wrappers.model_wrapper import ModelWrapper
+from model_wrappers.thin_wrappers import AssignmentFixerInitializer
 from modeling.configuration import Configuration
 from modeling.derived_modeling_data import DerivedModelingData
 from modeling.model_components import ModelComponents
 from solving_utilities.assignment_fixing_data import AssignmentFixingData
+from solving_utilities.group_shifter import GroupShifter
 from solving_utilities.solution_reminders import SolutionReminderAssignmentFixing
 from solving_utilities.variable_access import GurobiVariableAccess
 from utilities import var_values
@@ -92,9 +93,60 @@ class AssignmentFixer(ModelWrapper):
             assignments[:start_a] + assignments[end_a:start_b] + assignments[end_b:],
         )
 
-    @abc.abstractmethod
+    def _separate_groups(
+        self,
+        free_assignments: list[tuple[int, int, int]],
+        fixed_assignments: list[tuple[int, int, int]],
+    ) -> tuple[set[tuple[int, int]], set[tuple[int, int]]]:
+        groups_of_free = set(
+            (project_id, group_id)
+            for project_id, group_id, _ in free_assignments
+            if project_id != -1  # Must be real group
+        )
+        groups_of_fixed = set(
+            (project_id, group_id)
+            for project_id, group_id, _ in fixed_assignments
+            if project_id != -1
+        )
+        return groups_of_free.difference(groups_of_fixed), groups_of_fixed
+
     def fix_rest(self, zone_a: int, zone_b: int, num_zones: int):
-        pass
+        line_up_assignments = self.current_sol_fixing_data.line_up_assignments
+        free_assignments, fixed_assignments = self._separate_assignments(
+            zone_a, zone_b, num_zones, line_up_assignments
+        )
+        groups_only_free, groups_mixed = self._separate_groups(free_assignments, fixed_assignments)
+        if groups_only_free:
+            group_shifter = GroupShifter(
+                groups_only_free=groups_only_free,
+                groups_mixed=groups_mixed,
+                line_up_assignments=self.current_sol_fixing_data.line_up_assignments,
+                project_group_student_triples=self.derived.project_group_student_triples,
+                assign_students_var_values=self.current_solution.assign_students_var_values,
+            )
+            line_up_assignments = group_shifter.adjusted_line_up_assignments
+            start_values = group_shifter.adjusted_start_values
+            free_assignments, fixed_assignments = self._separate_assignments(
+                zone_a, zone_b, num_zones, line_up_assignments
+            )
+            assignments = set(free_assignments + fixed_assignments)
+        else:
+            start_values = self.current_solution.assign_students_var_values
+            assignments = self.current_sol_fixing_data.assignments
+
+        self.model.setAttr("Start", self.variable_access.assign_students, start_values)
+
+        free_student_ids = set(student_id for _, _, student_id in free_assignments)
+        upper_bounds = [
+            (
+                1
+                if student_id in free_student_ids
+                or (project_id, group_id, student_id) in assignments
+                else 0
+            )
+            for project_id, group_id, student_id in self.derived.project_group_student_triples
+        ]
+        self.model.setAttr("UB", self.variable_access.assign_students, upper_bounds)
 
     def increment_random_seed(self):
         self.model.Params.Seed += 1
@@ -135,3 +187,16 @@ class AssignmentFixer(ModelWrapper):
     def free_all_unassigned_vars(self):
         variables = list(self.model_components.variables.unassigned_students.values())
         self.model.setAttr("UB", variables, [1] * len(variables))
+
+    @classmethod
+    def get(cls, initializer: AssignmentFixerInitializer):
+        return cls(
+            config=initializer.config,
+            derived=initializer.derived,
+            model_components=initializer.model_components,
+            model=initializer.model,
+            sol_reminder=initializer.current_solution,
+            fixing_data=initializer.fixing_data,
+            start_time=initializer.start_time,
+            solution_summaries=initializer.solution_summaries,
+        )

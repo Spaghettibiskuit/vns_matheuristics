@@ -1,7 +1,6 @@
 """A class that contains a model which it reduces according to VNS rules."""
 
 from model_wrappers.assignment_fixer import AssignmentFixer
-from model_wrappers.thin_wrappers import AssignmentFixerInitializer
 from solving_utilities.group_shifter import GroupShifter
 
 
@@ -62,16 +61,3 @@ class OnlyAssignmentFixer(AssignmentFixer):
             for project_id, group_id, student_id in self.derived.project_group_student_triples
         ]
         self.model.setAttr("UB", self.variable_access.assign_students, upper_bounds)
-
-    @classmethod
-    def get(cls, initializer: AssignmentFixerInitializer):
-        return cls(
-            config=initializer.config,
-            derived=initializer.derived,
-            model_components=initializer.model_components,
-            model=initializer.model,
-            sol_reminder=initializer.current_solution,
-            fixing_data=initializer.fixing_data,
-            start_time=initializer.start_time,
-            solution_summaries=initializer.solution_summaries,
-        )

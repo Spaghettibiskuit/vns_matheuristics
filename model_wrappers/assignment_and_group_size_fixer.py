@@ -8,10 +8,6 @@ from model_wrappers.assignment_fixer import AssignmentFixer
 class AssignmentAndGroupSizeFixer(AssignmentFixer):
 
     @functools.cached_property
-    def _len_project_group_pairs_zeros(self) -> list[float]:
-        return [0.0] * len(self.derived.project_group_pairs)
-
-    @functools.cached_property
     def _len_project_group_pairs_undefineds(self) -> list[float]:
         return [GRB.UNDEFINED] * len(self.derived.project_group_pairs)
 
@@ -26,19 +22,14 @@ class AssignmentAndGroupSizeFixer(AssignmentFixer):
                 self.current_solution.group_size_deficit_var_values,
             ),
         ]:
-            for attribute, values in ["LB", "UB"]:
-                self.model.setAttr(attribute, grb_vars, values)
+            self.model.setAttr("UB", grb_vars, values)
 
     def release_group_size(self):
         for grb_vars in [
             self.variable_access.group_size_surplus,
             self.variable_access.group_size_deficit,
         ]:
-            for attribute, boundary_vals in [
-                ("LB", self._len_project_group_pairs_zeros),
-                ("UB", self._len_project_group_pairs_undefineds),
-            ]:
-                self.model.setAttr(attribute, grb_vars, boundary_vals)
+            self.model.setAttr("UB", grb_vars, self._len_project_group_pairs_undefineds)
 
     def fix_rest(self, zone_a: int, zone_b: int, num_zones: int):
         line_up_assignments = self.current_sol_fixing_data.line_up_assignments
