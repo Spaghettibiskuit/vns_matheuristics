@@ -5,7 +5,7 @@ import gurobipy
 
 from modeling.model_components import ModelComponents
 from solving_utilities.callbacks import PatienceShake, PatienceVND
-from solving_utilities.solution_reminders import SolutionReminderBase
+from solving_utilities.solution_reminder import SolutionReminder
 from utilities import Stations, gurobi_round
 
 
@@ -17,7 +17,7 @@ class ModelWrapper(abc.ABC):
         model: gurobipy.Model,
         start_time: float,
         solution_summaries: list[dict[str, int | float | str]],
-        sol_reminder: SolutionReminderBase,
+        sol_reminder: SolutionReminder,
     ):
         self.model_components = model_components
         self.model = model
@@ -25,6 +25,7 @@ class ModelWrapper(abc.ABC):
         self.solution_summaries = solution_summaries
         self.current_solution = sol_reminder
         self.best_found_solution = sol_reminder
+        self.assign_students_vars = tuple(self.model_components.variables.assign_students.values())
 
     @property
     def status(self) -> int:
@@ -32,8 +33,7 @@ class ModelWrapper(abc.ABC):
 
     @property
     def bound(self) -> int:
-        bound = self.model.ObjBound
-        return int(min(bound, gurobipy.GRB.MAXINT) + 1e-4)
+        return int(min(self.model.ObjBound, gurobipy.GRB.MAXINT) + 1e-4)
 
     @property
     def objective_value(self) -> int:
@@ -78,10 +78,11 @@ class ModelWrapper(abc.ABC):
         return self.objective_value > self.current_solution.objective_value
 
     def recover_to_best_found(self):
-        variables = self.model.getVars()
-        variable_values = self.best_found_solution.variable_values
-        self.model.setAttr("LB", variables, variable_values)
-        self.model.setAttr("UB", variables, variable_values)
+
+        assignment_var_values = self.best_found_solution.assign_students_var_values
+        self.model.setAttr("LB", self.assign_students_vars, assignment_var_values)
+        self.model.setAttr("UB", self.assign_students_vars, assignment_var_values)
+
         self.eliminate_time_limit()
         self.model.optimize()
 

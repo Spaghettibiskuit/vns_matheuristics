@@ -9,14 +9,11 @@ from solving_utilities.callbacks import (
     GurobiAloneProgressTracker,
     InitialOptimizationTracker,
 )
-from solving_utilities.solution_reminders import (
-    SolutionReminderAssignmentFixing,
-    SolutionReminderBranching,
-)
+from solving_utilities.solution_reminder import SolutionReminder
 from utilities import Stations, gurobi_round, var_values
 
 
-class ThinWrapper:
+class Initializer:
 
     def __init__(self, config: Configuration, derived: DerivedModelingData):
         self.config = config
@@ -41,8 +38,14 @@ class ThinWrapper:
             }
             self.solution_summaries.append(summary)
 
+    @functools.cached_property
+    def current_solution(self) -> SolutionReminder:
+        variables = self.model_components.variables
+        return SolutionReminder(
+            objective_value=gurobi_round(self.model.ObjVal),
+            assign_students_var_values=var_values(variables.assign_students.values()),
+        )
 
-class AssignmentFixerInitializer(ThinWrapper):
     @functools.cached_property
     def fixing_data(self) -> AssignmentFixingData:
         return AssignmentFixingData.get(
@@ -51,28 +54,6 @@ class AssignmentFixerInitializer(ThinWrapper):
             variables=self.model_components.variables,
             lin_expressions=self.model_components.lin_expressions,
             model=self.model,
-        )
-
-    @functools.cached_property
-    def current_solution(self) -> SolutionReminderAssignmentFixing:
-        variables = self.model_components.variables
-        return SolutionReminderAssignmentFixing(
-            variable_values=var_values(self.model.getVars()),
-            objective_value=gurobi_round(self.model.ObjVal),
-            assign_students_var_values=var_values(variables.assign_students.values()),
-            group_size_surplus_var_values=var_values(variables.group_size_surplus.values()),
-            group_size_deficit_var_values=var_values(variables.group_size_deficit.values()),
-        )
-
-
-class LocalBrancherInitializer(ThinWrapper):
-    @functools.cached_property
-    def current_solution(self):
-        variables = self.model_components.variables
-        return SolutionReminderBranching(
-            variable_values=var_values(self.model.getVars()),
-            objective_value=gurobi_round(self.model.ObjVal),
-            assign_students_var_values=var_values(list(variables.assign_students.values())),
         )
 
 

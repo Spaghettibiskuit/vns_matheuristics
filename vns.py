@@ -8,11 +8,7 @@ from model_wrappers.assignment_fixer import AssignmentFixer
 
 # from model_wrappers.assignment_and_group_size_fixer import AssignmentAndGroupSizeFixer
 from model_wrappers.local_brancher import LocalBrancher
-from model_wrappers.thin_wrappers import (
-    AssignmentFixerInitializer,
-    GurobiDuck,
-    LocalBrancherInitializer,
-)
+from model_wrappers.thin_wrappers import GurobiDuck, Initializer
 from modeling.configuration import Configuration
 from modeling.derived_modeling_data import DerivedModelingData
 from solution import Solution
@@ -76,7 +72,7 @@ class VariableNeighborhoodSearch:
             round(percentage / 100 * max_num_assignment_changes) for percentage in percentages
         )
 
-        initial_model = LocalBrancherInitializer(config=self.config, derived=self.derived)
+        initial_model = Initializer(config=self.config, derived=self.derived)
         start_time = initial_model.start_time
 
         k_cur = k_min - k_step  # lets shake begin at k_min even if no better sol found during VND
@@ -174,7 +170,7 @@ class VariableNeighborhoodSearch:
 
         k = min_shake - step_shake
 
-        initial_model = AssignmentFixerInitializer(self.config, self.derived)
+        initial_model = Initializer(self.config, self.derived)
         start_time = initial_model.start_time
 
         initial_model.set_time_limit(total_time_limit, start_time)
@@ -290,4 +286,4 @@ class VariableNeighborhoodSearch:
 if __name__ == "__main__":
     random.seed(0)
     vns = VariableNeighborhoodSearch(30, 300, 0)
-    vns.assignment_fixing(total_time_limit=600)
+    vns.local_branching(total_time_limit=60)

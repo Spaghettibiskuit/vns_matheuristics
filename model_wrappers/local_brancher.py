@@ -5,9 +5,9 @@ import itertools
 import gurobipy
 
 from model_wrappers.model_wrapper import ModelWrapper
-from model_wrappers.thin_wrappers import LocalBrancherInitializer
+from model_wrappers.thin_wrappers import Initializer
 from modeling.model_components import ModelComponents
-from solving_utilities.solution_reminders import SolutionReminderBranching
+from solving_utilities.solution_reminder import SolutionReminder
 from utilities import var_values
 
 
@@ -20,7 +20,7 @@ class LocalBrancher(ModelWrapper):
         model: gurobipy.Model,
         start_time: float,
         solution_summaries: list[dict[str, int | float | str]],
-        sol_reminder: SolutionReminderBranching,
+        sol_reminder: SolutionReminder,
     ):
         super().__init__(
             model_components=model_components,
@@ -29,17 +29,13 @@ class LocalBrancher(ModelWrapper):
             solution_summaries=solution_summaries,
             sol_reminder=sol_reminder,
         )
-        variables = self.model_components.variables
-        self.assign_students_vars = list(variables.assign_students.values())
+
         self.branching_constraints: list[gurobipy.Constr] = []
         self.counter = itertools.count()
         self.shake_constraints: tuple[gurobipy.Constr, gurobipy.Constr] | None = None
-        self.current_solution: SolutionReminderBranching
-        self.best_found_solution: SolutionReminderBranching
 
     def store_solution(self):
-        self.current_solution = SolutionReminderBranching(
-            variable_values=var_values(self.model.getVars()),
+        self.current_solution = SolutionReminder(
             objective_value=self.objective_value,
             assign_students_var_values=var_values(self.assign_students_vars),
         )
@@ -101,7 +97,7 @@ class LocalBrancher(ModelWrapper):
     @classmethod
     def get(
         cls,
-        initializer: LocalBrancherInitializer,
+        initializer: Initializer,
     ):
         return cls(
             model_components=initializer.model_components,

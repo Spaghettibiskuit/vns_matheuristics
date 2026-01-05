@@ -6,14 +6,13 @@ import random
 import gurobipy
 
 from model_wrappers.model_wrapper import ModelWrapper
-from model_wrappers.thin_wrappers import AssignmentFixerInitializer
+from model_wrappers.thin_wrappers import Initializer
 from modeling.configuration import Configuration
 from modeling.derived_modeling_data import DerivedModelingData
 from modeling.model_components import ModelComponents
 from solving_utilities.assignment_fixing_data import AssignmentFixingData
 from solving_utilities.group_shifter import GroupShifter
-from solving_utilities.solution_reminders import SolutionReminderAssignmentFixing
-from solving_utilities.variable_access import GurobiVariableAccess
+from solving_utilities.solution_reminder import SolutionReminder
 from utilities import var_values
 
 
@@ -28,7 +27,7 @@ class AssignmentFixer(ModelWrapper):
         solution_summaries: list[dict[str, int | float | str]],
         config: Configuration,
         derived: DerivedModelingData,
-        sol_reminder: SolutionReminderAssignmentFixing,
+        sol_reminder: SolutionReminder,
         fixing_data: AssignmentFixingData,
     ):
         super().__init__(model_components, model, start_time, solution_summaries, sol_reminder)
@@ -36,17 +35,11 @@ class AssignmentFixer(ModelWrapper):
         self.derived = derived
         self.current_sol_fixing_data = fixing_data
         self.best_sol_fixing_data = fixing_data
-        self.variable_access = GurobiVariableAccess.get(self.model_components.variables)
-        self.current_solution: SolutionReminderAssignmentFixing
-        self.best_found_solution: SolutionReminderAssignmentFixing
 
     def store_solution(self):
-        self.current_solution = SolutionReminderAssignmentFixing(
-            variable_values=var_values(self.model.getVars()),
+        self.current_solution = SolutionReminder(
             objective_value=self.objective_value,
-            assign_students_var_values=var_values(self.variable_access.assign_students),
-            group_size_surplus_var_values=var_values(self.variable_access.group_size_surplus),
-            group_size_deficit_var_values=var_values(self.variable_access.group_size_deficit),
+            assign_students_var_values=var_values(self.assign_students_vars),
         )
         self.current_sol_fixing_data = AssignmentFixingData.get(
             config=self.config,
@@ -134,7 +127,7 @@ class AssignmentFixer(ModelWrapper):
             start_values = self.current_solution.assign_students_var_values
             assignments = self.current_sol_fixing_data.assignments
 
-        self.model.setAttr("Start", self.variable_access.assign_students, start_values)
+        self.model.setAttr("Start", self.assign_students_vars, start_values)
 
         free_student_ids = set(student_id for _, _, student_id in free_assignments)
         upper_bounds = [
@@ -146,7 +139,7 @@ class AssignmentFixer(ModelWrapper):
             )
             for project_id, group_id, student_id in self.derived.project_group_student_triples
         ]
-        self.model.setAttr("UB", self.variable_access.assign_students, upper_bounds)
+        self.model.setAttr("UB", self.assign_students_vars, upper_bounds)
 
     def increment_random_seed(self):
         self.model.Params.Seed += 1
@@ -158,8 +151,8 @@ class AssignmentFixer(ModelWrapper):
 
         self.model.setAttr(
             "UB",
-            self.variable_access.assign_students,
-            [1] * len(self.variable_access.assign_students),
+            self.assign_students_vars,
+            [1] * len(self.assign_students_vars),
         )
 
         worst_k = self.current_sol_fixing_data.line_up_assignments[:k]
@@ -182,14 +175,14 @@ class AssignmentFixer(ModelWrapper):
             )
         ]
 
-        self.model.setAttr("Start", self.variable_access.assign_students, start_values)
+        self.model.setAttr("Start", self.assign_students_vars, start_values)
 
     def free_all_unassigned_vars(self):
         variables = list(self.model_components.variables.unassigned_students.values())
         self.model.setAttr("UB", variables, [1] * len(variables))
 
     @classmethod
-    def get(cls, initializer: AssignmentFixerInitializer):
+    def get(cls, initializer: Initializer):
         return cls(
             config=initializer.config,
             derived=initializer.derived,
