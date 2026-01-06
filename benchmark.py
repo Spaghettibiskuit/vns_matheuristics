@@ -36,16 +36,17 @@ class LocalBranchingParameters:
 class VariableFixingParamters:
     total_time_limit: int | float = 60
     min_num_zones: int = 4
-    step_num_zones: int = 1
-    max_num_zones: int = 6
+    step_num_zones: int = 2
+    max_num_zones: int = 8
     max_iterations_per_num_zones: int = 20
     min_shake_perc: int = 10
     step_shake_perc: int = 10
     max_shake_perc: int = 80
-    initial_patience: int | float = 6
-    shake_patience: int | float = 6
-    min_optimization_patience: int | float = 3
-    step_optimization_patience: int | float = 3
+    initial_patience: int | float = 10
+    shake_patience: int | float = 10
+    min_optimization_patience: int | float = 10
+    step_optimization_patience: int | float = 10
+    required_initial_solutions: int = 5
 
 
 @dataclasses.dataclass
@@ -148,12 +149,12 @@ def benchmark(
 
 if __name__ == "__main__":
     benchmark(
-        name="30_720s",
+        name="100_0_to_2_1h",
         run_gurobi=True,
-        run_local_branching=True,
+        run_local_branching=False,
         run_variable_fixing=True,
         instances=[(i * 10, i * 100, j) for i in range(10, 11) for j in range(3)],
-        gurobi_alone_parameters=GurobiAloneParameters(time_limit=720),
-        local_branching_parameters=LocalBranchingParameters(total_time_limit=720),
-        variable_fixing_paramters=VariableFixingParamters(total_time_limit=720),
+        gurobi_alone_parameters=GurobiAloneParameters(time_limit=3_600),
+        # local_branching_parameters=LocalBranchingParameters(total_time_limit=720),
+        variable_fixing_paramters=VariableFixingParamters(total_time_limit=3_600),
     )

@@ -13,6 +13,7 @@ from solution import Solution
 from solution_processing.solution_checker import SolutionChecker
 from solution_processing.solution_info_retriever import SolutionInformationRetriever
 from solution_processing.solution_viewer import SolutionViewer
+from solving_utilities.patience_manager import PatienceManager
 
 
 class VariableNeighborhoodSearch:
@@ -55,11 +56,11 @@ class VariableNeighborhoodSearch:
         k_min_perc: int | float = 10,
         k_step_perc: int | float = 10,
         k_max_perc: int | float = 80,
-        l_min_perc: int | float = 5,
-        l_step_perc: int | float = 5,
+        l_min_perc: int | float = 2,
+        l_step_perc: int | float = 2,
         l_max_perc: int | float = 40,
-        initial_patience: float | int = 6,
-        shake_patience: float | int = 6,
+        initial_patience: float | int = 9,
+        shake_patience: float | int = 9,
         min_optimization_patience: int | float = 6,
         step_optimization_patience: int | float = 6,
         required_initial_solutions: int = 5,
@@ -153,16 +154,15 @@ class VariableNeighborhoodSearch:
         self,
         total_time_limit: int | float = 60,
         min_num_zones: int = 4,
-        step_num_zones: int = 2,
-        max_num_zones: int = 8,
+        max_num_zones: int = 6,
         max_iterations_per_num_zones: int = 20,
         min_shake_perc: int = 10,
         step_shake_perc: int = 10,
         max_shake_perc: int = 80,
-        initial_patience: int | float = 9,
-        shake_patience: int | float = 9,
-        min_optimization_patience: int | float = 6,
-        step_optimization_patience: int | float = 6,
+        initial_patience: int | float = 3,
+        shake_patience: int | float = 3,
+        min_optimization_patience: int | float = 2,
+        base_patience_adjustment_rate: float = 0.2,
         required_initial_solutions: int = 5,
     ):
         min_shake, step_shake, max_shake = (
@@ -179,6 +179,13 @@ class VariableNeighborhoodSearch:
         initial_model.optimize(initial_patience)
 
         model = AssignmentFixer.get(initial_model)
+        patience_manager = PatienceManager(
+            model.model,
+            min_num_zones,
+            max_num_zones,
+            min_optimization_patience,
+            base_patience_adjustment_rate,
+        )
 
         while not self._time_over(start_time, total_time_limit):
             current_num_zones = max_num_zones
@@ -187,48 +194,56 @@ class VariableNeighborhoodSearch:
             free_zones_pairs = itertools.combinations(range(current_num_zones), 2)
             new_pairs = False
 
-            patience = min_optimization_patience
-
             while not self._time_over(start_time, total_time_limit):
                 if new_pairs:
                     free_zones_pairs = itertools.combinations(range(current_num_zones), 2)
                     new_pairs = False
                     iterations_current_num_zones = 0
+                    patience_manager.clear_gap_vals()
 
                 if (
                     iterations_current_num_zones > max_iterations_per_num_zones
                     or (free_zones_pair := next(free_zones_pairs, None)) is None
                 ):
+                    patience_manager.adjust_patience(current_num_zones)
                     if current_num_zones == min_num_zones:
                         break
                     new_pairs = True
-                    current_num_zones = max(current_num_zones - step_num_zones, min_num_zones)
-                    patience += step_optimization_patience
+                    current_num_zones = max(current_num_zones - 1, min_num_zones)
                     continue
 
                 iterations_current_num_zones += 1
                 model.fix_rest(*free_zones_pair, current_num_zones)
                 model.set_time_limit(total_time_limit, start_time)
+                patience = patience_manager.patience(current_num_zones)
+                print(
+                    f"\nCURRENT NUM ZONES:{current_num_zones}, PAIR: {free_zones_pair}, PATIENCE: {patience}\n"
+                )
                 model.optimize(patience)
+                patience_manager.record_gap()
 
                 if model.solution_count == 0:
                     break
 
                 if model.improvement_found():
+                    if model.new_best_found():
+                        patience_manager.num_unsuccessful_cycles = 0
                     model.store_solution()
                     new_pairs = True
                     current_num_zones = max_num_zones
-                    patience = min_optimization_patience
 
             if model.new_best_found():
                 model.make_current_solution_best_solution()
                 k = min_shake
+                patience_manager.num_unsuccessful_cycles = 0
             elif k == max_shake:
                 k = min_shake
                 model.increment_random_seed()
                 model.delete_zoning_rules()
+                patience_manager.num_unsuccessful_cycles += 1
             else:
                 k = min(k + step_shake, max_shake)
+                patience_manager.num_unsuccessful_cycles += 1
 
             model.make_best_solution_current_solution()
 
@@ -287,5 +302,5 @@ class VariableNeighborhoodSearch:
 
 if __name__ == "__main__":
     random.seed(0)
-    vns = VariableNeighborhoodSearch(100, 1000, 0)
+    vns = VariableNeighborhoodSearch(30, 300, 0)
     vns.assignment_fixing(total_time_limit=10_000)

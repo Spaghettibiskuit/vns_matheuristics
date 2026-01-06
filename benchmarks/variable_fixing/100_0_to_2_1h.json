@@ -1,0 +1,4155 @@
+{
+    "100_1000_0": [
+        {
+            "objective": 2604,
+            "runtime": 52.49141478538513,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 2612,
+            "runtime": 53.81154727935791,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 2781,
+            "runtime": 61.67490363121033,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 2889,
+            "runtime": 62.8983850479126,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 3002,
+            "runtime": 70.92847537994385,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 3051,
+            "runtime": 89.66401624679565,
+            "station": "vnd"
+        },
+        {
+            "objective": 3059,
+            "runtime": 89.6836199760437,
+            "station": "vnd"
+        },
+        {
+            "objective": 3063,
+            "runtime": 89.73724293708801,
+            "station": "vnd"
+        },
+        {
+            "objective": 3075,
+            "runtime": 89.8090488910675,
+            "station": "vnd"
+        },
+        {
+            "objective": 3077,
+            "runtime": 89.8817868232727,
+            "station": "vnd"
+        },
+        {
+            "objective": 3081,
+            "runtime": 90.46150875091553,
+            "station": "vnd"
+        },
+        {
+            "objective": 3090,
+            "runtime": 91.50395369529724,
+            "station": "vnd"
+        },
+        {
+            "objective": 3141,
+            "runtime": 92.59046983718872,
+            "station": "vnd"
+        },
+        {
+            "objective": 3143,
+            "runtime": 94.53705906867981,
+            "station": "vnd"
+        },
+        {
+            "objective": 3144,
+            "runtime": 95.01803302764893,
+            "station": "vnd"
+        },
+        {
+            "objective": 3146,
+            "runtime": 95.0334005355835,
+            "station": "vnd"
+        },
+        {
+            "objective": 3168,
+            "runtime": 95.25093412399292,
+            "station": "vnd"
+        },
+        {
+            "objective": 3171,
+            "runtime": 95.88950896263123,
+            "station": "vnd"
+        },
+        {
+            "objective": 3172,
+            "runtime": 96.84051752090454,
+            "station": "vnd"
+        },
+        {
+            "objective": 3181,
+            "runtime": 99.77450227737427,
+            "station": "vnd"
+        },
+        {
+            "objective": 3208,
+            "runtime": 99.78373074531555,
+            "station": "vnd"
+        },
+        {
+            "objective": 3212,
+            "runtime": 99.79398798942566,
+            "station": "vnd"
+        },
+        {
+            "objective": 3218,
+            "runtime": 99.80775666236877,
+            "station": "vnd"
+        },
+        {
+            "objective": 3220,
+            "runtime": 120.86486339569092,
+            "station": "vnd"
+        },
+        {
+            "objective": 3252,
+            "runtime": 121.28559875488281,
+            "station": "vnd"
+        },
+        {
+            "objective": 3253,
+            "runtime": 122.31404519081116,
+            "station": "vnd"
+        },
+        {
+            "objective": 3260,
+            "runtime": 122.76717972755432,
+            "station": "vnd"
+        },
+        {
+            "objective": 3262,
+            "runtime": 125.9898316860199,
+            "station": "vnd"
+        },
+        {
+            "objective": 3264,
+            "runtime": 125.99908590316772,
+            "station": "vnd"
+        },
+        {
+            "objective": 3280,
+            "runtime": 126.00764679908752,
+            "station": "vnd"
+        },
+        {
+            "objective": 3284,
+            "runtime": 130.20673179626465,
+            "station": "vnd"
+        },
+        {
+            "objective": 3286,
+            "runtime": 130.49479746818542,
+            "station": "vnd"
+        },
+        {
+            "objective": 3288,
+            "runtime": 131.28047037124634,
+            "station": "vnd"
+        },
+        {
+            "objective": 3290,
+            "runtime": 132.17915964126587,
+            "station": "vnd"
+        },
+        {
+            "objective": 3292,
+            "runtime": 132.99096393585205,
+            "station": "vnd"
+        },
+        {
+            "objective": 3293,
+            "runtime": 136.34627723693848,
+            "station": "vnd"
+        },
+        {
+            "objective": 3305,
+            "runtime": 141.36015129089355,
+            "station": "vnd"
+        },
+        {
+            "objective": 3306,
+            "runtime": 143.90109062194824,
+            "station": "vnd"
+        },
+        {
+            "objective": 3315,
+            "runtime": 144.9232804775238,
+            "station": "vnd"
+        },
+        {
+            "objective": 3317,
+            "runtime": 145.6049199104309,
+            "station": "vnd"
+        },
+        {
+            "objective": 3319,
+            "runtime": 148.3339855670929,
+            "station": "vnd"
+        },
+        {
+            "objective": 3320,
+            "runtime": 153.58343410491943,
+            "station": "vnd"
+        },
+        {
+            "objective": 3325,
+            "runtime": 172.66072130203247,
+            "station": "vnd"
+        },
+        {
+            "objective": 3341,
+            "runtime": 172.79086089134216,
+            "station": "vnd"
+        },
+        {
+            "objective": 3349,
+            "runtime": 172.93042850494385,
+            "station": "vnd"
+        },
+        {
+            "objective": 3350,
+            "runtime": 173.67367339134216,
+            "station": "vnd"
+        },
+        {
+            "objective": 3378,
+            "runtime": 175.82158970832825,
+            "station": "vnd"
+        },
+        {
+            "objective": 3380,
+            "runtime": 178.2498071193695,
+            "station": "vnd"
+        },
+        {
+            "objective": 3390,
+            "runtime": 178.2619924545288,
+            "station": "vnd"
+        },
+        {
+            "objective": 3392,
+            "runtime": 180.182608127594,
+            "station": "vnd"
+        },
+        {
+            "objective": 3394,
+            "runtime": 180.3562490940094,
+            "station": "vnd"
+        },
+        {
+            "objective": 3396,
+            "runtime": 180.54991054534912,
+            "station": "vnd"
+        },
+        {
+            "objective": 3398,
+            "runtime": 180.84160804748535,
+            "station": "vnd"
+        },
+        {
+            "objective": 3400,
+            "runtime": 180.85804271697998,
+            "station": "vnd"
+        },
+        {
+            "objective": 3402,
+            "runtime": 181.07811617851257,
+            "station": "vnd"
+        },
+        {
+            "objective": 3412,
+            "runtime": 188.25516724586487,
+            "station": "vnd"
+        },
+        {
+            "objective": 3416,
+            "runtime": 195.02898907661438,
+            "station": "vnd"
+        },
+        {
+            "objective": 3431,
+            "runtime": 195.31472063064575,
+            "station": "vnd"
+        },
+        {
+            "objective": 3432,
+            "runtime": 195.7285897731781,
+            "station": "vnd"
+        },
+        {
+            "objective": 3434,
+            "runtime": 198.4791078567505,
+            "station": "vnd"
+        },
+        {
+            "objective": 3435,
+            "runtime": 199.30272126197815,
+            "station": "vnd"
+        },
+        {
+            "objective": 3436,
+            "runtime": 199.63857531547546,
+            "station": "vnd"
+        },
+        {
+            "objective": 3438,
+            "runtime": 218.79159212112427,
+            "station": "vnd"
+        },
+        {
+            "objective": 3442,
+            "runtime": 218.84016180038452,
+            "station": "vnd"
+        },
+        {
+            "objective": 3452,
+            "runtime": 219.11157202720642,
+            "station": "vnd"
+        },
+        {
+            "objective": 3453,
+            "runtime": 221.21320867538452,
+            "station": "vnd"
+        },
+        {
+            "objective": 3455,
+            "runtime": 221.2322962284088,
+            "station": "vnd"
+        },
+        {
+            "objective": 3457,
+            "runtime": 221.37633228302002,
+            "station": "vnd"
+        },
+        {
+            "objective": 3491,
+            "runtime": 223.62276673316956,
+            "station": "vnd"
+        },
+        {
+            "objective": 3505,
+            "runtime": 226.2078619003296,
+            "station": "vnd"
+        },
+        {
+            "objective": 3507,
+            "runtime": 226.2185263633728,
+            "station": "vnd"
+        },
+        {
+            "objective": 3511,
+            "runtime": 226.22838878631592,
+            "station": "vnd"
+        },
+        {
+            "objective": 3515,
+            "runtime": 226.23919796943665,
+            "station": "vnd"
+        },
+        {
+            "objective": 3516,
+            "runtime": 229.40255546569824,
+            "station": "vnd"
+        },
+        {
+            "objective": 3518,
+            "runtime": 230.07076621055603,
+            "station": "vnd"
+        },
+        {
+            "objective": 3519,
+            "runtime": 247.99675965309143,
+            "station": "vnd"
+        },
+        {
+            "objective": 3524,
+            "runtime": 248.09949350357056,
+            "station": "vnd"
+        },
+        {
+            "objective": 3526,
+            "runtime": 248.34746289253235,
+            "station": "vnd"
+        },
+        {
+            "objective": 3538,
+            "runtime": 249.57624411582947,
+            "station": "vnd"
+        },
+        {
+            "objective": 3548,
+            "runtime": 251.58587861061096,
+            "station": "vnd"
+        },
+        {
+            "objective": 3552,
+            "runtime": 254.06182527542114,
+            "station": "vnd"
+        },
+        {
+            "objective": 3554,
+            "runtime": 254.4094569683075,
+            "station": "vnd"
+        },
+        {
+            "objective": 3558,
+            "runtime": 256.2045021057129,
+            "station": "vnd"
+        },
+        {
+            "objective": 3560,
+            "runtime": 256.80623030662537,
+            "station": "vnd"
+        },
+        {
+            "objective": 3566,
+            "runtime": 275.3751244544983,
+            "station": "vnd"
+        },
+        {
+            "objective": 3580,
+            "runtime": 277.1931240558624,
+            "station": "vnd"
+        },
+        {
+            "objective": 3582,
+            "runtime": 278.64551615715027,
+            "station": "vnd"
+        },
+        {
+            "objective": 3590,
+            "runtime": 278.6601758003235,
+            "station": "vnd"
+        },
+        {
+            "objective": 3591,
+            "runtime": 281.23386335372925,
+            "station": "vnd"
+        },
+        {
+            "objective": 3593,
+            "runtime": 281.25200271606445,
+            "station": "vnd"
+        },
+        {
+            "objective": 3594,
+            "runtime": 281.888703584671,
+            "station": "vnd"
+        },
+        {
+            "objective": 3596,
+            "runtime": 283.6756753921509,
+            "station": "vnd"
+        },
+        {
+            "objective": 3601,
+            "runtime": 301.027462720871,
+            "station": "vnd"
+        },
+        {
+            "objective": 3602,
+            "runtime": 301.0885286331177,
+            "station": "vnd"
+        },
+        {
+            "objective": 3613,
+            "runtime": 302.3399586677551,
+            "station": "vnd"
+        },
+        {
+            "objective": 3614,
+            "runtime": 306.2637400627136,
+            "station": "vnd"
+        },
+        {
+            "objective": 3615,
+            "runtime": 306.2849118709564,
+            "station": "vnd"
+        },
+        {
+            "objective": 3617,
+            "runtime": 309.5429050922394,
+            "station": "vnd"
+        },
+        {
+            "objective": 3619,
+            "runtime": 309.5552682876587,
+            "station": "vnd"
+        },
+        {
+            "objective": 3621,
+            "runtime": 309.57038950920105,
+            "station": "vnd"
+        },
+        {
+            "objective": 3622,
+            "runtime": 314.3599717617035,
+            "station": "vnd"
+        },
+        {
+            "objective": 3623,
+            "runtime": 317.55081152915955,
+            "station": "vnd"
+        },
+        {
+            "objective": 3625,
+            "runtime": 317.5703616142273,
+            "station": "vnd"
+        },
+        {
+            "objective": 3627,
+            "runtime": 318.8215310573578,
+            "station": "vnd"
+        },
+        {
+            "objective": 3629,
+            "runtime": 319.324857711792,
+            "station": "vnd"
+        },
+        {
+            "objective": 3631,
+            "runtime": 320.37974667549133,
+            "station": "vnd"
+        },
+        {
+            "objective": 3632,
+            "runtime": 325.3796806335449,
+            "station": "vnd"
+        },
+        {
+            "objective": 3634,
+            "runtime": 332.95211458206177,
+            "station": "vnd"
+        },
+        {
+            "objective": 3635,
+            "runtime": 335.34336709976196,
+            "station": "vnd"
+        },
+        {
+            "objective": 3636,
+            "runtime": 335.5030782222748,
+            "station": "vnd"
+        },
+        {
+            "objective": 3639,
+            "runtime": 343.2305443286896,
+            "station": "vnd"
+        },
+        {
+            "objective": 3645,
+            "runtime": 343.4195101261139,
+            "station": "vnd"
+        },
+        {
+            "objective": 3664,
+            "runtime": 344.79935908317566,
+            "station": "vnd"
+        },
+        {
+            "objective": 3666,
+            "runtime": 347.8013072013855,
+            "station": "vnd"
+        },
+        {
+            "objective": 3670,
+            "runtime": 348.1712098121643,
+            "station": "vnd"
+        },
+        {
+            "objective": 3672,
+            "runtime": 349.3696537017822,
+            "station": "vnd"
+        },
+        {
+            "objective": 3674,
+            "runtime": 352.571341753006,
+            "station": "vnd"
+        },
+        {
+            "objective": 3675,
+            "runtime": 360.7128674983978,
+            "station": "vnd"
+        },
+        {
+            "objective": 3676,
+            "runtime": 378.8560585975647,
+            "station": "vnd"
+        },
+        {
+            "objective": 3678,
+            "runtime": 378.8671934604645,
+            "station": "vnd"
+        },
+        {
+            "objective": 3679,
+            "runtime": 378.8771975040436,
+            "station": "vnd"
+        },
+        {
+            "objective": 3684,
+            "runtime": 379.9269642829895,
+            "station": "vnd"
+        },
+        {
+            "objective": 3686,
+            "runtime": 379.935250043869,
+            "station": "vnd"
+        },
+        {
+            "objective": 3687,
+            "runtime": 382.3767557144165,
+            "station": "vnd"
+        },
+        {
+            "objective": 3689,
+            "runtime": 382.8203172683716,
+            "station": "vnd"
+        },
+        {
+            "objective": 3691,
+            "runtime": 383.05763506889343,
+            "station": "vnd"
+        },
+        {
+            "objective": 3693,
+            "runtime": 384.97633600234985,
+            "station": "vnd"
+        },
+        {
+            "objective": 3694,
+            "runtime": 387.0525405406952,
+            "station": "vnd"
+        },
+        {
+            "objective": 3696,
+            "runtime": 394.73249769210815,
+            "station": "vnd"
+        },
+        {
+            "objective": 3698,
+            "runtime": 396.35625171661377,
+            "station": "vnd"
+        },
+        {
+            "objective": 3699,
+            "runtime": 396.36902022361755,
+            "station": "vnd"
+        },
+        {
+            "objective": 3701,
+            "runtime": 396.9707109928131,
+            "station": "vnd"
+        },
+        {
+            "objective": 3702,
+            "runtime": 402.7004909515381,
+            "station": "vnd"
+        },
+        {
+            "objective": 3703,
+            "runtime": 410.23452854156494,
+            "station": "vnd"
+        },
+        {
+            "objective": 3706,
+            "runtime": 411.3344511985779,
+            "station": "vnd"
+        },
+        {
+            "objective": 3709,
+            "runtime": 411.34661769866943,
+            "station": "vnd"
+        },
+        {
+            "objective": 3713,
+            "runtime": 411.35842990875244,
+            "station": "vnd"
+        },
+        {
+            "objective": 3715,
+            "runtime": 411.3688733577728,
+            "station": "vnd"
+        },
+        {
+            "objective": 3717,
+            "runtime": 412.198255777359,
+            "station": "vnd"
+        },
+        {
+            "objective": 3718,
+            "runtime": 431.2443492412567,
+            "station": "vnd"
+        },
+        {
+            "objective": 3720,
+            "runtime": 431.26028275489807,
+            "station": "vnd"
+        },
+        {
+            "objective": 3721,
+            "runtime": 431.2693338394165,
+            "station": "vnd"
+        },
+        {
+            "objective": 3722,
+            "runtime": 450.5620062351227,
+            "station": "vnd"
+        },
+        {
+            "objective": 3723,
+            "runtime": 450.57812762260437,
+            "station": "vnd"
+        },
+        {
+            "objective": 3725,
+            "runtime": 468.18978238105774,
+            "station": "vnd"
+        },
+        {
+            "objective": 3727,
+            "runtime": 469.27111196517944,
+            "station": "vnd"
+        },
+        {
+            "objective": 3728,
+            "runtime": 475.83009481430054,
+            "station": "vnd"
+        },
+        {
+            "objective": 3729,
+            "runtime": 482.9607639312744,
+            "station": "vnd"
+        },
+        {
+            "objective": 3730,
+            "runtime": 485.49486470222473,
+            "station": "vnd"
+        },
+        {
+            "objective": 3732,
+            "runtime": 495.0519859790802,
+            "station": "vnd"
+        },
+        {
+            "objective": 3733,
+            "runtime": 495.1194932460785,
+            "station": "vnd"
+        },
+        {
+            "objective": 3735,
+            "runtime": 495.4173421859741,
+            "station": "vnd"
+        },
+        {
+            "objective": 3737,
+            "runtime": 496.4174942970276,
+            "station": "vnd"
+        },
+        {
+            "objective": 3739,
+            "runtime": 497.26963448524475,
+            "station": "vnd"
+        },
+        {
+            "objective": 3740,
+            "runtime": 499.96665692329407,
+            "station": "vnd"
+        },
+        {
+            "objective": 3741,
+            "runtime": 501.2296931743622,
+            "station": "vnd"
+        },
+        {
+            "objective": 3742,
+            "runtime": 518.6952815055847,
+            "station": "vnd"
+        },
+        {
+            "objective": 3743,
+            "runtime": 518.716719865799,
+            "station": "vnd"
+        },
+        {
+            "objective": 3745,
+            "runtime": 519.8823957443237,
+            "station": "vnd"
+        },
+        {
+            "objective": 3746,
+            "runtime": 522.8993108272552,
+            "station": "vnd"
+        },
+        {
+            "objective": 3748,
+            "runtime": 523.8934051990509,
+            "station": "vnd"
+        },
+        {
+            "objective": 3749,
+            "runtime": 523.914853811264,
+            "station": "vnd"
+        },
+        {
+            "objective": 3751,
+            "runtime": 542.6339926719666,
+            "station": "vnd"
+        },
+        {
+            "objective": 3757,
+            "runtime": 578.7773473262787,
+            "station": "vnd"
+        },
+        {
+            "objective": 3758,
+            "runtime": 579.267507314682,
+            "station": "vnd"
+        },
+        {
+            "objective": 3761,
+            "runtime": 579.6505877971649,
+            "station": "vnd"
+        },
+        {
+            "objective": 3765,
+            "runtime": 582.098639011383,
+            "station": "vnd"
+        },
+        {
+            "objective": 3768,
+            "runtime": 582.1132640838623,
+            "station": "vnd"
+        },
+        {
+            "objective": 3770,
+            "runtime": 584.1514716148376,
+            "station": "vnd"
+        },
+        {
+            "objective": 3776,
+            "runtime": 584.1606471538544,
+            "station": "vnd"
+        },
+        {
+            "objective": 3783,
+            "runtime": 584.1705424785614,
+            "station": "vnd"
+        },
+        {
+            "objective": 3785,
+            "runtime": 584.1804358959198,
+            "station": "vnd"
+        },
+        {
+            "objective": 3786,
+            "runtime": 587.3601260185242,
+            "station": "vnd"
+        },
+        {
+            "objective": 3788,
+            "runtime": 588.3188672065735,
+            "station": "vnd"
+        },
+        {
+            "objective": 3789,
+            "runtime": 606.2947974205017,
+            "station": "vnd"
+        },
+        {
+            "objective": 3790,
+            "runtime": 606.4258720874786,
+            "station": "vnd"
+        },
+        {
+            "objective": 3796,
+            "runtime": 607.5235438346863,
+            "station": "vnd"
+        },
+        {
+            "objective": 3798,
+            "runtime": 608.7857608795166,
+            "station": "vnd"
+        },
+        {
+            "objective": 3800,
+            "runtime": 608.797429561615,
+            "station": "vnd"
+        },
+        {
+            "objective": 3802,
+            "runtime": 608.8120353221893,
+            "station": "vnd"
+        },
+        {
+            "objective": 3803,
+            "runtime": 611.0177676677704,
+            "station": "vnd"
+        },
+        {
+            "objective": 3804,
+            "runtime": 629.2105138301849,
+            "station": "vnd"
+        },
+        {
+            "objective": 3805,
+            "runtime": 629.3296928405762,
+            "station": "vnd"
+        },
+        {
+            "objective": 3807,
+            "runtime": 630.3927655220032,
+            "station": "vnd"
+        },
+        {
+            "objective": 3808,
+            "runtime": 636.725504398346,
+            "station": "vnd"
+        },
+        {
+            "objective": 3809,
+            "runtime": 637.9480559825897,
+            "station": "vnd"
+        },
+        {
+            "objective": 3811,
+            "runtime": 645.9019165039062,
+            "station": "vnd"
+        },
+        {
+            "objective": 3813,
+            "runtime": 656.2283823490143,
+            "station": "vnd"
+        },
+        {
+            "objective": 3814,
+            "runtime": 658.2856442928314,
+            "station": "vnd"
+        },
+        {
+            "objective": 3815,
+            "runtime": 697.4988052845001,
+            "station": "vnd"
+        },
+        {
+            "objective": 3816,
+            "runtime": 697.9384708404541,
+            "station": "vnd"
+        },
+        {
+            "objective": 3817,
+            "runtime": 698.0464804172516,
+            "station": "vnd"
+        },
+        {
+            "objective": 3818,
+            "runtime": 699.3879442214966,
+            "station": "vnd"
+        },
+        {
+            "objective": 3828,
+            "runtime": 699.4032185077667,
+            "station": "vnd"
+        },
+        {
+            "objective": 3830,
+            "runtime": 699.4174432754517,
+            "station": "vnd"
+        },
+        {
+            "objective": 3832,
+            "runtime": 718.8435475826263,
+            "station": "vnd"
+        },
+        {
+            "objective": 3833,
+            "runtime": 728.3763887882233,
+            "station": "vnd"
+        },
+        {
+            "objective": 3835,
+            "runtime": 733.8934535980225,
+            "station": "vnd"
+        },
+        {
+            "objective": 3837,
+            "runtime": 763.3331515789032,
+            "station": "vnd"
+        },
+        {
+            "objective": 3840,
+            "runtime": 766.60875415802,
+            "station": "vnd"
+        },
+        {
+            "objective": 3842,
+            "runtime": 774.6737694740295,
+            "station": "vnd"
+        },
+        {
+            "objective": 3844,
+            "runtime": 793.7288436889648,
+            "station": "vnd"
+        },
+        {
+            "objective": 3845,
+            "runtime": 829.729207277298,
+            "station": "vnd"
+        },
+        {
+            "objective": 3846,
+            "runtime": 833.0146219730377,
+            "station": "vnd"
+        },
+        {
+            "objective": 3848,
+            "runtime": 888.8625450134277,
+            "station": "vnd"
+        },
+        {
+            "objective": 3850,
+            "runtime": 889.6695692539215,
+            "station": "vnd"
+        },
+        {
+            "objective": 3852,
+            "runtime": 909.2584257125854,
+            "station": "vnd"
+        },
+        {
+            "objective": 3854,
+            "runtime": 950.6446635723114,
+            "station": "vnd"
+        },
+        {
+            "objective": 3855,
+            "runtime": 992.3694734573364,
+            "station": "vnd"
+        },
+        {
+            "objective": 3856,
+            "runtime": 1050.8076658248901,
+            "station": "vnd"
+        },
+        {
+            "objective": 3859,
+            "runtime": 1053.7712514400482,
+            "station": "vnd"
+        },
+        {
+            "objective": 3861,
+            "runtime": 1060.7098534107208,
+            "station": "vnd"
+        },
+        {
+            "objective": 3863,
+            "runtime": 1061.1810026168823,
+            "station": "vnd"
+        },
+        {
+            "objective": 3864,
+            "runtime": 1066.316572189331,
+            "station": "vnd"
+        },
+        {
+            "objective": 3866,
+            "runtime": 1086.1005086898804,
+            "station": "vnd"
+        },
+        {
+            "objective": 3867,
+            "runtime": 1123.2014405727386,
+            "station": "vnd"
+        },
+        {
+            "objective": 3869,
+            "runtime": 1130.722503900528,
+            "station": "vnd"
+        },
+        {
+            "objective": 3871,
+            "runtime": 1187.8619089126587,
+            "station": "vnd"
+        },
+        {
+            "objective": 3873,
+            "runtime": 1197.4213905334473,
+            "station": "vnd"
+        },
+        {
+            "objective": 3874,
+            "runtime": 1217.2352991104126,
+            "station": "vnd"
+        },
+        {
+            "objective": 3876,
+            "runtime": 1290.0550301074982,
+            "station": "vnd"
+        },
+        {
+            "objective": 3877,
+            "runtime": 1296.9946887493134,
+            "station": "vnd"
+        },
+        {
+            "objective": 3879,
+            "runtime": 1298.4361290931702,
+            "station": "vnd"
+        },
+        {
+            "objective": 3883,
+            "runtime": 1299.5613799095154,
+            "station": "vnd"
+        },
+        {
+            "objective": 3884,
+            "runtime": 1391.71546792984,
+            "station": "vnd"
+        },
+        {
+            "objective": 3885,
+            "runtime": 1393.1949155330658,
+            "station": "vnd"
+        },
+        {
+            "objective": 3887,
+            "runtime": 1394.6881997585297,
+            "station": "vnd"
+        },
+        {
+            "objective": 3888,
+            "runtime": 1400.91290640831,
+            "station": "vnd"
+        },
+        {
+            "objective": 3889,
+            "runtime": 1406.2067153453827,
+            "station": "vnd"
+        },
+        {
+            "objective": 3890,
+            "runtime": 1426.125380039215,
+            "station": "vnd"
+        },
+        {
+            "objective": 3892,
+            "runtime": 1480.8421952724457,
+            "station": "vnd"
+        },
+        {
+            "objective": 3893,
+            "runtime": 1489.0936813354492,
+            "station": "vnd"
+        },
+        {
+            "objective": 3894,
+            "runtime": 1492.3805661201477,
+            "station": "vnd"
+        },
+        {
+            "objective": 3895,
+            "runtime": 1531.716801404953,
+            "station": "vnd"
+        },
+        {
+            "objective": 3897,
+            "runtime": 1541.5651392936707,
+            "station": "vnd"
+        },
+        {
+            "objective": 3898,
+            "runtime": 1550.9966187477112,
+            "station": "vnd"
+        },
+        {
+            "objective": 3899,
+            "runtime": 1588.8677077293396,
+            "station": "vnd"
+        },
+        {
+            "objective": 3900,
+            "runtime": 1680.8309118747711,
+            "station": "vnd"
+        },
+        {
+            "objective": 3901,
+            "runtime": 1683.8267500400543,
+            "station": "vnd"
+        },
+        {
+            "objective": 3903,
+            "runtime": 1688.0712702274323,
+            "station": "vnd"
+        },
+        {
+            "objective": 3905,
+            "runtime": 1795.397343635559,
+            "station": "vnd"
+        },
+        {
+            "objective": 3907,
+            "runtime": 1803.4321541786194,
+            "station": "vnd"
+        },
+        {
+            "objective": 3908,
+            "runtime": 1804.3249328136444,
+            "station": "vnd"
+        },
+        {
+            "objective": 3909,
+            "runtime": 1805.0414731502533,
+            "station": "vnd"
+        },
+        {
+            "objective": 3910,
+            "runtime": 1805.698424577713,
+            "station": "vnd"
+        },
+        {
+            "objective": 3913,
+            "runtime": 1825.265721321106,
+            "station": "vnd"
+        },
+        {
+            "objective": 3914,
+            "runtime": 1851.598800420761,
+            "station": "vnd"
+        },
+        {
+            "objective": 3915,
+            "runtime": 1858.7781705856323,
+            "station": "vnd"
+        },
+        {
+            "objective": 3916,
+            "runtime": 1858.7874901294708,
+            "station": "vnd"
+        },
+        {
+            "objective": 3917,
+            "runtime": 1878.3298869132996,
+            "station": "vnd"
+        },
+        {
+            "objective": 3918,
+            "runtime": 1919.347728729248,
+            "station": "vnd"
+        },
+        {
+            "objective": 3919,
+            "runtime": 1919.3673121929169,
+            "station": "vnd"
+        },
+        {
+            "objective": 3921,
+            "runtime": 1977.374402999878,
+            "station": "vnd"
+        },
+        {
+            "objective": 3922,
+            "runtime": 2071.281171321869,
+            "station": "vnd"
+        },
+        {
+            "objective": 3924,
+            "runtime": 2072.635151386261,
+            "station": "vnd"
+        },
+        {
+            "objective": 3926,
+            "runtime": 2081.400707244873,
+            "station": "vnd"
+        },
+        {
+            "objective": 3927,
+            "runtime": 2085.1397619247437,
+            "station": "vnd"
+        },
+        {
+            "objective": 3928,
+            "runtime": 2108.4449548721313,
+            "station": "vnd"
+        },
+        {
+            "objective": 3929,
+            "runtime": 2182.01558303833,
+            "station": "vnd"
+        },
+        {
+            "objective": 3931,
+            "runtime": 2186.6404542922974,
+            "station": "vnd"
+        },
+        {
+            "objective": 3933,
+            "runtime": 2190.032382965088,
+            "station": "vnd"
+        },
+        {
+            "objective": 3934,
+            "runtime": 2192.948030233383,
+            "station": "vnd"
+        },
+        {
+            "objective": 3935,
+            "runtime": 2213.2589390277863,
+            "station": "vnd"
+        },
+        {
+            "objective": 3936,
+            "runtime": 2252.2765424251556,
+            "station": "vnd"
+        },
+        {
+            "objective": 3938,
+            "runtime": 2253.1177048683167,
+            "station": "vnd"
+        },
+        {
+            "objective": 3939,
+            "runtime": 2312.383065223694,
+            "station": "vnd"
+        },
+        {
+            "objective": 3940,
+            "runtime": 2348.5727150440216,
+            "station": "vnd"
+        },
+        {
+            "objective": 3941,
+            "runtime": 2435.4408032894135,
+            "station": "vnd"
+        },
+        {
+            "objective": 3943,
+            "runtime": 2509.0048472881317,
+            "station": "vnd"
+        },
+        {
+            "objective": 3944,
+            "runtime": 2618.084500312805,
+            "station": "vnd"
+        },
+        {
+            "objective": 3945,
+            "runtime": 2656.2980592250824,
+            "station": "vnd"
+        },
+        {
+            "objective": 3946,
+            "runtime": 2786.040733575821,
+            "station": "vnd"
+        },
+        {
+            "objective": 3948,
+            "runtime": 2786.054633617401,
+            "station": "vnd"
+        },
+        {
+            "objective": 3950,
+            "runtime": 2930.8638186454773,
+            "station": "vnd"
+        },
+        {
+            "objective": 3951,
+            "runtime": 2932.1424214839935,
+            "station": "vnd"
+        },
+        {
+            "objective": 3952,
+            "runtime": 2951.39848279953,
+            "station": "vnd"
+        },
+        {
+            "objective": 3954,
+            "runtime": 3163.653587579727,
+            "station": "vnd"
+        },
+        {
+            "objective": 3956,
+            "runtime": 3164.320689678192,
+            "station": "vnd"
+        },
+        {
+            "objective": 3957,
+            "runtime": 3173.5924944877625,
+            "station": "vnd"
+        },
+        {
+            "objective": 3959,
+            "runtime": 3244.826026201248,
+            "station": "vnd"
+        },
+        {
+            "objective": 3961,
+            "runtime": 3298.6929140090942,
+            "station": "vnd"
+        },
+        {
+            "objective": 3962,
+            "runtime": 3490.625257253647,
+            "station": "vnd"
+        },
+        {
+            "objective": 3963,
+            "runtime": 3494.638220310211,
+            "station": "vnd"
+        },
+        {
+            "is_correct": 1,
+            "runtime": 3603.7241735458374
+        }
+    ],
+    "100_1000_1": [
+        {
+            "objective": 2478,
+            "runtime": 49.424795389175415,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 2489,
+            "runtime": 49.46004843711853,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 2500,
+            "runtime": 49.51811194419861,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 2638,
+            "runtime": 49.9332320690155,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 2645,
+            "runtime": 50.691792011260986,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 2672,
+            "runtime": 56.1667914390564,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 2759,
+            "runtime": 56.790895223617554,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 2761,
+            "runtime": 59.345892906188965,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 3054,
+            "runtime": 67.89984583854675,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 3056,
+            "runtime": 71.89709973335266,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 3061,
+            "runtime": 76.03590440750122,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 3073,
+            "runtime": 83.9433958530426,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 3081,
+            "runtime": 94.00347590446472,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 3104,
+            "runtime": 103.63871836662292,
+            "station": "vnd"
+        },
+        {
+            "objective": 3107,
+            "runtime": 103.71762490272522,
+            "station": "vnd"
+        },
+        {
+            "objective": 3112,
+            "runtime": 103.8191990852356,
+            "station": "vnd"
+        },
+        {
+            "objective": 3113,
+            "runtime": 103.91553711891174,
+            "station": "vnd"
+        },
+        {
+            "objective": 3114,
+            "runtime": 103.99368524551392,
+            "station": "vnd"
+        },
+        {
+            "objective": 3123,
+            "runtime": 105.40192723274231,
+            "station": "vnd"
+        },
+        {
+            "objective": 3181,
+            "runtime": 106.11636877059937,
+            "station": "vnd"
+        },
+        {
+            "objective": 3194,
+            "runtime": 107.63408994674683,
+            "station": "vnd"
+        },
+        {
+            "objective": 3195,
+            "runtime": 108.26660680770874,
+            "station": "vnd"
+        },
+        {
+            "objective": 3196,
+            "runtime": 108.28621697425842,
+            "station": "vnd"
+        },
+        {
+            "objective": 3200,
+            "runtime": 108.76658034324646,
+            "station": "vnd"
+        },
+        {
+            "objective": 3202,
+            "runtime": 109.18983888626099,
+            "station": "vnd"
+        },
+        {
+            "objective": 3210,
+            "runtime": 112.39601635932922,
+            "station": "vnd"
+        },
+        {
+            "objective": 3214,
+            "runtime": 112.4064199924469,
+            "station": "vnd"
+        },
+        {
+            "objective": 3216,
+            "runtime": 112.41721677780151,
+            "station": "vnd"
+        },
+        {
+            "objective": 3226,
+            "runtime": 112.4310736656189,
+            "station": "vnd"
+        },
+        {
+            "objective": 3228,
+            "runtime": 112.44457721710205,
+            "station": "vnd"
+        },
+        {
+            "objective": 3230,
+            "runtime": 114.19301676750183,
+            "station": "vnd"
+        },
+        {
+            "objective": 3232,
+            "runtime": 116.7930474281311,
+            "station": "vnd"
+        },
+        {
+            "objective": 3240,
+            "runtime": 117.18963956832886,
+            "station": "vnd"
+        },
+        {
+            "objective": 3243,
+            "runtime": 117.82516622543335,
+            "station": "vnd"
+        },
+        {
+            "objective": 3244,
+            "runtime": 120.76170921325684,
+            "station": "vnd"
+        },
+        {
+            "objective": 3245,
+            "runtime": 123.39149951934814,
+            "station": "vnd"
+        },
+        {
+            "objective": 3257,
+            "runtime": 143.58727979660034,
+            "station": "vnd"
+        },
+        {
+            "objective": 3266,
+            "runtime": 143.89983296394348,
+            "station": "vnd"
+        },
+        {
+            "objective": 3284,
+            "runtime": 144.33068704605103,
+            "station": "vnd"
+        },
+        {
+            "objective": 3290,
+            "runtime": 145.38789772987366,
+            "station": "vnd"
+        },
+        {
+            "objective": 3323,
+            "runtime": 147.19148969650269,
+            "station": "vnd"
+        },
+        {
+            "objective": 3327,
+            "runtime": 150.9364492893219,
+            "station": "vnd"
+        },
+        {
+            "objective": 3339,
+            "runtime": 150.9487075805664,
+            "station": "vnd"
+        },
+        {
+            "objective": 3345,
+            "runtime": 150.9611837863922,
+            "station": "vnd"
+        },
+        {
+            "objective": 3347,
+            "runtime": 150.97279572486877,
+            "station": "vnd"
+        },
+        {
+            "objective": 3349,
+            "runtime": 154.54000687599182,
+            "station": "vnd"
+        },
+        {
+            "objective": 3351,
+            "runtime": 155.0734670162201,
+            "station": "vnd"
+        },
+        {
+            "objective": 3353,
+            "runtime": 155.6209774017334,
+            "station": "vnd"
+        },
+        {
+            "objective": 3355,
+            "runtime": 156.2977430820465,
+            "station": "vnd"
+        },
+        {
+            "objective": 3356,
+            "runtime": 157.0667462348938,
+            "station": "vnd"
+        },
+        {
+            "objective": 3357,
+            "runtime": 157.99538469314575,
+            "station": "vnd"
+        },
+        {
+            "objective": 3373,
+            "runtime": 177.68241620063782,
+            "station": "vnd"
+        },
+        {
+            "objective": 3375,
+            "runtime": 178.91086649894714,
+            "station": "vnd"
+        },
+        {
+            "objective": 3377,
+            "runtime": 178.92937183380127,
+            "station": "vnd"
+        },
+        {
+            "objective": 3378,
+            "runtime": 180.53064846992493,
+            "station": "vnd"
+        },
+        {
+            "objective": 3386,
+            "runtime": 183.357679605484,
+            "station": "vnd"
+        },
+        {
+            "objective": 3398,
+            "runtime": 185.50296187400818,
+            "station": "vnd"
+        },
+        {
+            "objective": 3400,
+            "runtime": 185.5121648311615,
+            "station": "vnd"
+        },
+        {
+            "objective": 3402,
+            "runtime": 185.52293348312378,
+            "station": "vnd"
+        },
+        {
+            "objective": 3404,
+            "runtime": 185.5323212146759,
+            "station": "vnd"
+        },
+        {
+            "objective": 3408,
+            "runtime": 187.66225957870483,
+            "station": "vnd"
+        },
+        {
+            "objective": 3410,
+            "runtime": 187.95328092575073,
+            "station": "vnd"
+        },
+        {
+            "objective": 3412,
+            "runtime": 189.1954197883606,
+            "station": "vnd"
+        },
+        {
+            "objective": 3414,
+            "runtime": 194.7010362148285,
+            "station": "vnd"
+        },
+        {
+            "objective": 3415,
+            "runtime": 196.39475440979004,
+            "station": "vnd"
+        },
+        {
+            "objective": 3417,
+            "runtime": 197.91701245307922,
+            "station": "vnd"
+        },
+        {
+            "objective": 3421,
+            "runtime": 198.85672855377197,
+            "station": "vnd"
+        },
+        {
+            "objective": 3423,
+            "runtime": 198.87186884880066,
+            "station": "vnd"
+        },
+        {
+            "objective": 3425,
+            "runtime": 203.72884511947632,
+            "station": "vnd"
+        },
+        {
+            "objective": 3427,
+            "runtime": 205.75382137298584,
+            "station": "vnd"
+        },
+        {
+            "objective": 3429,
+            "runtime": 205.7655849456787,
+            "station": "vnd"
+        },
+        {
+            "objective": 3431,
+            "runtime": 213.06784319877625,
+            "station": "vnd"
+        },
+        {
+            "objective": 3440,
+            "runtime": 222.67975878715515,
+            "station": "vnd"
+        },
+        {
+            "objective": 3441,
+            "runtime": 222.7432246208191,
+            "station": "vnd"
+        },
+        {
+            "objective": 3442,
+            "runtime": 223.31982326507568,
+            "station": "vnd"
+        },
+        {
+            "objective": 3443,
+            "runtime": 223.36264276504517,
+            "station": "vnd"
+        },
+        {
+            "objective": 3445,
+            "runtime": 234.09686756134033,
+            "station": "vnd"
+        },
+        {
+            "objective": 3453,
+            "runtime": 235.38000345230103,
+            "station": "vnd"
+        },
+        {
+            "objective": 3472,
+            "runtime": 235.81844282150269,
+            "station": "vnd"
+        },
+        {
+            "objective": 3496,
+            "runtime": 236.26391291618347,
+            "station": "vnd"
+        },
+        {
+            "objective": 3499,
+            "runtime": 237.17343711853027,
+            "station": "vnd"
+        },
+        {
+            "objective": 3501,
+            "runtime": 237.43474626541138,
+            "station": "vnd"
+        },
+        {
+            "objective": 3502,
+            "runtime": 238.2911777496338,
+            "station": "vnd"
+        },
+        {
+            "objective": 3504,
+            "runtime": 238.69227242469788,
+            "station": "vnd"
+        },
+        {
+            "objective": 3505,
+            "runtime": 238.72403955459595,
+            "station": "vnd"
+        },
+        {
+            "objective": 3507,
+            "runtime": 240.99477362632751,
+            "station": "vnd"
+        },
+        {
+            "objective": 3511,
+            "runtime": 241.00685477256775,
+            "station": "vnd"
+        },
+        {
+            "objective": 3514,
+            "runtime": 241.01908254623413,
+            "station": "vnd"
+        },
+        {
+            "objective": 3515,
+            "runtime": 241.0310411453247,
+            "station": "vnd"
+        },
+        {
+            "objective": 3517,
+            "runtime": 241.05500173568726,
+            "station": "vnd"
+        },
+        {
+            "objective": 3520,
+            "runtime": 241.06566166877747,
+            "station": "vnd"
+        },
+        {
+            "objective": 3529,
+            "runtime": 241.07552647590637,
+            "station": "vnd"
+        },
+        {
+            "objective": 3531,
+            "runtime": 243.3673872947693,
+            "station": "vnd"
+        },
+        {
+            "objective": 3533,
+            "runtime": 246.52774667739868,
+            "station": "vnd"
+        },
+        {
+            "objective": 3535,
+            "runtime": 246.91149592399597,
+            "station": "vnd"
+        },
+        {
+            "objective": 3536,
+            "runtime": 253.9899492263794,
+            "station": "vnd"
+        },
+        {
+            "objective": 3543,
+            "runtime": 255.5427689552307,
+            "station": "vnd"
+        },
+        {
+            "objective": 3545,
+            "runtime": 255.55306553840637,
+            "station": "vnd"
+        },
+        {
+            "objective": 3547,
+            "runtime": 255.56527066230774,
+            "station": "vnd"
+        },
+        {
+            "objective": 3550,
+            "runtime": 260.06157636642456,
+            "station": "vnd"
+        },
+        {
+            "objective": 3551,
+            "runtime": 269.5360310077667,
+            "station": "vnd"
+        },
+        {
+            "objective": 3552,
+            "runtime": 280.4518475532532,
+            "station": "vnd"
+        },
+        {
+            "objective": 3554,
+            "runtime": 280.590735912323,
+            "station": "vnd"
+        },
+        {
+            "objective": 3555,
+            "runtime": 281.2113218307495,
+            "station": "vnd"
+        },
+        {
+            "objective": 3566,
+            "runtime": 282.44331192970276,
+            "station": "vnd"
+        },
+        {
+            "objective": 3568,
+            "runtime": 282.4548194408417,
+            "station": "vnd"
+        },
+        {
+            "objective": 3574,
+            "runtime": 282.4725227355957,
+            "station": "vnd"
+        },
+        {
+            "objective": 3575,
+            "runtime": 284.5942041873932,
+            "station": "vnd"
+        },
+        {
+            "objective": 3584,
+            "runtime": 284.6031458377838,
+            "station": "vnd"
+        },
+        {
+            "objective": 3586,
+            "runtime": 284.61510467529297,
+            "station": "vnd"
+        },
+        {
+            "objective": 3588,
+            "runtime": 284.6253504753113,
+            "station": "vnd"
+        },
+        {
+            "objective": 3594,
+            "runtime": 284.6374020576477,
+            "station": "vnd"
+        },
+        {
+            "objective": 3596,
+            "runtime": 286.9033534526825,
+            "station": "vnd"
+        },
+        {
+            "objective": 3598,
+            "runtime": 288.4044623374939,
+            "station": "vnd"
+        },
+        {
+            "objective": 3600,
+            "runtime": 288.5867199897766,
+            "station": "vnd"
+        },
+        {
+            "objective": 3601,
+            "runtime": 306.5251796245575,
+            "station": "vnd"
+        },
+        {
+            "objective": 3602,
+            "runtime": 307.8079824447632,
+            "station": "vnd"
+        },
+        {
+            "objective": 3604,
+            "runtime": 307.81786918640137,
+            "station": "vnd"
+        },
+        {
+            "objective": 3613,
+            "runtime": 307.8278315067291,
+            "station": "vnd"
+        },
+        {
+            "objective": 3615,
+            "runtime": 308.89743661880493,
+            "station": "vnd"
+        },
+        {
+            "objective": 3621,
+            "runtime": 308.90601563453674,
+            "station": "vnd"
+        },
+        {
+            "objective": 3623,
+            "runtime": 311.68202567100525,
+            "station": "vnd"
+        },
+        {
+            "objective": 3624,
+            "runtime": 313.6744282245636,
+            "station": "vnd"
+        },
+        {
+            "objective": 3625,
+            "runtime": 313.9856467247009,
+            "station": "vnd"
+        },
+        {
+            "objective": 3626,
+            "runtime": 321.7616322040558,
+            "station": "vnd"
+        },
+        {
+            "objective": 3628,
+            "runtime": 326.4841845035553,
+            "station": "vnd"
+        },
+        {
+            "objective": 3630,
+            "runtime": 328.4219419956207,
+            "station": "vnd"
+        },
+        {
+            "objective": 3631,
+            "runtime": 329.6940462589264,
+            "station": "vnd"
+        },
+        {
+            "objective": 3635,
+            "runtime": 347.5652256011963,
+            "station": "vnd"
+        },
+        {
+            "objective": 3636,
+            "runtime": 348.9222469329834,
+            "station": "vnd"
+        },
+        {
+            "objective": 3640,
+            "runtime": 348.9377090930939,
+            "station": "vnd"
+        },
+        {
+            "objective": 3641,
+            "runtime": 348.95020508766174,
+            "station": "vnd"
+        },
+        {
+            "objective": 3647,
+            "runtime": 348.96448707580566,
+            "station": "vnd"
+        },
+        {
+            "objective": 3649,
+            "runtime": 352.1119475364685,
+            "station": "vnd"
+        },
+        {
+            "objective": 3650,
+            "runtime": 352.877290725708,
+            "station": "vnd"
+        },
+        {
+            "objective": 3651,
+            "runtime": 353.3415379524231,
+            "station": "vnd"
+        },
+        {
+            "objective": 3652,
+            "runtime": 353.3642141819,
+            "station": "vnd"
+        },
+        {
+            "objective": 3654,
+            "runtime": 354.5109803676605,
+            "station": "vnd"
+        },
+        {
+            "objective": 3657,
+            "runtime": 356.5850887298584,
+            "station": "vnd"
+        },
+        {
+            "objective": 3659,
+            "runtime": 375.48481345176697,
+            "station": "vnd"
+        },
+        {
+            "objective": 3663,
+            "runtime": 375.49985098838806,
+            "station": "vnd"
+        },
+        {
+            "objective": 3665,
+            "runtime": 378.9537031650543,
+            "station": "vnd"
+        },
+        {
+            "objective": 3666,
+            "runtime": 379.3190438747406,
+            "station": "vnd"
+        },
+        {
+            "objective": 3668,
+            "runtime": 379.8794298171997,
+            "station": "vnd"
+        },
+        {
+            "objective": 3672,
+            "runtime": 397.7290165424347,
+            "station": "vnd"
+        },
+        {
+            "objective": 3674,
+            "runtime": 398.6998302936554,
+            "station": "vnd"
+        },
+        {
+            "objective": 3675,
+            "runtime": 402.84230375289917,
+            "station": "vnd"
+        },
+        {
+            "objective": 3676,
+            "runtime": 403.3250036239624,
+            "station": "vnd"
+        },
+        {
+            "objective": 3677,
+            "runtime": 403.5755410194397,
+            "station": "vnd"
+        },
+        {
+            "objective": 3678,
+            "runtime": 404.73222160339355,
+            "station": "vnd"
+        },
+        {
+            "objective": 3679,
+            "runtime": 405.1728250980377,
+            "station": "vnd"
+        },
+        {
+            "objective": 3681,
+            "runtime": 422.9211256504059,
+            "station": "vnd"
+        },
+        {
+            "objective": 3684,
+            "runtime": 424.3217306137085,
+            "station": "vnd"
+        },
+        {
+            "objective": 3685,
+            "runtime": 425.18036794662476,
+            "station": "vnd"
+        },
+        {
+            "objective": 3686,
+            "runtime": 425.1932375431061,
+            "station": "vnd"
+        },
+        {
+            "objective": 3687,
+            "runtime": 425.2083730697632,
+            "station": "vnd"
+        },
+        {
+            "objective": 3688,
+            "runtime": 427.63144516944885,
+            "station": "vnd"
+        },
+        {
+            "objective": 3689,
+            "runtime": 428.0908284187317,
+            "station": "vnd"
+        },
+        {
+            "objective": 3691,
+            "runtime": 446.7078137397766,
+            "station": "vnd"
+        },
+        {
+            "objective": 3693,
+            "runtime": 447.4451689720154,
+            "station": "vnd"
+        },
+        {
+            "objective": 3695,
+            "runtime": 466.4821734428406,
+            "station": "vnd"
+        },
+        {
+            "objective": 3698,
+            "runtime": 500.6151485443115,
+            "station": "vnd"
+        },
+        {
+            "objective": 3702,
+            "runtime": 500.9657380580902,
+            "station": "vnd"
+        },
+        {
+            "objective": 3707,
+            "runtime": 501.35445070266724,
+            "station": "vnd"
+        },
+        {
+            "objective": 3709,
+            "runtime": 502.5347259044647,
+            "station": "vnd"
+        },
+        {
+            "objective": 3710,
+            "runtime": 502.56231451034546,
+            "station": "vnd"
+        },
+        {
+            "objective": 3712,
+            "runtime": 502.60130763053894,
+            "station": "vnd"
+        },
+        {
+            "objective": 3731,
+            "runtime": 503.76131558418274,
+            "station": "vnd"
+        },
+        {
+            "objective": 3746,
+            "runtime": 505.4201786518097,
+            "station": "vnd"
+        },
+        {
+            "objective": 3747,
+            "runtime": 507.7951109409332,
+            "station": "vnd"
+        },
+        {
+            "objective": 3749,
+            "runtime": 508.650438785553,
+            "station": "vnd"
+        },
+        {
+            "objective": 3753,
+            "runtime": 509.46947264671326,
+            "station": "vnd"
+        },
+        {
+            "objective": 3755,
+            "runtime": 510.69341683387756,
+            "station": "vnd"
+        },
+        {
+            "objective": 3757,
+            "runtime": 510.9573028087616,
+            "station": "vnd"
+        },
+        {
+            "objective": 3759,
+            "runtime": 516.9042522907257,
+            "station": "vnd"
+        },
+        {
+            "objective": 3766,
+            "runtime": 520.1064131259918,
+            "station": "vnd"
+        },
+        {
+            "objective": 3767,
+            "runtime": 524.8733110427856,
+            "station": "vnd"
+        },
+        {
+            "objective": 3775,
+            "runtime": 524.8818972110748,
+            "station": "vnd"
+        },
+        {
+            "objective": 3777,
+            "runtime": 524.8912408351898,
+            "station": "vnd"
+        },
+        {
+            "objective": 3780,
+            "runtime": 542.9986481666565,
+            "station": "vnd"
+        },
+        {
+            "objective": 3781,
+            "runtime": 543.0293183326721,
+            "station": "vnd"
+        },
+        {
+            "objective": 3783,
+            "runtime": 544.0171854496002,
+            "station": "vnd"
+        },
+        {
+            "objective": 3784,
+            "runtime": 544.9880385398865,
+            "station": "vnd"
+        },
+        {
+            "objective": 3794,
+            "runtime": 546.5856025218964,
+            "station": "vnd"
+        },
+        {
+            "objective": 3800,
+            "runtime": 546.6049439907074,
+            "station": "vnd"
+        },
+        {
+            "objective": 3802,
+            "runtime": 564.9897031784058,
+            "station": "vnd"
+        },
+        {
+            "objective": 3804,
+            "runtime": 565.676512002945,
+            "station": "vnd"
+        },
+        {
+            "objective": 3806,
+            "runtime": 605.1499235630035,
+            "station": "vnd"
+        },
+        {
+            "objective": 3809,
+            "runtime": 606.7243075370789,
+            "station": "vnd"
+        },
+        {
+            "objective": 3810,
+            "runtime": 606.7372884750366,
+            "station": "vnd"
+        },
+        {
+            "objective": 3812,
+            "runtime": 607.902651309967,
+            "station": "vnd"
+        },
+        {
+            "objective": 3815,
+            "runtime": 609.9360265731812,
+            "station": "vnd"
+        },
+        {
+            "objective": 3817,
+            "runtime": 610.3026385307312,
+            "station": "vnd"
+        },
+        {
+            "objective": 3818,
+            "runtime": 611.3536863327026,
+            "station": "vnd"
+        },
+        {
+            "objective": 3821,
+            "runtime": 650.5174453258514,
+            "station": "vnd"
+        },
+        {
+            "objective": 3823,
+            "runtime": 687.5955145359039,
+            "station": "vnd"
+        },
+        {
+            "objective": 3825,
+            "runtime": 689.5177059173584,
+            "station": "vnd"
+        },
+        {
+            "objective": 3826,
+            "runtime": 714.3045966625214,
+            "station": "vnd"
+        },
+        {
+            "objective": 3827,
+            "runtime": 722.8435180187225,
+            "station": "vnd"
+        },
+        {
+            "objective": 3828,
+            "runtime": 722.8702492713928,
+            "station": "vnd"
+        },
+        {
+            "objective": 3829,
+            "runtime": 753.8337359428406,
+            "station": "vnd"
+        },
+        {
+            "objective": 3830,
+            "runtime": 753.8468880653381,
+            "station": "vnd"
+        },
+        {
+            "objective": 3832,
+            "runtime": 791.8140597343445,
+            "station": "vnd"
+        },
+        {
+            "objective": 3834,
+            "runtime": 795.8843796253204,
+            "station": "vnd"
+        },
+        {
+            "objective": 3835,
+            "runtime": 797.9944548606873,
+            "station": "vnd"
+        },
+        {
+            "objective": 3836,
+            "runtime": 800.0848820209503,
+            "station": "vnd"
+        },
+        {
+            "objective": 3837,
+            "runtime": 822.3516173362732,
+            "station": "vnd"
+        },
+        {
+            "objective": 3839,
+            "runtime": 862.8336143493652,
+            "station": "vnd"
+        },
+        {
+            "objective": 3841,
+            "runtime": 916.1199851036072,
+            "station": "vnd"
+        },
+        {
+            "objective": 3843,
+            "runtime": 917.2737576961517,
+            "station": "vnd"
+        },
+        {
+            "objective": 3844,
+            "runtime": 936.9678220748901,
+            "station": "vnd"
+        },
+        {
+            "objective": 3845,
+            "runtime": 973.6172530651093,
+            "station": "vnd"
+        },
+        {
+            "objective": 3847,
+            "runtime": 975.1906514167786,
+            "station": "vnd"
+        },
+        {
+            "objective": 3848,
+            "runtime": 996.5413160324097,
+            "station": "vnd"
+        },
+        {
+            "objective": 3849,
+            "runtime": 1048.7795577049255,
+            "station": "vnd"
+        },
+        {
+            "objective": 3850,
+            "runtime": 1048.976711988449,
+            "station": "vnd"
+        },
+        {
+            "objective": 3852,
+            "runtime": 1055.729040145874,
+            "station": "vnd"
+        },
+        {
+            "objective": 3853,
+            "runtime": 1056.6090683937073,
+            "station": "vnd"
+        },
+        {
+            "objective": 3854,
+            "runtime": 1095.613203048706,
+            "station": "vnd"
+        },
+        {
+            "objective": 3856,
+            "runtime": 1095.6313512325287,
+            "station": "vnd"
+        },
+        {
+            "objective": 3857,
+            "runtime": 1100.9295275211334,
+            "station": "vnd"
+        },
+        {
+            "objective": 3858,
+            "runtime": 1136.1444368362427,
+            "station": "vnd"
+        },
+        {
+            "objective": 3859,
+            "runtime": 1138.2277791500092,
+            "station": "vnd"
+        },
+        {
+            "objective": 3861,
+            "runtime": 1145.8602623939514,
+            "station": "vnd"
+        },
+        {
+            "objective": 3863,
+            "runtime": 1201.3859782218933,
+            "station": "vnd"
+        },
+        {
+            "objective": 3864,
+            "runtime": 1210.257597208023,
+            "station": "vnd"
+        },
+        {
+            "objective": 3865,
+            "runtime": 1214.9617071151733,
+            "station": "vnd"
+        },
+        {
+            "objective": 3866,
+            "runtime": 1253.1385054588318,
+            "station": "vnd"
+        },
+        {
+            "objective": 3868,
+            "runtime": 1341.702565908432,
+            "station": "vnd"
+        },
+        {
+            "objective": 3870,
+            "runtime": 1348.9910635948181,
+            "station": "vnd"
+        },
+        {
+            "objective": 3872,
+            "runtime": 1351.0174534320831,
+            "station": "vnd"
+        },
+        {
+            "objective": 3874,
+            "runtime": 1352.7842724323273,
+            "station": "vnd"
+        },
+        {
+            "objective": 3876,
+            "runtime": 1357.224430322647,
+            "station": "vnd"
+        },
+        {
+            "objective": 3878,
+            "runtime": 1358.3534326553345,
+            "station": "vnd"
+        },
+        {
+            "objective": 3879,
+            "runtime": 1377.8514251708984,
+            "station": "vnd"
+        },
+        {
+            "objective": 3881,
+            "runtime": 1377.8661081790924,
+            "station": "vnd"
+        },
+        {
+            "objective": 3883,
+            "runtime": 1377.8811404705048,
+            "station": "vnd"
+        },
+        {
+            "objective": 3885,
+            "runtime": 1421.9963357448578,
+            "station": "vnd"
+        },
+        {
+            "objective": 3887,
+            "runtime": 1517.7493946552277,
+            "station": "vnd"
+        },
+        {
+            "objective": 3889,
+            "runtime": 1578.586326122284,
+            "station": "vnd"
+        },
+        {
+            "objective": 3891,
+            "runtime": 1583.2244093418121,
+            "station": "vnd"
+        },
+        {
+            "objective": 3892,
+            "runtime": 1587.057265996933,
+            "station": "vnd"
+        },
+        {
+            "objective": 3893,
+            "runtime": 1648.5086283683777,
+            "station": "vnd"
+        },
+        {
+            "objective": 3894,
+            "runtime": 1687.5887157917023,
+            "station": "vnd"
+        },
+        {
+            "objective": 3896,
+            "runtime": 1800.8220701217651,
+            "station": "vnd"
+        },
+        {
+            "objective": 3898,
+            "runtime": 1837.8304040431976,
+            "station": "vnd"
+        },
+        {
+            "objective": 3900,
+            "runtime": 1947.9579317569733,
+            "station": "vnd"
+        },
+        {
+            "objective": 3902,
+            "runtime": 1967.458803653717,
+            "station": "vnd"
+        },
+        {
+            "objective": 3904,
+            "runtime": 2060.829013109207,
+            "station": "vnd"
+        },
+        {
+            "objective": 3905,
+            "runtime": 2103.9757487773895,
+            "station": "vnd"
+        },
+        {
+            "objective": 3906,
+            "runtime": 2123.259747982025,
+            "station": "vnd"
+        },
+        {
+            "objective": 3908,
+            "runtime": 2234.994059562683,
+            "station": "vnd"
+        },
+        {
+            "objective": 3910,
+            "runtime": 2376.924008131027,
+            "station": "vnd"
+        },
+        {
+            "objective": 3911,
+            "runtime": 2378.1103835105896,
+            "station": "vnd"
+        },
+        {
+            "objective": 3912,
+            "runtime": 2487.8307514190674,
+            "station": "vnd"
+        },
+        {
+            "objective": 3913,
+            "runtime": 2513.976553916931,
+            "station": "vnd"
+        },
+        {
+            "objective": 3914,
+            "runtime": 2522.5446548461914,
+            "station": "vnd"
+        },
+        {
+            "objective": 3915,
+            "runtime": 2523.334419488907,
+            "station": "vnd"
+        },
+        {
+            "objective": 3916,
+            "runtime": 2656.458220243454,
+            "station": "vnd"
+        },
+        {
+            "objective": 3917,
+            "runtime": 2661.77623295784,
+            "station": "vnd"
+        },
+        {
+            "objective": 3919,
+            "runtime": 2735.39813375473,
+            "station": "vnd"
+        },
+        {
+            "objective": 3921,
+            "runtime": 2847.3268327713013,
+            "station": "vnd"
+        },
+        {
+            "objective": 3923,
+            "runtime": 2917.817224264145,
+            "station": "vnd"
+        },
+        {
+            "objective": 3924,
+            "runtime": 2939.244764328003,
+            "station": "vnd"
+        },
+        {
+            "objective": 3925,
+            "runtime": 2963.5289413928986,
+            "station": "vnd"
+        },
+        {
+            "objective": 3926,
+            "runtime": 3109.6054861545563,
+            "station": "vnd"
+        },
+        {
+            "objective": 3927,
+            "runtime": 3111.1479251384735,
+            "station": "vnd"
+        },
+        {
+            "objective": 3928,
+            "runtime": 3220.6667745113373,
+            "station": "vnd"
+        },
+        {
+            "objective": 3929,
+            "runtime": 3295.9415802955627,
+            "station": "vnd"
+        },
+        {
+            "objective": 3930,
+            "runtime": 3315.6711165905,
+            "station": "vnd"
+        },
+        {
+            "objective": 3931,
+            "runtime": 3511.9433698654175,
+            "station": "vnd"
+        },
+        {
+            "objective": 3933,
+            "runtime": 3511.9535150527954,
+            "station": "vnd"
+        },
+        {
+            "objective": 3934,
+            "runtime": 3521.1365263462067,
+            "station": "vnd"
+        },
+        {
+            "objective": 3935,
+            "runtime": 3527.907684326172,
+            "station": "vnd"
+        },
+        {
+            "is_correct": 1,
+            "runtime": 3603.8044743537903
+        }
+    ],
+    "100_1000_2": [
+        {
+            "objective": 2568,
+            "runtime": 48.14510250091553,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 2575,
+            "runtime": 48.180225133895874,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 2593,
+            "runtime": 48.23638892173767,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 2676,
+            "runtime": 48.5016303062439,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 2701,
+            "runtime": 53.40138339996338,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 2766,
+            "runtime": 54.375754833221436,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 2767,
+            "runtime": 57.357807636260986,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 3020,
+            "runtime": 61.408507347106934,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 3021,
+            "runtime": 67.22425031661987,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 3031,
+            "runtime": 75.45411109924316,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 3033,
+            "runtime": 83.53820705413818,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 3035,
+            "runtime": 85.6414704322815,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 3037,
+            "runtime": 90.52168679237366,
+            "station": "initial_optimization"
+        },
+        {
+            "objective": 3088,
+            "runtime": 109.91791415214539,
+            "station": "vnd"
+        },
+        {
+            "objective": 3092,
+            "runtime": 109.99538493156433,
+            "station": "vnd"
+        },
+        {
+            "objective": 3097,
+            "runtime": 110.08235335350037,
+            "station": "vnd"
+        },
+        {
+            "objective": 3109,
+            "runtime": 110.68975329399109,
+            "station": "vnd"
+        },
+        {
+            "objective": 3133,
+            "runtime": 111.44714760780334,
+            "station": "vnd"
+        },
+        {
+            "objective": 3149,
+            "runtime": 111.88541150093079,
+            "station": "vnd"
+        },
+        {
+            "objective": 3183,
+            "runtime": 112.92240571975708,
+            "station": "vnd"
+        },
+        {
+            "objective": 3184,
+            "runtime": 115.28912591934204,
+            "station": "vnd"
+        },
+        {
+            "objective": 3185,
+            "runtime": 115.68257212638855,
+            "station": "vnd"
+        },
+        {
+            "objective": 3190,
+            "runtime": 116.1295645236969,
+            "station": "vnd"
+        },
+        {
+            "objective": 3192,
+            "runtime": 116.644202709198,
+            "station": "vnd"
+        },
+        {
+            "objective": 3195,
+            "runtime": 116.66672229766846,
+            "station": "vnd"
+        },
+        {
+            "objective": 3211,
+            "runtime": 119.99037551879883,
+            "station": "vnd"
+        },
+        {
+            "objective": 3212,
+            "runtime": 120.00011110305786,
+            "station": "vnd"
+        },
+        {
+            "objective": 3215,
+            "runtime": 120.01102662086487,
+            "station": "vnd"
+        },
+        {
+            "objective": 3219,
+            "runtime": 120.02291345596313,
+            "station": "vnd"
+        },
+        {
+            "objective": 3227,
+            "runtime": 122.62281394004822,
+            "station": "vnd"
+        },
+        {
+            "objective": 3229,
+            "runtime": 125.06249022483826,
+            "station": "vnd"
+        },
+        {
+            "objective": 3234,
+            "runtime": 125.63343930244446,
+            "station": "vnd"
+        },
+        {
+            "objective": 3235,
+            "runtime": 126.17408609390259,
+            "station": "vnd"
+        },
+        {
+            "objective": 3236,
+            "runtime": 127.52131462097168,
+            "station": "vnd"
+        },
+        {
+            "objective": 3241,
+            "runtime": 147.33473563194275,
+            "station": "vnd"
+        },
+        {
+            "objective": 3253,
+            "runtime": 147.64293122291565,
+            "station": "vnd"
+        },
+        {
+            "objective": 3270,
+            "runtime": 148.09398484230042,
+            "station": "vnd"
+        },
+        {
+            "objective": 3280,
+            "runtime": 149.7932472229004,
+            "station": "vnd"
+        },
+        {
+            "objective": 3281,
+            "runtime": 149.81129598617554,
+            "station": "vnd"
+        },
+        {
+            "objective": 3293,
+            "runtime": 151.39020204544067,
+            "station": "vnd"
+        },
+        {
+            "objective": 3318,
+            "runtime": 152.8592255115509,
+            "station": "vnd"
+        },
+        {
+            "objective": 3322,
+            "runtime": 152.8689181804657,
+            "station": "vnd"
+        },
+        {
+            "objective": 3328,
+            "runtime": 152.88209128379822,
+            "station": "vnd"
+        },
+        {
+            "objective": 3330,
+            "runtime": 152.89414930343628,
+            "station": "vnd"
+        },
+        {
+            "objective": 3333,
+            "runtime": 155.8846743106842,
+            "station": "vnd"
+        },
+        {
+            "objective": 3334,
+            "runtime": 176.08504486083984,
+            "station": "vnd"
+        },
+        {
+            "objective": 3349,
+            "runtime": 176.4446563720703,
+            "station": "vnd"
+        },
+        {
+            "objective": 3351,
+            "runtime": 177.3542184829712,
+            "station": "vnd"
+        },
+        {
+            "objective": 3352,
+            "runtime": 177.61727690696716,
+            "station": "vnd"
+        },
+        {
+            "objective": 3354,
+            "runtime": 177.87073683738708,
+            "station": "vnd"
+        },
+        {
+            "objective": 3355,
+            "runtime": 177.89721584320068,
+            "station": "vnd"
+        },
+        {
+            "objective": 3377,
+            "runtime": 179.88482451438904,
+            "station": "vnd"
+        },
+        {
+            "objective": 3391,
+            "runtime": 182.488356590271,
+            "station": "vnd"
+        },
+        {
+            "objective": 3395,
+            "runtime": 182.4982783794403,
+            "station": "vnd"
+        },
+        {
+            "objective": 3399,
+            "runtime": 182.50776433944702,
+            "station": "vnd"
+        },
+        {
+            "objective": 3401,
+            "runtime": 185.61266112327576,
+            "station": "vnd"
+        },
+        {
+            "objective": 3413,
+            "runtime": 205.15774154663086,
+            "station": "vnd"
+        },
+        {
+            "objective": 3415,
+            "runtime": 206.18591904640198,
+            "station": "vnd"
+        },
+        {
+            "objective": 3422,
+            "runtime": 207.840754032135,
+            "station": "vnd"
+        },
+        {
+            "objective": 3423,
+            "runtime": 207.85295581817627,
+            "station": "vnd"
+        },
+        {
+            "objective": 3429,
+            "runtime": 210.2001338005066,
+            "station": "vnd"
+        },
+        {
+            "objective": 3437,
+            "runtime": 210.20901131629944,
+            "station": "vnd"
+        },
+        {
+            "objective": 3439,
+            "runtime": 210.2192895412445,
+            "station": "vnd"
+        },
+        {
+            "objective": 3441,
+            "runtime": 210.2309718132019,
+            "station": "vnd"
+        },
+        {
+            "objective": 3443,
+            "runtime": 210.24646019935608,
+            "station": "vnd"
+        },
+        {
+            "objective": 3444,
+            "runtime": 213.8296763896942,
+            "station": "vnd"
+        },
+        {
+            "objective": 3446,
+            "runtime": 232.60797810554504,
+            "station": "vnd"
+        },
+        {
+            "objective": 3452,
+            "runtime": 232.82567238807678,
+            "station": "vnd"
+        },
+        {
+            "objective": 3454,
+            "runtime": 233.62238430976868,
+            "station": "vnd"
+        },
+        {
+            "objective": 3458,
+            "runtime": 235.14279627799988,
+            "station": "vnd"
+        },
+        {
+            "objective": 3460,
+            "runtime": 235.1545705795288,
+            "station": "vnd"
+        },
+        {
+            "objective": 3462,
+            "runtime": 236.79843735694885,
+            "station": "vnd"
+        },
+        {
+            "objective": 3464,
+            "runtime": 236.80646681785583,
+            "station": "vnd"
+        },
+        {
+            "objective": 3466,
+            "runtime": 239.7705090045929,
+            "station": "vnd"
+        },
+        {
+            "objective": 3468,
+            "runtime": 258.4624788761139,
+            "station": "vnd"
+        },
+        {
+            "objective": 3472,
+            "runtime": 258.6029272079468,
+            "station": "vnd"
+        },
+        {
+            "objective": 3474,
+            "runtime": 258.73194456100464,
+            "station": "vnd"
+        },
+        {
+            "objective": 3476,
+            "runtime": 260.1410982608795,
+            "station": "vnd"
+        },
+        {
+            "objective": 3488,
+            "runtime": 261.63708901405334,
+            "station": "vnd"
+        },
+        {
+            "objective": 3493,
+            "runtime": 261.6491708755493,
+            "station": "vnd"
+        },
+        {
+            "objective": 3500,
+            "runtime": 264.3977711200714,
+            "station": "vnd"
+        },
+        {
+            "objective": 3502,
+            "runtime": 264.41019654273987,
+            "station": "vnd"
+        },
+        {
+            "objective": 3503,
+            "runtime": 266.4086413383484,
+            "station": "vnd"
+        },
+        {
+            "objective": 3504,
+            "runtime": 266.7711923122406,
+            "station": "vnd"
+        },
+        {
+            "objective": 3505,
+            "runtime": 267.96451020240784,
+            "station": "vnd"
+        },
+        {
+            "objective": 3506,
+            "runtime": 267.98769307136536,
+            "station": "vnd"
+        },
+        {
+            "objective": 3521,
+            "runtime": 275.6591432094574,
+            "station": "vnd"
+        },
+        {
+            "objective": 3525,
+            "runtime": 276.2542941570282,
+            "station": "vnd"
+        },
+        {
+            "objective": 3527,
+            "runtime": 279.1804738044739,
+            "station": "vnd"
+        },
+        {
+            "objective": 3528,
+            "runtime": 281.99620175361633,
+            "station": "vnd"
+        },
+        {
+            "objective": 3529,
+            "runtime": 285.2576484680176,
+            "station": "vnd"
+        },
+        {
+            "objective": 3530,
+            "runtime": 287.79528045654297,
+            "station": "vnd"
+        },
+        {
+            "objective": 3533,
+            "runtime": 287.9625315666199,
+            "station": "vnd"
+        },
+        {
+            "objective": 3538,
+            "runtime": 303.9550540447235,
+            "station": "vnd"
+        },
+        {
+            "objective": 3539,
+            "runtime": 304.2694516181946,
+            "station": "vnd"
+        },
+        {
+            "objective": 3551,
+            "runtime": 305.72146463394165,
+            "station": "vnd"
+        },
+        {
+            "objective": 3552,
+            "runtime": 305.73325991630554,
+            "station": "vnd"
+        },
+        {
+            "objective": 3571,
+            "runtime": 305.7451722621918,
+            "station": "vnd"
+        },
+        {
+            "objective": 3573,
+            "runtime": 307.0488512516022,
+            "station": "vnd"
+        },
+        {
+            "objective": 3574,
+            "runtime": 307.05975818634033,
+            "station": "vnd"
+        },
+        {
+            "objective": 3576,
+            "runtime": 309.64350938796997,
+            "station": "vnd"
+        },
+        {
+            "objective": 3578,
+            "runtime": 310.460107088089,
+            "station": "vnd"
+        },
+        {
+            "objective": 3580,
+            "runtime": 311.69783902168274,
+            "station": "vnd"
+        },
+        {
+            "objective": 3581,
+            "runtime": 313.8314869403839,
+            "station": "vnd"
+        },
+        {
+            "objective": 3582,
+            "runtime": 313.84549283981323,
+            "station": "vnd"
+        },
+        {
+            "objective": 3583,
+            "runtime": 320.54685974121094,
+            "station": "vnd"
+        },
+        {
+            "objective": 3588,
+            "runtime": 322.76449704170227,
+            "station": "vnd"
+        },
+        {
+            "objective": 3591,
+            "runtime": 323.85836458206177,
+            "station": "vnd"
+        },
+        {
+            "objective": 3592,
+            "runtime": 330.4046137332916,
+            "station": "vnd"
+        },
+        {
+            "objective": 3596,
+            "runtime": 338.4067895412445,
+            "station": "vnd"
+        },
+        {
+            "objective": 3597,
+            "runtime": 356.85243797302246,
+            "station": "vnd"
+        },
+        {
+            "objective": 3601,
+            "runtime": 356.89547181129456,
+            "station": "vnd"
+        },
+        {
+            "objective": 3607,
+            "runtime": 356.9576735496521,
+            "station": "vnd"
+        },
+        {
+            "objective": 3608,
+            "runtime": 357.0550482273102,
+            "station": "vnd"
+        },
+        {
+            "objective": 3624,
+            "runtime": 358.3753705024719,
+            "station": "vnd"
+        },
+        {
+            "objective": 3626,
+            "runtime": 359.5958139896393,
+            "station": "vnd"
+        },
+        {
+            "objective": 3628,
+            "runtime": 362.0915517807007,
+            "station": "vnd"
+        },
+        {
+            "objective": 3632,
+            "runtime": 362.4526207447052,
+            "station": "vnd"
+        },
+        {
+            "objective": 3635,
+            "runtime": 363.289644241333,
+            "station": "vnd"
+        },
+        {
+            "objective": 3637,
+            "runtime": 364.52311754226685,
+            "station": "vnd"
+        },
+        {
+            "objective": 3639,
+            "runtime": 367.76951122283936,
+            "station": "vnd"
+        },
+        {
+            "objective": 3641,
+            "runtime": 370.1224248409271,
+            "station": "vnd"
+        },
+        {
+            "objective": 3643,
+            "runtime": 377.23035073280334,
+            "station": "vnd"
+        },
+        {
+            "objective": 3645,
+            "runtime": 377.2410259246826,
+            "station": "vnd"
+        },
+        {
+            "objective": 3646,
+            "runtime": 383.82678174972534,
+            "station": "vnd"
+        },
+        {
+            "objective": 3647,
+            "runtime": 401.3326778411865,
+            "station": "vnd"
+        },
+        {
+            "objective": 3648,
+            "runtime": 402.423171043396,
+            "station": "vnd"
+        },
+        {
+            "objective": 3652,
+            "runtime": 404.8943576812744,
+            "station": "vnd"
+        },
+        {
+            "objective": 3653,
+            "runtime": 404.903178691864,
+            "station": "vnd"
+        },
+        {
+            "objective": 3656,
+            "runtime": 404.9126920700073,
+            "station": "vnd"
+        },
+        {
+            "objective": 3662,
+            "runtime": 406.13594150543213,
+            "station": "vnd"
+        },
+        {
+            "objective": 3664,
+            "runtime": 424.1506609916687,
+            "station": "vnd"
+        },
+        {
+            "objective": 3666,
+            "runtime": 425.01404428482056,
+            "station": "vnd"
+        },
+        {
+            "objective": 3670,
+            "runtime": 425.0244092941284,
+            "station": "vnd"
+        },
+        {
+            "objective": 3672,
+            "runtime": 442.2081263065338,
+            "station": "vnd"
+        },
+        {
+            "objective": 3676,
+            "runtime": 443.5437889099121,
+            "station": "vnd"
+        },
+        {
+            "objective": 3678,
+            "runtime": 443.5567898750305,
+            "station": "vnd"
+        },
+        {
+            "objective": 3680,
+            "runtime": 444.66369342803955,
+            "station": "vnd"
+        },
+        {
+            "objective": 3682,
+            "runtime": 447.0497968196869,
+            "station": "vnd"
+        },
+        {
+            "objective": 3683,
+            "runtime": 449.2670443058014,
+            "station": "vnd"
+        },
+        {
+            "objective": 3684,
+            "runtime": 467.1648736000061,
+            "station": "vnd"
+        },
+        {
+            "objective": 3685,
+            "runtime": 467.1777935028076,
+            "station": "vnd"
+        },
+        {
+            "objective": 3689,
+            "runtime": 468.0664052963257,
+            "station": "vnd"
+        },
+        {
+            "objective": 3692,
+            "runtime": 470.5711603164673,
+            "station": "vnd"
+        },
+        {
+            "objective": 3693,
+            "runtime": 470.8332462310791,
+            "station": "vnd"
+        },
+        {
+            "objective": 3694,
+            "runtime": 489.23202872276306,
+            "station": "vnd"
+        },
+        {
+            "objective": 3695,
+            "runtime": 489.2854833602905,
+            "station": "vnd"
+        },
+        {
+            "objective": 3700,
+            "runtime": 490.51760172843933,
+            "station": "vnd"
+        },
+        {
+            "objective": 3702,
+            "runtime": 491.56076192855835,
+            "station": "vnd"
+        },
+        {
+            "objective": 3704,
+            "runtime": 510.15796542167664,
+            "station": "vnd"
+        },
+        {
+            "objective": 3706,
+            "runtime": 528.528960943222,
+            "station": "vnd"
+        },
+        {
+            "objective": 3707,
+            "runtime": 546.1005001068115,
+            "station": "vnd"
+        },
+        {
+            "objective": 3708,
+            "runtime": 546.1848132610321,
+            "station": "vnd"
+        },
+        {
+            "objective": 3710,
+            "runtime": 564.6865849494934,
+            "station": "vnd"
+        },
+        {
+            "objective": 3712,
+            "runtime": 564.6969830989838,
+            "station": "vnd"
+        },
+        {
+            "objective": 3715,
+            "runtime": 598.588315486908,
+            "station": "vnd"
+        },
+        {
+            "objective": 3716,
+            "runtime": 599.8121988773346,
+            "station": "vnd"
+        },
+        {
+            "objective": 3718,
+            "runtime": 600.4187641143799,
+            "station": "vnd"
+        },
+        {
+            "objective": 3731,
+            "runtime": 601.4815883636475,
+            "station": "vnd"
+        },
+        {
+            "objective": 3741,
+            "runtime": 603.3203265666962,
+            "station": "vnd"
+        },
+        {
+            "objective": 3743,
+            "runtime": 603.3335921764374,
+            "station": "vnd"
+        },
+        {
+            "objective": 3751,
+            "runtime": 603.346301317215,
+            "station": "vnd"
+        },
+        {
+            "objective": 3752,
+            "runtime": 603.3581080436707,
+            "station": "vnd"
+        },
+        {
+            "objective": 3754,
+            "runtime": 606.1451585292816,
+            "station": "vnd"
+        },
+        {
+            "objective": 3756,
+            "runtime": 606.7299017906189,
+            "station": "vnd"
+        },
+        {
+            "objective": 3758,
+            "runtime": 607.5985374450684,
+            "station": "vnd"
+        },
+        {
+            "objective": 3760,
+            "runtime": 609.2143433094025,
+            "station": "vnd"
+        },
+        {
+            "objective": 3762,
+            "runtime": 612.5633838176727,
+            "station": "vnd"
+        },
+        {
+            "objective": 3764,
+            "runtime": 621.1749656200409,
+            "station": "vnd"
+        },
+        {
+            "objective": 3765,
+            "runtime": 622.4245200157166,
+            "station": "vnd"
+        },
+        {
+            "objective": 3769,
+            "runtime": 628.5261313915253,
+            "station": "vnd"
+        },
+        {
+            "objective": 3773,
+            "runtime": 645.6546869277954,
+            "station": "vnd"
+        },
+        {
+            "objective": 3778,
+            "runtime": 646.7032821178436,
+            "station": "vnd"
+        },
+        {
+            "objective": 3784,
+            "runtime": 647.3095426559448,
+            "station": "vnd"
+        },
+        {
+            "objective": 3785,
+            "runtime": 650.1936705112457,
+            "station": "vnd"
+        },
+        {
+            "objective": 3786,
+            "runtime": 650.214316368103,
+            "station": "vnd"
+        },
+        {
+            "objective": 3787,
+            "runtime": 657.5796887874603,
+            "station": "vnd"
+        },
+        {
+            "objective": 3788,
+            "runtime": 660.6426737308502,
+            "station": "vnd"
+        },
+        {
+            "objective": 3790,
+            "runtime": 660.98779296875,
+            "station": "vnd"
+        },
+        {
+            "objective": 3792,
+            "runtime": 661.4310793876648,
+            "station": "vnd"
+        },
+        {
+            "objective": 3796,
+            "runtime": 668.5217726230621,
+            "station": "vnd"
+        },
+        {
+            "objective": 3797,
+            "runtime": 703.8056597709656,
+            "station": "vnd"
+        },
+        {
+            "objective": 3798,
+            "runtime": 704.2295506000519,
+            "station": "vnd"
+        },
+        {
+            "objective": 3805,
+            "runtime": 705.1877558231354,
+            "station": "vnd"
+        },
+        {
+            "objective": 3806,
+            "runtime": 705.1995093822479,
+            "station": "vnd"
+        },
+        {
+            "objective": 3809,
+            "runtime": 705.2089107036591,
+            "station": "vnd"
+        },
+        {
+            "objective": 3810,
+            "runtime": 706.4573452472687,
+            "station": "vnd"
+        },
+        {
+            "objective": 3811,
+            "runtime": 715.890294790268,
+            "station": "vnd"
+        },
+        {
+            "objective": 3812,
+            "runtime": 733.0606029033661,
+            "station": "vnd"
+        },
+        {
+            "objective": 3813,
+            "runtime": 733.125599861145,
+            "station": "vnd"
+        },
+        {
+            "objective": 3814,
+            "runtime": 733.9265305995941,
+            "station": "vnd"
+        },
+        {
+            "objective": 3815,
+            "runtime": 733.9384047985077,
+            "station": "vnd"
+        },
+        {
+            "objective": 3817,
+            "runtime": 770.8379163742065,
+            "station": "vnd"
+        },
+        {
+            "objective": 3819,
+            "runtime": 778.1802113056183,
+            "station": "vnd"
+        },
+        {
+            "objective": 3820,
+            "runtime": 796.8471338748932,
+            "station": "vnd"
+        },
+        {
+            "objective": 3821,
+            "runtime": 796.8578774929047,
+            "station": "vnd"
+        },
+        {
+            "objective": 3822,
+            "runtime": 850.925843000412,
+            "station": "vnd"
+        },
+        {
+            "objective": 3823,
+            "runtime": 852.3719761371613,
+            "station": "vnd"
+        },
+        {
+            "objective": 3825,
+            "runtime": 859.9807810783386,
+            "station": "vnd"
+        },
+        {
+            "objective": 3827,
+            "runtime": 863.4289472103119,
+            "station": "vnd"
+        },
+        {
+            "objective": 3831,
+            "runtime": 864.8460092544556,
+            "station": "vnd"
+        },
+        {
+            "objective": 3833,
+            "runtime": 868.8719682693481,
+            "station": "vnd"
+        },
+        {
+            "objective": 3834,
+            "runtime": 876.2940256595612,
+            "station": "vnd"
+        },
+        {
+            "objective": 3835,
+            "runtime": 883.3075623512268,
+            "station": "vnd"
+        },
+        {
+            "objective": 3838,
+            "runtime": 902.0953876972198,
+            "station": "vnd"
+        },
+        {
+            "objective": 3839,
+            "runtime": 902.1104888916016,
+            "station": "vnd"
+        },
+        {
+            "objective": 3840,
+            "runtime": 910.0497198104858,
+            "station": "vnd"
+        },
+        {
+            "objective": 3845,
+            "runtime": 915.5551035404205,
+            "station": "vnd"
+        },
+        {
+            "objective": 3846,
+            "runtime": 940.4360313415527,
+            "station": "vnd"
+        },
+        {
+            "objective": 3848,
+            "runtime": 940.691654920578,
+            "station": "vnd"
+        },
+        {
+            "objective": 3850,
+            "runtime": 941.7457194328308,
+            "station": "vnd"
+        },
+        {
+            "objective": 3852,
+            "runtime": 949.188063621521,
+            "station": "vnd"
+        },
+        {
+            "objective": 3853,
+            "runtime": 950.8655707836151,
+            "station": "vnd"
+        },
+        {
+            "objective": 3854,
+            "runtime": 1007.3358907699585,
+            "station": "vnd"
+        },
+        {
+            "objective": 3855,
+            "runtime": 1007.3482675552368,
+            "station": "vnd"
+        },
+        {
+            "objective": 3856,
+            "runtime": 1015.5292575359344,
+            "station": "vnd"
+        },
+        {
+            "objective": 3857,
+            "runtime": 1023.4400112628937,
+            "station": "vnd"
+        },
+        {
+            "objective": 3858,
+            "runtime": 1028.3562371730804,
+            "station": "vnd"
+        },
+        {
+            "objective": 3859,
+            "runtime": 1064.8231534957886,
+            "station": "vnd"
+        },
+        {
+            "objective": 3860,
+            "runtime": 1067.4137415885925,
+            "station": "vnd"
+        },
+        {
+            "objective": 3861,
+            "runtime": 1075.8779208660126,
+            "station": "vnd"
+        },
+        {
+            "objective": 3863,
+            "runtime": 1146.9083077907562,
+            "station": "vnd"
+        },
+        {
+            "objective": 3864,
+            "runtime": 1184.7101154327393,
+            "station": "vnd"
+        },
+        {
+            "objective": 3866,
+            "runtime": 1204.429045200348,
+            "station": "vnd"
+        },
+        {
+            "objective": 3868,
+            "runtime": 1293.4839351177216,
+            "station": "vnd"
+        },
+        {
+            "objective": 3871,
+            "runtime": 1295.3642394542694,
+            "station": "vnd"
+        },
+        {
+            "objective": 3873,
+            "runtime": 1302.117726802826,
+            "station": "vnd"
+        },
+        {
+            "objective": 3875,
+            "runtime": 1311.850759267807,
+            "station": "vnd"
+        },
+        {
+            "objective": 3877,
+            "runtime": 1370.9271733760834,
+            "station": "vnd"
+        },
+        {
+            "objective": 3878,
+            "runtime": 1509.7015144824982,
+            "station": "vnd"
+        },
+        {
+            "objective": 3880,
+            "runtime": 1515.0327253341675,
+            "station": "vnd"
+        },
+        {
+            "objective": 3881,
+            "runtime": 1515.3585846424103,
+            "station": "vnd"
+        },
+        {
+            "objective": 3883,
+            "runtime": 1620.6759145259857,
+            "station": "vnd"
+        },
+        {
+            "objective": 3885,
+            "runtime": 1624.8693702220917,
+            "station": "vnd"
+        },
+        {
+            "objective": 3887,
+            "runtime": 1643.6822953224182,
+            "station": "vnd"
+        },
+        {
+            "objective": 3888,
+            "runtime": 1647.0082142353058,
+            "station": "vnd"
+        },
+        {
+            "objective": 3890,
+            "runtime": 1719.8557562828064,
+            "station": "vnd"
+        },
+        {
+            "objective": 3892,
+            "runtime": 1721.998563528061,
+            "station": "vnd"
+        },
+        {
+            "objective": 3893,
+            "runtime": 1809.2121713161469,
+            "station": "vnd"
+        },
+        {
+            "objective": 3894,
+            "runtime": 1815.9044253826141,
+            "station": "vnd"
+        },
+        {
+            "objective": 3896,
+            "runtime": 1922.9401144981384,
+            "station": "vnd"
+        },
+        {
+            "objective": 3897,
+            "runtime": 1932.24813747406,
+            "station": "vnd"
+        },
+        {
+            "objective": 3898,
+            "runtime": 1933.0169899463654,
+            "station": "vnd"
+        },
+        {
+            "objective": 3899,
+            "runtime": 1933.7030317783356,
+            "station": "vnd"
+        },
+        {
+            "objective": 3900,
+            "runtime": 1951.7883160114288,
+            "station": "vnd"
+        },
+        {
+            "objective": 3901,
+            "runtime": 1956.2400345802307,
+            "station": "vnd"
+        },
+        {
+            "objective": 3902,
+            "runtime": 2059.219565629959,
+            "station": "vnd"
+        },
+        {
+            "objective": 3903,
+            "runtime": 2097.998382091522,
+            "station": "vnd"
+        },
+        {
+            "objective": 3904,
+            "runtime": 2098.0093896389008,
+            "station": "vnd"
+        },
+        {
+            "objective": 3905,
+            "runtime": 2099.6337497234344,
+            "station": "vnd"
+        },
+        {
+            "objective": 3906,
+            "runtime": 2099.6435034275055,
+            "station": "vnd"
+        },
+        {
+            "objective": 3908,
+            "runtime": 2118.0741169452667,
+            "station": "vnd"
+        },
+        {
+            "objective": 3910,
+            "runtime": 2203.3977053165436,
+            "station": "vnd"
+        },
+        {
+            "objective": 3912,
+            "runtime": 2211.2841839790344,
+            "station": "vnd"
+        },
+        {
+            "objective": 3913,
+            "runtime": 2248.2129878997803,
+            "station": "vnd"
+        },
+        {
+            "objective": 3914,
+            "runtime": 2319.856321334839,
+            "station": "vnd"
+        },
+        {
+            "objective": 3916,
+            "runtime": 2326.3197548389435,
+            "station": "vnd"
+        },
+        {
+            "objective": 3917,
+            "runtime": 2347.8715345859528,
+            "station": "vnd"
+        },
+        {
+            "objective": 3918,
+            "runtime": 2475.623024702072,
+            "station": "vnd"
+        },
+        {
+            "objective": 3919,
+            "runtime": 2512.7886340618134,
+            "station": "vnd"
+        },
+        {
+            "objective": 3921,
+            "runtime": 2602.690108537674,
+            "station": "vnd"
+        },
+        {
+            "objective": 3922,
+            "runtime": 2785.9976868629456,
+            "station": "vnd"
+        },
+        {
+            "objective": 3924,
+            "runtime": 2986.7697353363037,
+            "station": "vnd"
+        },
+        {
+            "objective": 3925,
+            "runtime": 2990.4866473674774,
+            "station": "vnd"
+        },
+        {
+            "objective": 3926,
+            "runtime": 2998.7913303375244,
+            "station": "vnd"
+        },
+        {
+            "objective": 3928,
+            "runtime": 2998.8159606456757,
+            "station": "vnd"
+        },
+        {
+            "objective": 3930,
+            "runtime": 3172.3945231437683,
+            "station": "vnd"
+        },
+        {
+            "objective": 3931,
+            "runtime": 3243.8839659690857,
+            "station": "vnd"
+        },
+        {
+            "objective": 3932,
+            "runtime": 3431.0083994865417,
+            "station": "vnd"
+        },
+        {
+            "objective": 3935,
+            "runtime": 3450.01318693161,
+            "station": "vnd"
+        },
+        {
+            "is_correct": 1,
+            "runtime": 3603.1820278167725
+        }
+    ]
+}
