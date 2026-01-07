@@ -66,11 +66,15 @@ class ModelWrapper(abc.ABC):
                 "objective": self.objective_value,
                 "runtime": time.time() - self.start_time,
                 "station": Stations.SHAKE if shake else Stations.VND,
+                "shakes": self.model.Params.Seed,
             }
             self.solution_summaries.append(summary)
 
     def new_best_found(self) -> bool:
         return self.current_solution.objective_value > self.best_found_solution.objective_value
+
+    def increment_random_seed(self):
+        self.model.Params.Seed += 1
 
     def improvement_infeasible(self) -> bool:
         return self.bound <= self.current_solution.objective_value

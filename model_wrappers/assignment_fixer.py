@@ -141,9 +141,6 @@ class AssignmentFixer(ModelWrapper):
         ]
         self.model.setAttr("UB", self.assign_students_vars, upper_bounds)
 
-    def increment_random_seed(self):
-        self.model.Params.Seed += 1
-
     def delete_zoning_rules(self):
         self.zones.cache_clear()
 

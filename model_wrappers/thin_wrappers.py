@@ -41,6 +41,7 @@ class Initializer:
                 "objective": obj,
                 "runtime": time() - self.start_time,
                 "station": Stations.INITIAL_OPTIMIZATION,
+                "shakes": self.model.Params.Seed,
             }
             self.solution_summaries.append(summary)
 

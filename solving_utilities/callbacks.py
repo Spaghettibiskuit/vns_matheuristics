@@ -146,6 +146,7 @@ class Patience:
                     "objective": current_objective,
                     "runtime": self.reference_time - self.start_time,
                     "station": self.station,
+                    "shakes": model.Params.Seed,
                 }
                 self.solution_summaries.append(summary)
 

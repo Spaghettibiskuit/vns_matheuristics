@@ -19,16 +19,18 @@ class Subfolders(enum.StrEnum):
 @dataclasses.dataclass
 class LocalBranchingParameters:
     total_time_limit: int | float = 60
-    k_min_perc: int | float = 10
-    k_step_perc: int | float = 10
-    k_max_perc: int | float = 80
-    l_min_perc: int | float = 10
-    l_step_perc: int | float = 10
-    l_max_perc: int | float = 40
+    shake_min_perc: int | float = 10
+    shake_step_perc: int | float = 10
+    shake_max_perc: int | float = 40
+    rhs_min_perc: int | float = 10
+    rhs_step_perc: int | float = 10
+    rhs_max_perc: int | float = 40
     initial_patience: float | int = 6
     shake_patience: float | int = 6
-    min_optimization_patience: int | float = 6
-    step_optimization_patience: int | float = 6
+    step_shake_patience: float | int = 0.6
+    base_optimization_patience: int | float = 6
+    step_optimization_patience: int | float = 0.6
+    required_initial_solutions: int = 5
     drop_branching_constrs_before_shake: bool = False
 
 
@@ -36,16 +38,15 @@ class LocalBranchingParameters:
 class VariableFixingParamters:
     total_time_limit: int | float = 60
     min_num_zones: int = 4
-    step_num_zones: int = 2
-    max_num_zones: int = 8
-    max_iterations_per_num_zones: int = 20
+    max_num_zones: int = 6
     min_shake_perc: int = 10
     step_shake_perc: int = 10
-    max_shake_perc: int = 80
-    initial_patience: int | float = 10
-    shake_patience: int | float = 10
-    min_optimization_patience: int | float = 10
-    step_optimization_patience: int | float = 10
+    max_shake_perc: int = 40
+    initial_patience: int | float = 6
+    shake_patience: int | float = 6
+    shake_patience_step: int | float = 0.6 * (max_num_zones - min_num_zones + 1)
+    base_optimization_patience: int | float = 6
+    base_optimization_patience_step: float = 0.6
     required_initial_solutions: int = 5
 
 
@@ -96,7 +97,7 @@ def benchmark(
     instances: list[tuple[int, int, int]],
     gurobi_alone_parameters: GurobiAloneParameters = GurobiAloneParameters(),
     local_branching_parameters: LocalBranchingParameters = LocalBranchingParameters(),
-    variable_fixing_paramters: VariableFixingParamters = VariableFixingParamters(),
+    variable_fixing_parameters: VariableFixingParamters = VariableFixingParamters(),
     seed: int = 0,
 ):
     check_whether_instances_exist(instances)
@@ -128,8 +129,18 @@ def benchmark(
             )
             gurobi_path.write_text(json.dumps(gurobi_solutions, indent=4), encoding="utf-8")
 
+        num_projects = instance[0]
+
         if run_local_branching:
             random.seed(seed)
+            patience = num_projects / 10 * 3
+            local_branching_parameters.initial_patience = patience
+            local_branching_parameters.shake_patience = patience
+            local_branching_parameters.base_optimization_patience = patience
+
+            local_branching_parameters.step_shake_patience = patience / 10
+            local_branching_parameters.step_optimization_patience = patience / 10
+
             local_branching_solutions[key] = benchmark_instance_local_branching(
                 instance, local_branching_parameters
             )
@@ -139,8 +150,23 @@ def benchmark(
 
         if run_variable_fixing:
             random.seed(seed)
+            patience = num_projects / 10
+            variable_fixing_parameters.initial_patience = patience
+            variable_fixing_parameters.shake_patience = patience
+            variable_fixing_parameters.base_optimization_patience = patience
+            variable_fixing_parameters.base_optimization_patience_step = patience / 10
+            variable_fixing_parameters.shake_patience_step = (
+                (
+                    variable_fixing_parameters.max_num_zones
+                    - variable_fixing_parameters.min_num_zones
+                    + 1
+                )
+                * patience
+                / 10
+            )
+
             variable_fixing_solutions[key] = benchmark_instance_variable_fixing(
-                instance, variable_fixing_paramters
+                instance, variable_fixing_parameters
             )
             variable_fixing_path.write_text(
                 json.dumps(variable_fixing_solutions, indent=4), encoding="utf-8"
@@ -149,12 +175,12 @@ def benchmark(
 
 if __name__ == "__main__":
     benchmark(
-        name="100_0_to_2_1h",
-        run_gurobi=True,
-        run_local_branching=False,
+        name="test",
+        run_gurobi=False,
+        run_local_branching=True,
         run_variable_fixing=True,
-        instances=[(i * 10, i * 100, j) for i in range(10, 11) for j in range(3)],
-        gurobi_alone_parameters=GurobiAloneParameters(time_limit=3_600),
-        # local_branching_parameters=LocalBranchingParameters(total_time_limit=720),
-        variable_fixing_paramters=VariableFixingParamters(total_time_limit=3_600),
+        instances=[(i * 10, i * 100, j) for i in range(1, 2) for j in range(0, 3)],
+        gurobi_alone_parameters=GurobiAloneParameters(time_limit=10),
+        local_branching_parameters=LocalBranchingParameters(total_time_limit=60),
+        variable_fixing_parameters=VariableFixingParamters(total_time_limit=60),
     )

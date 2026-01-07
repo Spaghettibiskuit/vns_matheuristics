@@ -33,6 +33,8 @@ class LocalBrancher(ModelWrapper):
         self.branching_constraints: list[gurobipy.Constr] = []
         self.counter = itertools.count()
         self.shake_constraints: tuple[gurobipy.Constr, gurobipy.Constr] | None = None
+        self.current_solution: SolutionReminder
+        self.best_found_solution: SolutionReminder
 
     def store_solution(self):
         self.current_solution = SolutionReminder(
@@ -43,13 +45,15 @@ class LocalBrancher(ModelWrapper):
     def make_current_solution_best_solution(self):
         self.best_found_solution = self.current_solution
 
-    def branching_lin_expression(self, shake: bool = False):
-        relevant_solution = self.best_found_solution if shake else self.current_solution
+    def make_best_solution_current_solution(self):
+        self.current_solution = self.best_found_solution
+
+    def branching_lin_expression(self):
         return gurobipy.quicksum(
             1 - var if var_value > 0.5 else var
             for var, var_value in zip(
                 self.assign_students_vars,
-                relevant_solution.assign_students_var_values,
+                self.current_solution.assign_students_var_values,
             )
         )
 
@@ -78,7 +82,7 @@ class LocalBrancher(ModelWrapper):
         self.branching_constraints.clear()
 
     def add_shaking_constraints(self, k_cur: int, k_step: int):
-        lin_expr = self.branching_lin_expression(shake=True)
+        lin_expr = self.branching_lin_expression()
         smaller_radius = self.model.addConstr(
             lin_expr >= k_cur,
         )

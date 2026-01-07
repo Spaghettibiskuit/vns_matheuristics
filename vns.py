@@ -53,23 +53,31 @@ class VariableNeighborhoodSearch:
     def local_branching(
         self,
         total_time_limit: int | float = 60,
-        k_min_perc: int | float = 10,
-        k_step_perc: int | float = 10,
-        k_max_perc: int | float = 80,
-        l_min_perc: int | float = 2,
-        l_step_perc: int | float = 2,
-        l_max_perc: int | float = 40,
-        initial_patience: float | int = 9,
-        shake_patience: float | int = 9,
-        min_optimization_patience: int | float = 6,
-        step_optimization_patience: int | float = 6,
+        shake_min_perc: int | float = 10,
+        shake_step_perc: int | float = 10,
+        shake_max_perc: int | float = 40,
+        rhs_min_perc: int | float = 10,
+        rhs_step_perc: int | float = 10,
+        rhs_max_perc: int | float = 40,
+        initial_patience: float | int = 6,
+        shake_patience: float | int = 6,
+        step_shake_patience: float | int = 0.6,
+        base_optimization_patience: int | float = 6,
+        step_optimization_patience: int | float = 0.6,
         required_initial_solutions: int = 5,
         drop_branching_constrs_before_shake: bool = False,
     ):
         max_num_assignment_changes = self.config.number_of_students * 2
-        percentages = (k_min_perc, k_step_perc, k_max_perc, l_min_perc, l_step_perc, l_max_perc)
-        k_min, k_step, k_max, l_min, l_step, l_max = (
-            round(percentage / 100 * max_num_assignment_changes) for percentage in percentages
+        shake_min, shake_step, shake_max, rhs_min, rhs_step, rhs_max = (
+            round(percentage / 100 * max_num_assignment_changes)
+            for percentage in (
+                shake_min_perc,
+                shake_step_perc,
+                shake_max_perc,
+                rhs_min_perc,
+                rhs_step_perc,
+                rhs_max_perc,
+            )
         )
 
         initial_model = Initializer(
@@ -77,7 +85,7 @@ class VariableNeighborhoodSearch:
         )
         start_time = initial_model.start_time
 
-        k_cur = k_min - k_step  # lets shake begin at k_min even if no better sol found during VND
+        shake_cur = shake_min - shake_step
 
         initial_model.set_time_limit(total_time_limit, start_time)
         initial_model.optimize(patience=initial_patience)
@@ -85,16 +93,19 @@ class VariableNeighborhoodSearch:
         model = LocalBrancher.get(initial_model)
 
         while not self._time_over(start_time, total_time_limit):
-            rhs = l_min
-            patience = min_optimization_patience
+            rhs = rhs_min
+            patience = base_optimization_patience
 
             while not self._time_over(start_time, total_time_limit):
-                if rhs > l_max:
+                if rhs > rhs_max:
                     break
+
+                patience = base_optimization_patience / rhs_min * rhs
 
                 model.set_time_limit(total_time_limit, start_time)
 
                 model.add_bounding_branching_constraint(rhs)
+                print(f"\n\nPATIENCE: {patience}\n\n")
                 model.optimize(patience)
                 model.pop_branching_constraints_stack()
 
@@ -102,47 +113,55 @@ class VariableNeighborhoodSearch:
                     break
 
                 if model.improvement_infeasible():
-                    if rhs > l_min:
+                    if rhs > rhs_min:
                         model.pop_branching_constraints_stack()
                     model.add_excluding_branching_constraint(rhs)
-                    rhs += l_step
-                    patience += step_optimization_patience
+                    rhs += rhs_step
 
                 elif model.improvement_found():
                     model.store_solution()
                     if model.status == GRB.OPTIMAL:
-                        if rhs > l_min:
+                        if rhs > rhs_min:
                             model.pop_branching_constraints_stack()
                         model.add_excluding_branching_constraint(rhs)
-                    rhs = l_min
-                    patience = min_optimization_patience
+                    rhs = rhs_min
 
                 else:
                     break
+
+            base_optimization_patience += step_optimization_patience
 
             if model.new_best_found():
                 model.make_current_solution_best_solution()
-                k_cur = k_min
+                shake_cur = shake_min
             else:
-                k_cur += k_step
-                if k_cur > k_max:
-                    k_cur = k_min
+                shake_cur += shake_step
+                if shake_cur > shake_max:
+                    shake_cur = shake_min
             if drop_branching_constrs_before_shake:
                 model.drop_all_branching_constraints()
 
-            while not self._time_over(start_time, total_time_limit):
-                model.add_shaking_constraints(k_cur, k_step)
-                model.set_time_limit(total_time_limit, start_time)
-                model.optimize(patience=shake_patience, shake=True)
+            model.make_best_solution_current_solution()
 
-                model.remove_shaking_constraints()
-                if model.status == GRB.INFEASIBLE:
-                    k_cur += k_step
-                    if k_cur > k_max:
-                        k_cur = k_min
-                else:
-                    model.store_solution()
-                    break
+            model.add_shaking_constraints(shake_cur, shake_step)
+            model.set_time_limit(total_time_limit, start_time)
+            print(
+                f"\n\n PATIENCE: {shake_patience}; SHAKE: {shake_cur}-{shake_cur + shake_step} "
+                f" ({self.config.number_of_students})\n\n"
+            )
+            model.optimize(shake_patience, shake=True)
+            shake_patience += step_shake_patience
+            model.remove_shaking_constraints()
+
+            if model.solution_count == 0:
+                break
+
+            model.store_solution()
+            if model.new_best_found():
+                model.make_current_solution_best_solution()
+                shake_cur = shake_min - shake_step
+
+            model.increment_random_seed()
 
         model.drop_all_branching_constraints()
         model.recover_to_best_found()
@@ -155,14 +174,14 @@ class VariableNeighborhoodSearch:
         total_time_limit: int | float = 60,
         min_num_zones: int = 4,
         max_num_zones: int = 6,
-        max_iterations_per_num_zones: int = 20,
         min_shake_perc: int = 10,
         step_shake_perc: int = 10,
-        max_shake_perc: int = 80,
-        initial_patience: int | float = 3,
-        shake_patience: int | float = 3,
-        min_optimization_patience: int | float = 2,
-        base_patience_adjustment_rate: float = 0.2,
+        max_shake_perc: int = 40,
+        initial_patience: int | float = 6,
+        shake_patience: int | float = 6,
+        shake_patience_step: int | float = 0.6,
+        base_optimization_patience: int | float = 6,
+        base_optimization_patience_step: float = 0.6,
         required_initial_solutions: int = 5,
     ):
         min_shake, step_shake, max_shake = (
@@ -170,7 +189,7 @@ class VariableNeighborhoodSearch:
             for percentage in (min_shake_perc, step_shake_perc, max_shake_perc)
         )
 
-        k = min_shake - step_shake
+        shake_cur = min_shake - step_shake
 
         initial_model = Initializer(self.config, self.derived, required_initial_solutions)
         start_time = initial_model.start_time
@@ -180,16 +199,14 @@ class VariableNeighborhoodSearch:
 
         model = AssignmentFixer.get(initial_model)
         patience_manager = PatienceManager(
-            model.model,
             min_num_zones,
             max_num_zones,
-            min_optimization_patience,
-            base_patience_adjustment_rate,
+            base_optimization_patience,
+            base_optimization_patience_step,
         )
 
         while not self._time_over(start_time, total_time_limit):
             current_num_zones = max_num_zones
-            iterations_current_num_zones = 0
 
             free_zones_pairs = itertools.combinations(range(current_num_zones), 2)
             new_pairs = False
@@ -198,13 +215,8 @@ class VariableNeighborhoodSearch:
                 if new_pairs:
                     free_zones_pairs = itertools.combinations(range(current_num_zones), 2)
                     new_pairs = False
-                    iterations_current_num_zones = 0
-                    patience_manager.clear_gap_vals()
 
-                if (
-                    iterations_current_num_zones > max_iterations_per_num_zones
-                    or (free_zones_pair := next(free_zones_pairs, None)) is None
-                ):
+                if (free_zones_pair := next(free_zones_pairs, None)) is None:
                     patience_manager.adjust_patience(current_num_zones)
                     if current_num_zones == min_num_zones:
                         break
@@ -212,53 +224,53 @@ class VariableNeighborhoodSearch:
                     current_num_zones = max(current_num_zones - 1, min_num_zones)
                     continue
 
-                iterations_current_num_zones += 1
                 model.fix_rest(*free_zones_pair, current_num_zones)
                 model.set_time_limit(total_time_limit, start_time)
-                patience = patience_manager.patience(current_num_zones)
+                patience = patience_manager.patiences[current_num_zones]
                 print(
                     f"\nCURRENT NUM ZONES:{current_num_zones}, PAIR: {free_zones_pair}, PATIENCE: {patience}\n"
                 )
                 model.optimize(patience)
-                patience_manager.record_gap()
 
                 if model.solution_count == 0:
                     break
 
                 if model.improvement_found():
-                    if model.new_best_found():
-                        patience_manager.num_unsuccessful_cycles = 0
                     model.store_solution()
                     new_pairs = True
                     current_num_zones = max_num_zones
 
             if model.new_best_found():
                 model.make_current_solution_best_solution()
-                k = min_shake
-                patience_manager.num_unsuccessful_cycles = 0
-            elif k == max_shake:
-                k = min_shake
-                model.increment_random_seed()
-                model.delete_zoning_rules()
-                patience_manager.num_unsuccessful_cycles += 1
+                shake_cur = min_shake
+            elif shake_cur == max_shake:
+                shake_cur = min_shake
             else:
-                k = min(k + step_shake, max_shake)
-                patience_manager.num_unsuccessful_cycles += 1
+                shake_cur = min(shake_cur + step_shake, max_shake)
+
+            model.delete_zoning_rules()
 
             model.make_best_solution_current_solution()
 
-            model.force_k_worst_to_change(k)
+            model.force_k_worst_to_change(shake_cur)
             model.set_time_limit(total_time_limit, start_time)
+
+            print(f"\n\nPATIENCE: {shake_patience}; FORCED TO MOVE: {shake_cur}\n\n")
+
             model.optimize(shake_patience, shake=True)
+
+            shake_patience += shake_patience_step
             model.free_all_unassigned_vars()
 
-            if model.status == GRB.TIME_LIMIT:
+            if model.solution_count == 0:
                 break
 
             model.store_solution()
             if model.new_best_found():
                 model.make_current_solution_best_solution()
-                k = min_shake - step_shake
+                shake_cur = min_shake - step_shake
+
+            model.increment_random_seed()
 
         model.recover_to_best_found()
         self.best_model = model
@@ -303,4 +315,4 @@ class VariableNeighborhoodSearch:
 if __name__ == "__main__":
     random.seed(0)
     vns = VariableNeighborhoodSearch(30, 300, 0)
-    vns.assignment_fixing(total_time_limit=10_000)
+    vns.local_branching(total_time_limit=10_000)
