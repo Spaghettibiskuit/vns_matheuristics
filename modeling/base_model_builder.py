@@ -69,16 +69,13 @@ class BaseModelBuilder:
         )
 
     def _construct_linear_expressions(self, variables: Variables) -> LinExpressions:
-        assign_students = variables.assign_students
         sum_realized_project_preferences = gp.quicksum(
-            self.project_preferences[student_id, project_id]
-            * assign_students[project_id, group_id, student_id]
-            for project_id, group_id, student_id in self.project_group_student_triples
+            self.project_preferences[student_id, project_id] * var
+            for (project_id, _, student_id), var in variables.assign_students.items()
         )
 
-        mutual_unrealized = variables.mutual_unrealized
         sum_reward_mutual = self.reward_mutual_pair * gp.quicksum(
-            1 - mutual_unrealized[*mutual_pair] for mutual_pair in self.mutual_pairs
+            1 - var for var in variables.mutual_unrealized.values()
         )
 
         sum_penalties_unassigned = self.penalty_unassigned * gp.quicksum(
@@ -93,8 +90,7 @@ class BaseModelBuilder:
                 self.projects_info["pen_groups"],
                 self.projects_info["desired#groups"],
             )
-            for group_id in self.group_ids[project_id]
-            if group_id >= num_groups_desired
+            for group_id in self.group_ids[project_id][num_groups_desired:]
         )
 
         group_size_surplus = variables.group_size_surplus

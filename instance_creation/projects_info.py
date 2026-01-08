@@ -1,8 +1,8 @@
 """Contains function to generate a dataframe on random projects."""
 
-import random as rd
+import random
 
-import pandas as pd
+import pandas
 
 
 def random_projects_df(
@@ -21,7 +21,7 @@ def random_projects_df(
     max_pen_num_groups: int,
     min_pen_group_size: int,
     max_pen_group_size: int,
-) -> pd.DataFrame:
+) -> pandas.DataFrame:
     """Returns random projects with names and information on them.
 
     Args:
@@ -67,21 +67,21 @@ def random_projects_df(
     """
 
     desired_nums_groups = [
-        rd.randint(min_desired_num_groups, max_desired_num_groups) for _ in range(num_projects)
+        random.randint(min_desired_num_groups, max_desired_num_groups) for _ in range(num_projects)
     ]
     max_nums_groups = [
         desired_num_groups
-        + rd.randint(min_manageable_surplus_groups, max_manageable_surplus_groups)
+        + random.randint(min_manageable_surplus_groups, max_manageable_surplus_groups)
         for desired_num_groups in desired_nums_groups
     ]
     ideal_group_sizes = [
-        rd.randint(min_ideal_group_size, max_ideal_group_size) for _ in range(num_projects)
+        random.randint(min_ideal_group_size, max_ideal_group_size) for _ in range(num_projects)
     ]
     min_group_sizes = [
         max(
             1,
             ideal_group_size
-            - rd.randint(
+            - random.randint(
                 min_tolerable_group_size_deficit,
                 max_tolerable_group_size_deficit,
             ),
@@ -90,14 +90,14 @@ def random_projects_df(
     ]
     max_group_sizes = [
         ideal_group_size
-        + rd.randint(min_tolerable_group_size_surplus, max_tolerable_group_size_surplus)
+        + random.randint(min_tolerable_group_size_surplus, max_tolerable_group_size_surplus)
         for ideal_group_size in ideal_group_sizes
     ]
     pen_num_groups = [
-        rd.randint(min_pen_num_groups, max_pen_num_groups) for _ in range(num_projects)
+        random.randint(min_pen_num_groups, max_pen_num_groups) for _ in range(num_projects)
     ]
     pen_group_size = [
-        rd.randint(min_pen_group_size, max_pen_group_size) for _ in range(num_projects)
+        random.randint(min_pen_group_size, max_pen_group_size) for _ in range(num_projects)
     ]
 
     data_projects = {
@@ -110,4 +110,4 @@ def random_projects_df(
         "pen_size": pen_group_size,
     }
 
-    return pd.DataFrame(data_projects)
+    return pandas.DataFrame(data_projects)

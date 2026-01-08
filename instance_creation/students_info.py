@@ -19,16 +19,14 @@ def _random_partner_preferences(
         all_other_ids = student_ids[:student_id] + student_ids[student_id + 1 :]
         num_partner_prefs = random.randint(min_num_partner_prefs, max_num_partner_prefs)
 
-        if not (ids_that_chose_student := chosen_by[student_id]):
-            student_partner_prefs = random.sample(all_other_ids, num_partner_prefs)
-        else:
+        if ids_that_chose_student := chosen_by[student_id]:
             applicable_for_reciprocity = random.sample(
                 ids_that_chose_student,
                 min(len(ids_that_chose_student), num_partner_prefs),
             )
             reciprocal_prefs = [
-                other_student_id
-                for other_student_id in applicable_for_reciprocity
+                applicable_id
+                for applicable_id in applicable_for_reciprocity
                 if random.random() <= percentage_reciprocity
             ]
             num_missing_prefs = num_partner_prefs - len(reciprocal_prefs)
@@ -43,6 +41,8 @@ def _random_partner_preferences(
                 ]
                 random_prefs = random.sample(left_options, num_missing_prefs)
                 student_partner_prefs = reciprocal_prefs + random_prefs
+        else:
+            student_partner_prefs = random.sample(all_other_ids, num_partner_prefs)
 
         students_partner_prefs.append(student_partner_prefs)
 
@@ -54,20 +54,15 @@ def _random_partner_preferences(
 
 def _peer_project_preferences(
     desired_partners: list[int], project_preferences_so_far: list[tuple[int, ...]]
-) -> tuple[list[int], ...] | None:
-    desired_partners_with_prefs = [
-        desired_partner
+) -> tuple[list[int], ...]:
+    available_prefs = [
+        project_preferences_so_far[desired_partner]
         for desired_partner in desired_partners
         if desired_partner < len(project_preferences_so_far)
     ]
-    if not desired_partners_with_prefs:
-        return None
-
-    relevant_prefs = [
-        project_preferences_so_far[desired_partner]
-        for desired_partner in desired_partners_with_prefs
-    ]
-    return tuple(list(preferences_for_project) for preferences_for_project in zip(*relevant_prefs))
+    return tuple(
+        list(preferences_for_project) for preferences_for_project in zip(*available_prefs)
+    )
 
 
 def peer_influenced_project_preference(preferences_for_project: list[int]) -> int:
@@ -86,18 +81,18 @@ def _random_project_preferences(
         peer_preferences_per_project = _peer_project_preferences(
             partner_preferences, project_preferences_per_student
         )
-        if peer_preferences_per_project is None:
-            student_project_preferences = tuple(
-                random.randint(min_pref, max_pref) for _ in range(num_projects)
-            )
-        else:
+        if peer_preferences_per_project:
             student_project_preferences = tuple(
                 (
-                    peer_influenced_project_preference(preferences_for_project)
+                    peer_influenced_project_preference(peer_preferences_for_project)
                     if random.random() <= percentage_peer_influenced
                     else random.randint(min_pref, max_pref)
                 )
-                for preferences_for_project in peer_preferences_per_project
+                for peer_preferences_for_project in peer_preferences_per_project
+            )
+        else:
+            student_project_preferences = tuple(
+                random.randint(min_pref, max_pref) for _ in range(num_projects)
             )
 
         project_preferences_per_student.append(student_project_preferences)

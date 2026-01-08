@@ -1,13 +1,13 @@
 """A dataclass that contains all information on the instance, all parameters on how to run VNS."""
 
-from dataclasses import dataclass
+import dataclasses
 
-import pandas as pd
+import pandas
 
-from utilities import load_instance
+import utilities
 
 
-@dataclass(frozen=True)
+@dataclasses.dataclass(frozen=True)
 class Configuration:
     """Contains all information on the instance and all parameters on how to run VNS."""
 
@@ -17,8 +17,8 @@ class Configuration:
     reward_mutual_pair: int
     penalty_unassigned: int
 
-    projects_info: pd.DataFrame
-    students_info: pd.DataFrame
+    projects_info: pandas.DataFrame
+    students_info: pandas.DataFrame
 
     @classmethod
     def get(
@@ -29,7 +29,7 @@ class Configuration:
         reward_mutual_pair: int,
         penalty_unassigned: int,
     ):
-        projects_info, students_info = load_instance(
+        projects_info, students_info = utilities.load_instance(
             number_of_projects, number_of_students, instance_index
         )
         return cls(

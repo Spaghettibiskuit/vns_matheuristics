@@ -314,5 +314,5 @@ class VariableNeighborhoodSearch:
 
 if __name__ == "__main__":
     random.seed(0)
-    vns = VariableNeighborhoodSearch(30, 300, 0)
-    vns.local_branching(total_time_limit=10_000)
+    vns = VariableNeighborhoodSearch(20, 200, 0)
+    vns.gurobi_alone(time_limit=60)
