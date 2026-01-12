@@ -1,4 +1,4 @@
-"""A class that checks whether a solution that was found is valid and correct."""
+"""A class that checks whether a solution is valid and the objective value calculated correctly."""
 
 import functools
 
@@ -10,7 +10,7 @@ from utilities import gurobi_round
 
 
 class SolutionChecker:
-    """Checks whether a solution that was found is valid and correct."""
+    """Checks whether the solution is valid and the objective value calculated correctly."""
 
     def __init__(
         self,
@@ -25,58 +25,57 @@ class SolutionChecker:
         self.retriever = retriever
 
     @functools.cached_property
-    def all_students_either_assigned_once_or_unassigned(self) -> bool:
+    def _all_students_either_assigned_once_or_unassigned(self) -> bool:
         unassigned_students = self.retriever.unassigned_students
         assigned_students = [student_id for _, _, student_id in self.retriever.assignments]
-        all_student_ids = list(self.derived.student_ids)
-        return sorted(unassigned_students + assigned_students) == all_student_ids
+        return sorted(unassigned_students + assigned_students) == list(self.derived.student_ids)
 
     @functools.cached_property
-    def groups_opened_if_and_only_if_students_inside(self) -> bool:
+    def _groups_opened_if_and_only_if_students_inside(self) -> bool:
         derived_open_groups = set(
             (project_id, group_id) for project_id, group_id, _ in self.retriever.assignments
         )
         return sorted(derived_open_groups) == self.retriever.established_groups
 
     @functools.cached_property
-    def all_group_sizes_within_bounds(self) -> bool:
-        projects_info = self.config.projects_info
+    def _all_group_sizes_within_bounds(self) -> bool:
+        min_group_size = self.config.projects_info["min_group_size"]
+        max_group_size = self.config.projects_info["max_group_size"]
         return all(
-            projects_info["min_group_size"][project_id]
-            <= len(self.retriever.students_in_group(project_id, group_id))
-            <= projects_info["max_group_size"][project_id]
+            min_group_size[project_id]
+            <= len(self.retriever.students_in_group[project_id, group_id])
+            <= max_group_size[project_id]
             for project_id, group_id in self.retriever.established_groups
         )
 
     @functools.cached_property
-    def no_project_too_many_established_groups(self) -> bool:
-        projects_info = self.config.projects_info
+    def _no_project_too_many_established_groups(self) -> bool:
+        max_num_groups = self.config.projects_info["max#groups"]
         return all(
-            len(self.retriever.groups_in_project(project_id))
-            <= projects_info["max#groups"][project_id]
+            len(self.retriever.groups_in_project[project_id]) <= max_num_groups[project_id]
             for project_id in self.derived.project_ids
         )
 
     @functools.cached_property
-    def all_projects_only_consecutive_group_ids(self) -> bool:
+    def _all_projects_only_consecutive_group_ids(self) -> bool:
         return all(
-            sorted(groups := self.retriever.groups_in_project(project_id))
+            sorted(groups := self.retriever.groups_in_project[project_id])
             == list(range(len(groups)))
             for project_id in self.derived.project_ids
         )
 
     @functools.cached_property
-    def is_valid(self) -> bool:
+    def _is_valid(self) -> bool:
         return (
-            self.all_students_either_assigned_once_or_unassigned
-            and self.groups_opened_if_and_only_if_students_inside
-            and self.all_group_sizes_within_bounds
-            and self.no_project_too_many_established_groups
-            and self.all_projects_only_consecutive_group_ids
+            self._all_students_either_assigned_once_or_unassigned
+            and self._groups_opened_if_and_only_if_students_inside
+            and self._all_group_sizes_within_bounds
+            and self._no_project_too_many_established_groups
+            and self._all_projects_only_consecutive_group_ids
         )
 
     @functools.cached_property
-    def sum_realized_project_preferences(self) -> int | float:
+    def _sum_realized_project_preferences(self) -> int | float:
         project_preferences = self.derived.project_preferences
         return sum(
             project_preferences[student_id, project_id]
@@ -84,21 +83,21 @@ class SolutionChecker:
         )
 
     @functools.cached_property
-    def sum_reward_mutual(self) -> int | float:
+    def _sum_reward_mutual(self) -> int | float:
         return len(self.retriever.mutual_pairs) * self.config.reward_mutual_pair
 
     @functools.cached_property
-    def sum_penalties_unassigned(self) -> int | float:
+    def _sum_penalties_unassigned(self) -> int | float:
         return len(self.retriever.unassigned_students) * self.config.penalty_unassigned
 
     @functools.cached_property
-    def sum_penalties_surplus_groups(self) -> int | float:
+    def _sum_penalties_surplus_groups(self) -> int | float:
         desired_num_of_groups = self.config.projects_info["desired#groups"]
         penalty_per_excess_group = self.config.projects_info["pen_groups"]
         return sum(
             max(
                 0,
-                len(self.retriever.groups_in_project(project_id))
+                len(self.retriever.groups_in_project[project_id])
                 - desired_num_of_groups[project_id],
             )
             * penalty_per_excess_group[project_id]
@@ -106,12 +105,12 @@ class SolutionChecker:
         )
 
     @functools.cached_property
-    def sum_penalties_group_size(self) -> int | float:
+    def _sum_penalties_group_size(self) -> int | float:
         ideal_group_size = self.config.projects_info["ideal_group_size"]
         penalty_deviation = self.config.projects_info["pen_size"]
         return sum(
             abs(
-                len(self.retriever.students_in_group(project_id, group_id))
+                len(self.retriever.students_in_group[project_id, group_id])
                 - ideal_group_size[project_id]
             )
             * penalty_deviation[project_id]
@@ -119,45 +118,46 @@ class SolutionChecker:
         )
 
     @functools.cached_property
-    def sum_realized_project_preferences_correct(self) -> bool:
-        return self.sum_realized_project_preferences == gurobi_round(
+    def _sum_realized_project_preferences_correct(self) -> bool:
+        return self._sum_realized_project_preferences == gurobi_round(
             self.lin_expressions.sum_realized_project_preferences.getValue()
         )
 
     @functools.cached_property
-    def sum_reward_mutual_correct(self) -> bool:
-        return self.sum_reward_mutual == gurobi_round(
+    def _sum_reward_mutual_correct(self) -> bool:
+        return self._sum_reward_mutual == gurobi_round(
             self.lin_expressions.sum_reward_mutual.getValue()
         )
 
     @functools.cached_property
-    def sum_penalties_unassigned_correct(self) -> bool:
-        return self.sum_penalties_unassigned == gurobi_round(
+    def _sum_penalties_unassigned_correct(self) -> bool:
+        return self._sum_penalties_unassigned == gurobi_round(
             self.lin_expressions.sum_penalties_unassigned.getValue()
         )
 
     @functools.cached_property
-    def sum_penalties_surplus_groups_correct(self) -> bool:
-        return self.sum_penalties_surplus_groups == gurobi_round(
+    def _sum_penalties_surplus_groups_correct(self) -> bool:
+        return self._sum_penalties_surplus_groups == gurobi_round(
             self.lin_expressions.sum_penalties_surplus_groups.getValue()
         )
 
     @functools.cached_property
-    def sum_penalties_group_size_correct(self) -> bool:
-        return self.sum_penalties_group_size == gurobi_round(
+    def _sum_penalties_group_size_correct(self) -> bool:
+        return self._sum_penalties_group_size == gurobi_round(
             self.lin_expressions.sum_penalties_group_size.getValue()
         )
 
     @functools.cached_property
-    def objective_value_calculated_correctly(self) -> bool:
+    def _objective_value_calculated_correctly(self) -> bool:
         return (
-            self.sum_realized_project_preferences_correct
-            and self.sum_reward_mutual_correct
-            and self.sum_penalties_unassigned_correct
-            and self.sum_penalties_surplus_groups_correct
-            and self.sum_penalties_group_size_correct
+            self._sum_realized_project_preferences_correct
+            and self._sum_reward_mutual_correct
+            and self._sum_penalties_unassigned_correct
+            and self._sum_penalties_surplus_groups_correct
+            and self._sum_penalties_group_size_correct
         )
 
     @functools.cached_property
     def is_correct(self) -> bool:
-        return self.is_valid and self.objective_value_calculated_correctly
+        """Return whether the solution is valid and the objective value calculated correctly."""
+        return self._is_valid and self._objective_value_calculated_correctly

@@ -177,11 +177,11 @@ class VariableNeighborhoodSearch:
         min_shake_perc: int = 10,
         step_shake_perc: int = 10,
         max_shake_perc: int = 40,
-        initial_patience: int | float = 6,
-        shake_patience: int | float = 6,
-        shake_patience_step: int | float = 0.6,
-        base_optimization_patience: int | float = 6,
-        base_optimization_patience_step: float = 0.6,
+        initial_patience: int | float = 3,
+        shake_patience: int | float = 3,
+        shake_patience_step: int | float = 0.3,
+        base_optimization_patience: int | float = 3,
+        base_optimization_patience_step: float = 0.3,
         required_initial_solutions: int = 5,
     ):
         min_shake, step_shake, max_shake = (
@@ -315,4 +315,4 @@ class VariableNeighborhoodSearch:
 if __name__ == "__main__":
     random.seed(0)
     vns = VariableNeighborhoodSearch(20, 200, 0)
-    vns.gurobi_alone(time_limit=60)
+    vns.assignment_fixing(total_time_limit=60)

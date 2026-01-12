@@ -43,7 +43,7 @@ class Solution:
         students_in_groups = {}
         for group_id in range(max_group_id):
             students_in_groups[group_id] = [
-                self.retriever.students_in_group(project_id, group_id)
+                self.retriever.students_in_group[project_id, group_id]
                 for project_id in self.derived.project_ids
             ]
         return pandas.DataFrame(students_in_groups)

@@ -79,8 +79,8 @@ class IndividualAssignmentScorer:
         projects_info = self.config.projects_info
         penalty = projects_info["pen_groups"][project_id]
         num_desired_groups = projects_info["desired#groups"][project_id]
-        num_groups = len(self.retriever.groups_in_project(project_id))
-        total_num_students = len(self.retriever.students_in_project(project_id))
+        num_groups = len(self.retriever.groups_in_project[project_id])
+        total_num_students = len(self.retriever.students_in_project[project_id])
         return penalty * max(0, num_groups - num_desired_groups) / total_num_students
 
     @functools.lru_cache(maxsize=1_280)
@@ -88,7 +88,7 @@ class IndividualAssignmentScorer:
         projects_info = self.config.projects_info
         ideal_group_size = projects_info["ideal_group_size"][project_id]
         penalty = projects_info["pen_size"][project_id]
-        num_students = len(self.retriever.students_in_group(project_id, group_id))
+        num_students = len(self.retriever.students_in_group[project_id, group_id])
         return penalty * abs(ideal_group_size - num_students) / num_students
 
     @functools.lru_cache(maxsize=12_800)
