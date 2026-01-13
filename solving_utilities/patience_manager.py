@@ -15,12 +15,12 @@ class PatienceManager:
             num_zones: len(list(itertools.combinations(range(num_zones), 2)))
             for num_zones in nums_zones
         }
-        base_sum_patience_all_pairs = min_patience * self.nums_pairs[max_num_zones]
+        max_num_pairs = self.nums_pairs[max_num_zones]
+        base_sum_patience_all_pairs = min_patience * max_num_pairs
         self.patiences = {
             num_zones: base_sum_patience_all_pairs / num_pairs
             for num_zones, num_pairs in self.nums_pairs.items()
         }
-        max_num_pairs = self.nums_pairs[max_num_zones]
         self.patience_steps = {
             num_zones: min_patience_step * max_num_pairs / num_pairs
             for num_zones, num_pairs in self.nums_pairs.items()

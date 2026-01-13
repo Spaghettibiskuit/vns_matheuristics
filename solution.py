@@ -7,7 +7,7 @@ from pathlib import Path
 import pandas
 
 from model_wrappers.model_wrapper import ModelWrapper
-from model_wrappers.thin_wrappers import GurobiDuck
+from model_wrappers.thin_wrappers import GurobiAloneWrapper
 from modeling.configuration import Configuration
 from modeling.derived_modeling_data import DerivedModelingData
 from solution_processing.solution_checker import SolutionChecker
@@ -23,7 +23,7 @@ class Solution:
         self,
         config: Configuration,
         derived: DerivedModelingData,
-        wrapped_model: ModelWrapper | GurobiDuck,
+        wrapped_model: ModelWrapper | GurobiAloneWrapper,
         retriever: SolutionInformationRetriever,
         viewer: SolutionViewer,
         checker: SolutionChecker,

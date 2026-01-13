@@ -1,5 +1,5 @@
 import functools
-from time import time
+import time
 
 from modeling.base_model_builder import BaseModelBuilder
 from modeling.configuration import Configuration
@@ -20,12 +20,12 @@ class Initializer:
         self.model_components, self.model = BaseModelBuilder(
             config=self.config, derived=self.derived
         ).get_base_model()
-        self.start_time = time()
+        self.start_time = time.time()
         self.solution_summaries: list[dict[str, int | float | str]] = []
         self.required_sol_count = required_sol_count
 
     def set_time_limit(self, total_time_limit: int | float, start_time: float):
-        self.model.Params.TimeLimit = max(0, total_time_limit - (time() - start_time))
+        self.model.Params.TimeLimit = max(0, total_time_limit - (time.time() - start_time))
 
     def optimize(self, patience: int | float):
         callback = Patience(
@@ -39,7 +39,7 @@ class Initializer:
         if (obj := gurobi_round(self.model.ObjVal)) > callback.best_obj:
             summary: dict[str, int | float | str] = {
                 "objective": obj,
-                "runtime": time() - self.start_time,
+                "runtime": time.time() - self.start_time,
                 "station": Stations.INITIAL_OPTIMIZATION,
                 "shakes": self.model.Params.Seed,
             }
@@ -64,14 +64,11 @@ class Initializer:
         )
 
 
-class GurobiDuck:
+class GurobiAloneWrapper:
 
     def __init__(self, config: Configuration, derived: DerivedModelingData):
-        self.config = config
-        self.derived = derived
-        self.model_components, self.model = BaseModelBuilder(
-            config=self.config, derived=self.derived
-        ).get_base_model()
+        self.model_components, self.model = BaseModelBuilder(config, derived).get_base_model()
+        self.start_time = time.time()
         self.solution_summaries: list[dict[str, int | float]] = []
 
     @property
@@ -82,10 +79,10 @@ class GurobiDuck:
         self.model.Params.TimeLimit = time_limit
 
     def optimize(self):
-        self.model.optimize(GurobiAloneProgressTracker(self.solution_summaries))
+        self.model.optimize(GurobiAloneProgressTracker(self.start_time, self.solution_summaries))
         summary: dict[str, int | float] = {
             "objective": gurobi_round(self.model.ObjVal),
             "bound": gurobi_round(self.model.ObjBound),
-            "runtime": self.model.Runtime,
+            "runtime": time.time() - self.start_time,
         }
         self.solution_summaries.append(summary)

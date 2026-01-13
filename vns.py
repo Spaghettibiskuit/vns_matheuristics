@@ -1,12 +1,12 @@
 import itertools
 import random
-from time import time
+import time
 
 from gurobipy import GRB
 
 from model_wrappers.assignment_fixer import AssignmentFixer
 from model_wrappers.local_brancher import LocalBrancher
-from model_wrappers.thin_wrappers import GurobiDuck, Initializer
+from model_wrappers.thin_wrappers import GurobiAloneWrapper, Initializer
 from modeling.configuration import Configuration
 from modeling.derived_modeling_data import DerivedModelingData
 from solution import Solution
@@ -38,8 +38,8 @@ class VariableNeighborhoodSearch:
         self.best_solution = None
 
     def gurobi_alone(self, time_limit: int | float = float("inf")) -> list[dict[str, int | float]]:
-        start_time = time()
-        model = GurobiDuck(
+        start_time = time.time()
+        model = GurobiAloneWrapper(
             config=self.config,
             derived=self.derived,
         )
@@ -278,7 +278,7 @@ class VariableNeighborhoodSearch:
         return model.solution_summaries
 
     def _time_over(self, start_time: float, total_time_limit: int | float):
-        return time() - start_time > total_time_limit
+        return time.time() - start_time > total_time_limit
 
     def _post_processing(self, start_time: float):
         if self.best_model is None:
@@ -308,11 +308,11 @@ class VariableNeighborhoodSearch:
         else:
             print("IS INCORRECT")
         self.best_model.solution_summaries.append(
-            {"is_correct": int(checker.is_correct), "runtime": time() - start_time}
+            {"is_correct": int(checker.is_correct), "runtime": time.time() - start_time}
         )
 
 
 if __name__ == "__main__":
     random.seed(0)
-    vns = VariableNeighborhoodSearch(20, 200, 0)
-    vns.assignment_fixing(total_time_limit=60)
+    vns = VariableNeighborhoodSearch(30, 300, 0)
+    vns.assignment_fixing(total_time_limit=10_000)
