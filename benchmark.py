@@ -175,12 +175,12 @@ def benchmark(
 
 if __name__ == "__main__":
     benchmark(
-        name="100_0_1h",
-        run_gurobi=True,
-        run_local_branching=False,
-        run_variable_fixing=False,
-        instances=[(i * 10, i * 100, j) for i in range(10, 11) for j in range(0, 1)],
+        name="30_0_1h.json",
+        run_gurobi=False,
+        run_local_branching=True,
+        run_variable_fixing=True,
+        instances=[(i * 10, i * 100, j) for i in range(3, 4) for j in range(0, 1)],
         gurobi_alone_parameters=GurobiAloneParameters(time_limit=3_600),
-        # local_branching_parameters=LocalBranchingParameters(total_time_limit=60),
-        # variable_fixing_parameters=VariableFixingParamters(total_time_limit=60),
+        local_branching_parameters=LocalBranchingParameters(total_time_limit=3_600),
+        variable_fixing_parameters=VariableFixingParamters(total_time_limit=3_600),
     )

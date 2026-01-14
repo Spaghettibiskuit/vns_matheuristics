@@ -315,4 +315,4 @@ class VariableNeighborhoodSearch:
 if __name__ == "__main__":
     random.seed(0)
     vns = VariableNeighborhoodSearch(30, 300, 0)
-    vns.assignment_fixing(total_time_limit=10_000)
+    vns.assignment_fixing(total_time_limit=60)

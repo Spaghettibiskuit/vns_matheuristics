@@ -4,11 +4,11 @@ import itertools
 
 import gurobipy
 
+import utilities
 from model_wrappers.model_wrapper import ModelWrapper
 from model_wrappers.thin_wrappers import Initializer
 from modeling.model_components import ModelComponents
 from solving_utilities.solution_reminder import SolutionReminder
-from utilities import var_values
 
 
 class LocalBrancher(ModelWrapper):
@@ -31,15 +31,24 @@ class LocalBrancher(ModelWrapper):
         )
 
         self.branching_constraints: list[gurobipy.Constr] = []
-        self.counter = itertools.count()
         self.shake_constraints: tuple[gurobipy.Constr, gurobipy.Constr] | None = None
-        self.current_solution: SolutionReminder
-        self.best_found_solution: SolutionReminder
+        self.counter = itertools.count()
+
+    @property
+    def status(self) -> int:
+        return self.model.Status
+
+    @property
+    def bound(self) -> int:
+        return int(min(self.model.ObjBound, gurobipy.GRB.MAXINT) + 1e-4)
+
+    def improvement_infeasible(self) -> bool:
+        return self.bound <= self.current_solution.objective_value
 
     def store_solution(self):
         self.current_solution = SolutionReminder(
             objective_value=self.objective_value,
-            assign_students_var_values=var_values(self.assign_students_vars),
+            assign_students_var_values=utilities.var_values(self.assign_students_vars),
         )
 
     def make_current_solution_best_solution(self):

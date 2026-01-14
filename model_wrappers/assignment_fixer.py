@@ -5,6 +5,7 @@ import random
 
 import gurobipy
 
+import utilities
 from model_wrappers.model_wrapper import ModelWrapper
 from model_wrappers.thin_wrappers import Initializer
 from modeling.configuration import Configuration
@@ -13,7 +14,6 @@ from modeling.model_components import ModelComponents
 from solving_utilities.assignment_fixing_data import AssignmentFixingData
 from solving_utilities.group_shifter import GroupShifter
 from solving_utilities.solution_reminder import SolutionReminder
-from utilities import var_values
 
 
 class AssignmentFixer(ModelWrapper):
@@ -39,7 +39,7 @@ class AssignmentFixer(ModelWrapper):
     def store_solution(self):
         self.current_solution = SolutionReminder(
             objective_value=self.objective_value,
-            assign_students_var_values=var_values(self.assign_students_vars),
+            assign_students_var_values=utilities.var_values(self.assign_students_vars),
         )
         self.current_sol_fixing_data = AssignmentFixingData.get(
             config=self.config,
@@ -75,15 +75,13 @@ class AssignmentFixer(ModelWrapper):
         return boundaries
 
     def _separate_assignments(
-        self, zone_a: int, zone_b: int, num_zones: int, assignments: list[tuple[int, int, int]]
+        self, zone_a: int, zone_b: int, num_zones: int, line_up: list[tuple[int, int, int]]
     ) -> tuple[list[tuple[int, int, int]], list[tuple[int, int, int]]]:
-
-        zones = self.zones(num_zones)
-        start_a, end_a = zones[zone_a]
+        start_a, end_a = (zones := self.zones(num_zones))[zone_a]
         start_b, end_b = zones[zone_b]
         return (
-            assignments[start_a:end_a] + assignments[start_b:end_b],
-            assignments[:start_a] + assignments[end_a:start_b] + assignments[end_b:],
+            line_up[start_a:end_a] + line_up[start_b:end_b],
+            line_up[:start_a] + line_up[end_a:start_b] + line_up[end_b:],
         )
 
     def _separate_groups(
@@ -104,9 +102,8 @@ class AssignmentFixer(ModelWrapper):
         return groups_of_free.difference(groups_of_fixed), groups_of_fixed
 
     def fix_rest(self, zone_a: int, zone_b: int, num_zones: int):
-        line_up_assignments = self.current_sol_fixing_data.line_up_assignments
         free_assignments, fixed_assignments = self._separate_assignments(
-            zone_a, zone_b, num_zones, line_up_assignments
+            zone_a, zone_b, num_zones, self.current_sol_fixing_data.line_up_assignments
         )
         groups_only_free, groups_mixed = self._separate_groups(free_assignments, fixed_assignments)
         if groups_only_free:
@@ -117,10 +114,9 @@ class AssignmentFixer(ModelWrapper):
                 project_group_student_triples=self.derived.project_group_student_triples,
                 assign_students_var_values=self.current_solution.assign_students_var_values,
             )
-            line_up_assignments = group_shifter.adjusted_line_up_assignments
             start_values = group_shifter.adjusted_start_values
             free_assignments, fixed_assignments = self._separate_assignments(
-                zone_a, zone_b, num_zones, line_up_assignments
+                zone_a, zone_b, num_zones, group_shifter.adjusted_line_up_assignments
             )
             assignments = set(free_assignments + fixed_assignments)
         else:
@@ -145,27 +141,25 @@ class AssignmentFixer(ModelWrapper):
         self.zones.cache_clear()
 
     def force_k_worst_to_change(self, k: int):
-
         self.model.setAttr(
             "UB",
             self.assign_students_vars,
             [1] * len(self.assign_students_vars),
         )
 
-        worst_k = self.current_sol_fixing_data.line_up_assignments[:k]
+        worst_k_assignments = self.current_sol_fixing_data.line_up_assignments[:k]
         variables = self.model_components.variables
 
-        for project_id, group_id, student_id in worst_k:
+        for project_id, group_id, student_id in worst_k_assignments:
             if project_id == -1:  # It is a pseudo_assignment
                 var = variables.unassigned_students[student_id]
             else:
                 var = variables.assign_students[project_id, group_id, student_id]
             var.UB = 0
 
-        undefined_val = gurobipy.GRB.UNDEFINED
-        worst_k_student_ids = set(student_id for _, _, student_id in worst_k)
+        worst_k_student_ids = set(student_id for _, _, student_id in worst_k_assignments)
         start_values = [
-            undefined_val if student_id in worst_k_student_ids else value
+            gurobipy.GRB.UNDEFINED if student_id in worst_k_student_ids else value
             for (_, _, student_id), value in zip(
                 self.derived.project_group_student_triples,
                 self.current_solution.assign_students_var_values,

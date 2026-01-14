@@ -1,13 +1,13 @@
 import functools
 import time
 
+import utilities
 from modeling.base_model_builder import BaseModelBuilder
 from modeling.configuration import Configuration
 from modeling.derived_modeling_data import DerivedModelingData
 from solving_utilities.assignment_fixing_data import AssignmentFixingData
 from solving_utilities.callbacks import GurobiAloneProgressTracker, Patience
 from solving_utilities.solution_reminder import SolutionReminder
-from utilities import Stations, gurobi_round, var_values
 
 
 class Initializer:
@@ -32,15 +32,15 @@ class Initializer:
             patience=patience,
             solution_summaries=self.solution_summaries,
             start_time=self.start_time,
-            station=Stations.INITIAL_OPTIMIZATION,
+            station=utilities.Stations.INITIAL_OPTIMIZATION,
             required_sol_count=self.required_sol_count,
         )
         self.model.optimize(callback)
-        if (obj := gurobi_round(self.model.ObjVal)) > callback.best_obj:
+        if (obj := utilities.gurobi_round(self.model.ObjVal)) > callback.best_obj:
             summary: dict[str, int | float | str] = {
                 "objective": obj,
                 "runtime": time.time() - self.start_time,
-                "station": Stations.INITIAL_OPTIMIZATION,
+                "station": utilities.Stations.INITIAL_OPTIMIZATION,
                 "shakes": self.model.Params.Seed,
             }
             self.solution_summaries.append(summary)
@@ -49,8 +49,8 @@ class Initializer:
     def current_solution(self) -> SolutionReminder:
         variables = self.model_components.variables
         return SolutionReminder(
-            objective_value=gurobi_round(self.model.ObjVal),
-            assign_students_var_values=var_values(variables.assign_students.values()),
+            objective_value=utilities.gurobi_round(self.model.ObjVal),
+            assign_students_var_values=utilities.var_values(variables.assign_students.values()),
         )
 
     @functools.cached_property
@@ -73,7 +73,7 @@ class GurobiAloneWrapper:
 
     @property
     def objective_value(self) -> int:
-        return gurobi_round(self.model.ObjVal)
+        return utilities.gurobi_round(self.model.ObjVal)
 
     def set_time_limit(self, time_limit: int | float):
         self.model.Params.TimeLimit = time_limit
@@ -81,8 +81,8 @@ class GurobiAloneWrapper:
     def optimize(self):
         self.model.optimize(GurobiAloneProgressTracker(self.start_time, self.solution_summaries))
         summary: dict[str, int | float] = {
-            "objective": gurobi_round(self.model.ObjVal),
-            "bound": gurobi_round(self.model.ObjBound),
+            "objective": utilities.gurobi_round(self.model.ObjVal),
+            "bound": utilities.gurobi_round(self.model.ObjBound),
             "runtime": time.time() - self.start_time,
         }
         self.solution_summaries.append(summary)
