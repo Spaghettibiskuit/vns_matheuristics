@@ -6,14 +6,13 @@ import typing
 
 import pandas
 
-from modeling.derived_modeling_data import DerivedModelingData
 from solution_processing.solution_info_retriever import SolutionInformationRetriever
 
 
 class SolutionViewer:
 
-    def __init__(self, derived: DerivedModelingData, retriever: SolutionInformationRetriever):
-        self.derived = derived
+    def __init__(self, retriever: SolutionInformationRetriever):
+        self.derived = retriever.derived
         self.retriever = retriever
 
     @functools.cached_property

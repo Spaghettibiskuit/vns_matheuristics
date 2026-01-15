@@ -2,8 +2,6 @@
 
 import functools
 
-from modeling.configuration import Configuration
-from modeling.derived_modeling_data import DerivedModelingData
 from modeling.model_components import LinExpressions
 from solution_processing.solution_info_retriever import SolutionInformationRetriever
 from utilities import gurobi_round
@@ -14,13 +12,11 @@ class SolutionChecker:
 
     def __init__(
         self,
-        config: Configuration,
-        derived: DerivedModelingData,
         lin_expressions: LinExpressions,
         retriever: SolutionInformationRetriever,
     ):
-        self.config = config
-        self.derived = derived
+        self.config = retriever.config
+        self.derived = retriever.derived
         self.lin_expressions = lin_expressions
         self.retriever = retriever
 

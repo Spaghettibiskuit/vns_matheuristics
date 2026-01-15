@@ -2,7 +2,7 @@ import json
 import random
 
 import utilities
-from create_instance import create_instance
+from instance_creation.create_instance import create_instance
 
 for num_projects, num_students in [(i, i * 10) for i in range(3, 4)]:
     random.seed(0)

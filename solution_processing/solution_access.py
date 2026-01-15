@@ -8,31 +8,24 @@ import pandas
 
 from model_wrappers.model_wrapper import ModelWrapper
 from model_wrappers.thin_wrappers import GurobiAloneWrapper
-from modeling.configuration import Configuration
-from modeling.derived_modeling_data import DerivedModelingData
 from solution_processing.solution_checker import SolutionChecker
 from solution_processing.solution_info_retriever import SolutionInformationRetriever
 from solution_processing.solution_viewer import SolutionViewer
 
-SOLUTIONS_FOLDER_NAME = "solutions"
 
-
-class Solution:
+class SolutionAccess:
 
     def __init__(
         self,
-        config: Configuration,
-        derived: DerivedModelingData,
-        wrapped_model: ModelWrapper | GurobiAloneWrapper,
+        model: ModelWrapper | GurobiAloneWrapper,
         retriever: SolutionInformationRetriever,
         viewer: SolutionViewer,
         checker: SolutionChecker,
     ):
-        self.config = config
-        self.derived = derived
-        self.objective_value = wrapped_model.objective_value
-        self.variables = wrapped_model.model_components.variables
-        self.lin_expressions = wrapped_model.model_components.lin_expressions
+        self.config = retriever.config
+        self.derived = retriever.derived
+        self.model = model
+        self.benchmark_summaries = model.solution_summaries
         self.retriever = retriever
         self.viewer = viewer
         self.checker = checker
@@ -49,7 +42,7 @@ class Solution:
         return pandas.DataFrame(students_in_groups)
 
     def save_as_csv(self, filename: str, suffix: str = "csv"):
-        target_folder = Path(__file__).parent / SOLUTIONS_FOLDER_NAME / "custom"
+        target_folder = Path("solutions") / "custom"
         path = target_folder / f"{filename}.{suffix}"
         if path.exists():
             raise ValueError("Filename already exists.")
@@ -57,14 +50,14 @@ class Solution:
         target_folder.mkdir(parents=True, exist_ok=True)
 
         top_comments = [
-            f"# Objective: {self.objective_value}",
+            f"# Objective: {self.model.objective_value}",
             f"# Penalty per unassigned student: {self.config.penalty_unassigned}",
             f"# Reward per materialized mutual pair: {self.config.reward_mutual_pair}",
         ]
 
         lin_expr_values = [
-            getattr(self.lin_expressions, field.name).getValue()
-            for field in fields(self.lin_expressions)
+            getattr(self.model.model_components.lin_expressions, field.name).getValue()
+            for field in fields(self.model.model_components.lin_expressions)
         ]
         descriptors = [
             "Sum of the realized project preferences",

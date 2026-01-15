@@ -5,9 +5,14 @@ import random
 from pathlib import Path
 
 import utilities
-from vns import VariableNeighborhoodSearch
+from assignment_fixing import assignment_fixing
+from gurobi_alone import gurobi_alone
+from local_branching import local_branching
+from model_wrappers.assignment_fixer import AssignmentFixer
+from model_wrappers.local_brancher import LocalBrancher
+from model_wrappers.thin_wrappers import GurobiAloneWrapper
 
-BENCHMARKS_FOLDER = Path(__file__).parent / "benchmarks"
+BENCHMARKS_FOLDER = Path("benchmarks")
 
 
 class Subfolders(enum.StrEnum):
@@ -35,18 +40,18 @@ class LocalBranchingParameters:
 
 
 @dataclasses.dataclass
-class VariableFixingParamters:
+class AssignmentFixingParamters:
     total_time_limit: int | float = 60
     min_num_zones: int = 4
     max_num_zones: int = 6
     min_shake_perc: int = 10
     step_shake_perc: int = 10
     max_shake_perc: int = 40
-    initial_patience: int | float = 6
-    shake_patience: int | float = 6
-    shake_patience_step: int | float = 0.6 * (max_num_zones - min_num_zones + 1)
-    base_optimization_patience: int | float = 6
-    base_optimization_patience_step: float = 0.6
+    initial_patience: int | float = 3
+    shake_patience: int | float = 3
+    shake_patience_step: int | float = 0.9
+    base_optimization_patience: int | float = 3
+    base_optimization_patience_step: float = 0.3
     required_initial_solutions: int = 5
 
 
@@ -59,45 +64,51 @@ def check_whether_instances_exist(instances: list[tuple[int, int, int]]):
     for instance in instances:
         path_projects, path_students = utilities.build_paths(*instance)
         if not path_projects.exists():
-            raise ValueError(f"{repr(path_projects)} does not exist")
+            raise ValueError(f"{path_projects} does not exist")
         if not path_students.exists():
-            raise ValueError(f"{repr(path_students)} does not exist")
+            raise ValueError(f"{path_students} does not exist")
 
 
-def get_path(subfolder: str, name: str):
-    return BENCHMARKS_FOLDER / subfolder / (name + ".json")
+def get_path(method: str, name: str):
+    return BENCHMARKS_FOLDER / method / (name + ".json")
 
 
 def benchmark_instance_gurobi_alone(
     instance: tuple[int, int, int], parameters: GurobiAloneParameters
 ) -> list[dict[str, int | float]]:
-    vns = VariableNeighborhoodSearch(*instance)
-    return vns.gurobi_alone(**dataclasses.asdict(parameters))
+    solution_access = gurobi_alone(*instance, **dataclasses.asdict(parameters))
+    if not isinstance(solution_access.model, GurobiAloneWrapper):
+        raise TypeError()
+    return solution_access.model.solution_summaries
 
 
 def benchmark_instance_local_branching(
     instance: tuple[int, int, int], parameters: LocalBranchingParameters
 ) -> list[dict[str, int | float | str]]:
-    vns = VariableNeighborhoodSearch(*instance)
-    return vns.local_branching(**dataclasses.asdict(parameters))
+    solution_access = local_branching(*instance, **dataclasses.asdict(parameters))
+    if not isinstance(solution_access.model, LocalBrancher):
+        raise TypeError()
+    return solution_access.model.solution_summaries
 
 
 def benchmark_instance_variable_fixing(
-    instance: tuple[int, int, int], parameters: VariableFixingParamters
+    instance: tuple[int, int, int], parameters: AssignmentFixingParamters
 ) -> list[dict[str, int | float | str]]:
-    vns = VariableNeighborhoodSearch(*instance)
-    return vns.assignment_fixing(**dataclasses.asdict(parameters))
+    solution_access = assignment_fixing(*instance, **dataclasses.asdict(parameters))
+    if not isinstance(solution_access.model, AssignmentFixer):
+        raise TypeError()
+    return solution_access.model.solution_summaries
 
 
 def benchmark(
     name: str,
-    run_gurobi: bool,
+    run_gurobi_alone: bool,
     run_local_branching: bool,
     run_variable_fixing: bool,
     instances: list[tuple[int, int, int]],
     gurobi_alone_parameters: GurobiAloneParameters = GurobiAloneParameters(),
     local_branching_parameters: LocalBranchingParameters = LocalBranchingParameters(),
-    variable_fixing_parameters: VariableFixingParamters = VariableFixingParamters(),
+    variable_fixing_parameters: AssignmentFixingParamters = AssignmentFixingParamters(),
     seed: int = 0,
 ):
     check_whether_instances_exist(instances)
@@ -107,12 +118,12 @@ def benchmark(
     variable_fixing_path = get_path(Subfolders.VARIABLE_FIXING, name)
 
     for path, will_be_written_to in (
-        (gurobi_path, run_gurobi),
+        (gurobi_path, run_gurobi_alone),
         (local_branching_path, run_local_branching),
         (variable_fixing_path, run_variable_fixing),
     ):
         if path.exists() and will_be_written_to:
-            raise ValueError(f"{repr(path)} that will be written to already exists.")
+            raise ValueError(f"{path} that will be written to already exists.")
 
     gurobi_solutions: dict[str, list[dict[str, int | float]]] = {}
     local_branching_solutions: dict[str, list[dict[str, int | float | str]]] = {}
@@ -122,7 +133,7 @@ def benchmark(
 
         key = "_".join(str(elem) for elem in instance)
 
-        if run_gurobi:
+        if run_gurobi_alone:
             random.seed(seed)
             gurobi_solutions[key] = benchmark_instance_gurobi_alone(
                 instance, gurobi_alone_parameters
@@ -175,12 +186,12 @@ def benchmark(
 
 if __name__ == "__main__":
     benchmark(
-        name="30_0_1h.json",
-        run_gurobi=False,
+        name="test",
+        run_gurobi_alone=True,
         run_local_branching=True,
         run_variable_fixing=True,
         instances=[(i * 10, i * 100, j) for i in range(3, 4) for j in range(0, 1)],
-        gurobi_alone_parameters=GurobiAloneParameters(time_limit=3_600),
-        local_branching_parameters=LocalBranchingParameters(total_time_limit=3_600),
-        variable_fixing_parameters=VariableFixingParamters(total_time_limit=3_600),
+        gurobi_alone_parameters=GurobiAloneParameters(time_limit=60),
+        local_branching_parameters=LocalBranchingParameters(total_time_limit=180),
+        variable_fixing_parameters=AssignmentFixingParamters(total_time_limit=180),
     )

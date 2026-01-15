@@ -2,14 +2,14 @@ import itertools
 import random
 import time
 
-from gurobipy import GRB
+import gurobipy
 
 from model_wrappers.assignment_fixer import AssignmentFixer
 from model_wrappers.local_brancher import LocalBrancher
 from model_wrappers.thin_wrappers import GurobiAloneWrapper, Initializer
 from modeling.configuration import Configuration
 from modeling.derived_modeling_data import DerivedModelingData
-from solution import Solution
+from solution_processing.solution_access import SolutionAccess
 from solution_processing.solution_checker import SolutionChecker
 from solution_processing.solution_info_retriever import SolutionInformationRetriever
 from solution_processing.solution_viewer import SolutionViewer
@@ -120,7 +120,7 @@ class VariableNeighborhoodSearch:
 
                 elif model.improvement_found():
                     model.store_solution()
-                    if model.status == GRB.OPTIMAL:
+                    if model.status == gurobipy.GRB.OPTIMAL:
                         if rhs > rhs_min:
                             model.pop_branching_constraints_stack()
                         model.add_excluding_branching_constraint(rhs)
@@ -288,17 +288,13 @@ class VariableNeighborhoodSearch:
             derived=self.derived,
             variables=self.best_model.model_components.variables,
         )
-        viewer = SolutionViewer(derived=self.derived, retriever=retriever)
+        viewer = SolutionViewer(retriever)
         checker = SolutionChecker(
-            config=self.config,
-            derived=self.derived,
             lin_expressions=self.best_model.model_components.lin_expressions,
             retriever=retriever,
         )
-        self.best_solution = Solution(
-            config=self.config,
-            derived=self.derived,
-            wrapped_model=self.best_model,
+        self.best_solution = SolutionAccess(
+            model=self.best_model,
             retriever=retriever,
             viewer=viewer,
             checker=checker,
