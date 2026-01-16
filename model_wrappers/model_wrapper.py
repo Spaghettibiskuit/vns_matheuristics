@@ -35,8 +35,8 @@ class ModelWrapper(abc.ABC):
     def solution_count(self) -> int:
         return self.model.SolCount
 
-    def set_time_limit(self, total_time_limit: int | float, start_time: float):
-        self.model.Params.TimeLimit = max(0, total_time_limit - (time.time() - start_time))
+    def set_time_limit(self, total_time_limit: int | float):
+        self.model.Params.TimeLimit = max(0, total_time_limit - (time.time() - self.start_time))
 
     def optimize(self, patience: int | float, shake: bool = False, required_sol_count: int = 0):
         callback = Patience(

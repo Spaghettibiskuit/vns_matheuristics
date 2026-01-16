@@ -12,8 +12,6 @@ from model_wrappers.assignment_fixer import AssignmentFixer
 from model_wrappers.local_brancher import LocalBrancher
 from model_wrappers.thin_wrappers import GurobiAloneWrapper
 
-BENCHMARKS_FOLDER = Path("benchmarks")
-
 
 class Subfolders(enum.StrEnum):
     GUROBI = "gurobi"
@@ -23,36 +21,24 @@ class Subfolders(enum.StrEnum):
 
 @dataclasses.dataclass
 class LocalBranchingParameters:
-    total_time_limit: int | float = 60
-    shake_min_perc: int | float = 10
-    shake_step_perc: int | float = 10
-    shake_max_perc: int | float = 40
-    rhs_min_perc: int | float = 10
-    rhs_step_perc: int | float = 10
-    rhs_max_perc: int | float = 40
-    initial_patience: float | int = 6
-    shake_patience: float | int = 6
-    step_shake_patience: float | int = 0.6
-    base_optimization_patience: int | float = 6
-    step_optimization_patience: int | float = 0.6
-    required_initial_solutions: int = 5
-    drop_branching_constrs_before_shake: bool = False
+    time_limit: int | float = 60
+    initial_patience: float | int = 0
+    shake_patience: float | int = 0
+    step_shake_patience: float | int = 0
+    base_optimization_patience: int | float = 0
+    step_optimization_patience: int | float = 0
 
 
 @dataclasses.dataclass
 class AssignmentFixingParamters:
-    total_time_limit: int | float = 60
+    time_limit: int | float = 60
     min_num_zones: int = 4
     max_num_zones: int = 6
-    min_shake_perc: int = 10
-    step_shake_perc: int = 10
-    max_shake_perc: int = 40
-    initial_patience: int | float = 3
-    shake_patience: int | float = 3
-    shake_patience_step: int | float = 0.9
-    base_optimization_patience: int | float = 3
-    base_optimization_patience_step: float = 0.3
-    required_initial_solutions: int = 5
+    initial_patience: int | float = 0
+    shake_patience: int | float = 0
+    shake_patience_step: int | float = 0
+    base_optimization_patience: int | float = 0
+    base_optimization_patience_step: float = 0
 
 
 @dataclasses.dataclass
@@ -70,7 +56,7 @@ def check_whether_instances_exist(instances: list[tuple[int, int, int]]):
 
 
 def get_path(method: str, name: str):
-    return BENCHMARKS_FOLDER / method / (name + ".json")
+    return Path("benchmarks") / method / (name + ".json")
 
 
 def benchmark_instance_gurobi_alone(
@@ -190,8 +176,8 @@ if __name__ == "__main__":
         run_gurobi_alone=True,
         run_local_branching=True,
         run_variable_fixing=True,
-        instances=[(i * 10, i * 100, j) for i in range(3, 4) for j in range(0, 1)],
+        instances=[(i * 10, i * 100, j) for i in [3, 7, 10] for j in range(0, 1)],
         gurobi_alone_parameters=GurobiAloneParameters(time_limit=60),
-        local_branching_parameters=LocalBranchingParameters(total_time_limit=180),
-        variable_fixing_parameters=AssignmentFixingParamters(total_time_limit=180),
+        local_branching_parameters=LocalBranchingParameters(time_limit=180),
+        variable_fixing_parameters=AssignmentFixingParamters(time_limit=180),
     )

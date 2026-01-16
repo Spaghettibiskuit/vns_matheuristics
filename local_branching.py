@@ -17,7 +17,7 @@ def local_branching(
     instance_index: int,
     reward_mutual_pair: int = 2,
     penalty_unassigned: int = 3,
-    total_time_limit: int | float = 60,
+    time_limit: int | float = 60,
     shake_min_perc: int | float = 10,
     shake_step_perc: int | float = 10,
     shake_max_perc: int | float = 40,
@@ -30,7 +30,6 @@ def local_branching(
     base_optimization_patience: int | float = 6,
     step_optimization_patience: int | float = 0.6,
     required_initial_solutions: int = 5,
-    drop_branching_constrs_before_shake: bool = False,
 ) -> SolutionAccess:
     config = Configuration.get(
         number_of_projects=number_of_projects,
@@ -53,29 +52,23 @@ def local_branching(
         )
     )
 
-    initial_model = Initializer(
-        config=config, derived=derived, required_sol_count=required_initial_solutions
-    )
+    initial_model = Initializer(config, derived, required_initial_solutions)
     start_time = initial_model.start_time
 
     shake_cur = shake_min - shake_step
 
-    initial_model.set_time_limit(total_time_limit, start_time)
+    initial_model.set_time_limit(time_limit)
     initial_model.optimize(patience=initial_patience)
 
     model = LocalBrancher.get(initial_model)
 
-    while not time.time() - start_time > total_time_limit:
+    while time.time() - start_time < time_limit:
         rhs = rhs_min
-        patience = base_optimization_patience
 
-        while not time.time() - start_time > total_time_limit:
-            if rhs > rhs_max:
-                break
-
+        while time.time() - start_time < time_limit:
             patience = base_optimization_patience / rhs_min * rhs
 
-            model.set_time_limit(total_time_limit, start_time)
+            model.set_time_limit(time_limit)
 
             model.add_bounding_branching_constraint(rhs)
             print(f"\n\nPATIENCE: {patience}\n\n")
@@ -89,7 +82,9 @@ def local_branching(
                 if rhs > rhs_min:
                     model.pop_branching_constraints_stack()
                 model.add_excluding_branching_constraint(rhs)
-                rhs += rhs_step
+                if rhs == rhs_max:
+                    break
+                rhs = min(rhs + rhs_step, rhs_max)
 
             elif model.improvement_found():
                 model.store_solution()
@@ -107,17 +102,16 @@ def local_branching(
         if model.new_best_found():
             model.make_current_solution_best_solution()
             shake_cur = shake_min
+        elif shake_cur == shake_max:
+            shake_cur = shake_min
         else:
-            shake_cur += shake_step
-            if shake_cur > shake_max:
-                shake_cur = shake_min
-        if drop_branching_constrs_before_shake:
-            model.drop_all_branching_constraints()
+            shake_cur = min(shake_cur + shake_step, shake_max)
 
+        model.drop_all_branching_constraints()
         model.make_best_solution_current_solution()
 
         model.add_shaking_constraints(shake_cur, shake_step)
-        model.set_time_limit(total_time_limit, start_time)
+        model.set_time_limit(time_limit)
         print(
             f"\n\n PATIENCE: {shake_patience}; SHAKE: {shake_cur}-{shake_cur + shake_step} "
             f" ({config.number_of_students})\n\n"
@@ -143,4 +137,4 @@ def local_branching(
 
 if __name__ == "__main__":
     random.seed(0)
-    local_branching(30, 300, 0, total_time_limit=10_000)
+    local_branching(30, 300, 0, time_limit=10_000)

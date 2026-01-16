@@ -1,5 +1,4 @@
 import random
-import time
 
 from model_wrappers.thin_wrappers import GurobiAloneWrapper
 from modeling.configuration import Configuration
@@ -24,11 +23,10 @@ def gurobi_alone(
         penalty_unassigned=penalty_unassigned,
     )
     derived = DerivedModelingData.get(config=config)
-    start_time = time.time()
     model = GurobiAloneWrapper(config, derived)
     model.set_time_limit(time_limit)
     model.optimize()
-    return post_processing(start_time, config, derived, model)
+    return post_processing(model.start_time, config, derived, model)
 
 
 if __name__ == "__main__":

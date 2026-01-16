@@ -24,8 +24,8 @@ class Initializer:
         self.solution_summaries: list[dict[str, int | float | str]] = []
         self.required_sol_count = required_sol_count
 
-    def set_time_limit(self, total_time_limit: int | float, start_time: float):
-        self.model.Params.TimeLimit = max(0, total_time_limit - (time.time() - start_time))
+    def set_time_limit(self, total_time_limit: int | float):
+        self.model.Params.TimeLimit = max(0, total_time_limit - (time.time() - self.start_time))
 
     def optimize(self, patience: int | float):
         callback = Patience(
