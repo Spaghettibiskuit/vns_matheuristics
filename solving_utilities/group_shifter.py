@@ -1,5 +1,4 @@
 import functools
-import itertools
 
 
 class GroupShifter:
@@ -18,12 +17,8 @@ class GroupShifter:
         self._project_group_student_triples = project_group_student_triples
         self._assign_students_var_values = assign_students_var_values
 
-    @functools.cached_property
+    @property
     def _shifted_groups(self) -> dict[tuple[int, int], tuple[int, int]]:
-        all_groups = self._groups_only_free.union(self._groups_mixed)
-        if len(all_groups) != len(self._groups_only_free) + len(self._groups_mixed):
-            raise ValueError()
-
         affected_projects = set(project_id for project_id, _ in self._groups_only_free)
         only_free_groups: dict[int, list[int]] = {
             project_id: [] for project_id in affected_projects
@@ -31,26 +26,22 @@ class GroupShifter:
         mixed_affected_groups: dict[int, list[int]] = {
             project_id: [] for project_id in affected_projects
         }
+        for project_id, group_id in self._groups_only_free:
+            only_free_groups[project_id].append(group_id)
 
-        for project_id, group_id in all_groups:
+        for project_id, group_id in self._groups_mixed:
             if project_id in affected_projects:
-                if (project_id, group_id) in self._groups_only_free:
-                    only_free_groups[project_id].append(group_id)
-                else:
-                    mixed_affected_groups[project_id].append(group_id)
+                mixed_affected_groups[project_id].append(group_id)
 
         return {
             (project_id, group_id): (project_id, new_group_id)
-            for (project_id, mixed_affected_groups), (_, only_free_affected_groups) in zip(
+            for (project_id, mixed_groups), (_, free_groups) in zip(
                 sorted(mixed_affected_groups.items()), sorted(only_free_groups.items())
             )
-            for group_id, new_group_id in zip(
-                mixed_affected_groups + only_free_affected_groups,
-                itertools.count(),
-            )
+            for new_group_id, group_id in enumerate(mixed_groups + free_groups)
         }
 
-    @property
+    @functools.cached_property
     def adjusted_line_up_assignments(self) -> list[tuple[int, int, int]]:
         shifted_groups = self._shifted_groups
         return [
@@ -64,17 +55,13 @@ class GroupShifter:
 
     @property
     def adjusted_start_values(self) -> list[int | float]:
-        shifted_groups = self._shifted_groups
         start_values = dict(
             zip(
                 self._project_group_student_triples,
                 self._assign_students_var_values,
             )
         )
-        for project_id, group_id, student_id in self._original_line_up_assignments:
-            if (new_group := shifted_groups.get((project_id, group_id))) is not None:
-                old = (project_id, group_id, student_id)
-                new = (*new_group, student_id)
-                start_values[old], start_values[new] = start_values[new], start_values[old]
+        for old, new in zip(self._original_line_up_assignments, self.adjusted_line_up_assignments):
+            start_values[old], start_values[new] = start_values[new], start_values[old]
 
         return list(start_values.values())

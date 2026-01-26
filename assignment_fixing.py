@@ -131,4 +131,4 @@ def assignment_fixing(
 
 if __name__ == "__main__":
     random.seed(0)
-    assignment_fixing(30, 300, 0, time_limit=10_000)
+    assignment_fixing(30, 300, 0, time_limit=600)

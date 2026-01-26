@@ -1,4 +1,8 @@
-"""Contains functions to generate a dataframe on random students."""
+"""Create random preferences regarding projects and group partners for a given number of students.
+
+Every student expresses a preference for each available project. Every student also names other
+students he/she would like to work with.
+"""
 
 import random
 
@@ -65,7 +69,7 @@ def _peer_project_preferences(
     )
 
 
-def peer_influenced_project_preference(preferences_for_project: list[int]) -> int:
+def _peer_influenced_project_preference(preferences_for_project: list[int]) -> int:
     return max(preferences_for_project) if random.random() <= 0.5 else min(preferences_for_project)
 
 
@@ -84,7 +88,7 @@ def _random_project_preferences(
         if peer_preferences_per_project:
             student_project_preferences = tuple(
                 (
-                    peer_influenced_project_preference(peer_preferences_for_project)
+                    _peer_influenced_project_preference(peer_preferences_for_project)
                     if random.random() <= percentage_peer_influenced
                     else random.randint(min_pref, max_pref)
                 )
@@ -110,32 +114,36 @@ def random_students_df(
     min_project_preference: int,
     max_project_preference: int,
 ) -> pandas.DataFrame:
-    """Returns random students with partner and project preferences.
+    """Returns random specifications for a given number of students.
 
     Args:
-        num_projects: The number of projects in the problem instance.
-        num_students: The number of students in the problem instance.
-        num_partner_preferences: The number of partner preferences
-            each student specifies with the ID of the students he/she
-            wants to  work together with the most.
-        percentage_reciprocity: Roughly the probability that a student
-            specifies another student as a partner preference if that
-            student specified him/her as a partner preference before.
-        percentage_project_preference_overlap: To what degree the
-            student's preference value for a specific project is the
-            average preference for that project among those that are
-            partner preferences and already have specified their
-            project preferences.
+        num_projects: The number of projects.
+        num_students: The number of students.
+
+        min_num_partner_preferences: The minimum number of peers any student specifies as those
+            he/she would like to work together with.
+        max_num_partner_preferences: The maximum...
+
+        percentage_reciprocity: Roughly the 'probability' of reciprocating a partner preference.
+            The partner preferences are generated for one student after another. If at the time at
+            which the partner preferences for a given student are generated that student has
+            already been specified by another student, this is the probability with which the
+            student will reciprocate it. Unless more other students have specified the student
+            than his/her number of partner preferences. Then this probability only applies to a
+            random sample of that size.
+
+        percentage_peer_influenced_project_preferences: The probability that a preference of the
+            student is that of one of his/her preferred partners that have already specified their
+            project preferences. If the preference is influenced by peers it is the maximum or
+            minimum preference value among the peers with a 50/50 chance.
+
         min_project_preference: The lowest possible project preference.
         max_project_preference: The highest possible project preference.
 
     Returns:
-        The project preferences for all projects and the partner preferences
-        i.e., the students a student wants to work with the most, for all
-        students in the problem instance. Project preferences and partner preferences
-        are influenced by each other to a specifiable degree. Otherwise values
-        are random within bounds set by the arguments. THE INDEX POSITION IN THE
-        DATAFRAME LATER BECOMES THE STUDENT'S ID.
+        For all students the project preference for every project and the preferred partners
+        i.e., the students the student wants to work with. THE INDEX POSITION IN THE DATAFRAME
+        LATER BECOMES THE STUDENT'S ID.
     """
     partner_preferences = _random_partner_preferences(
         num_students,

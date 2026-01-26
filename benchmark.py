@@ -30,7 +30,7 @@ class LocalBranchingParameters:
 
 
 @dataclasses.dataclass
-class AssignmentFixingParamters:
+class AssignmentFixingParameters:
     time_limit: int | float = 60
     min_num_zones: int = 4
     max_num_zones: int = 6
@@ -78,7 +78,7 @@ def benchmark_instance_local_branching(
 
 
 def benchmark_instance_variable_fixing(
-    instance: tuple[int, int, int], parameters: AssignmentFixingParamters
+    instance: tuple[int, int, int], parameters: AssignmentFixingParameters
 ) -> list[dict[str, int | float | str]]:
     solution_access = assignment_fixing(*instance, **dataclasses.asdict(parameters))
     if not isinstance(solution_access.model, AssignmentFixer):
@@ -94,7 +94,7 @@ def benchmark(
     instances: list[tuple[int, int, int]],
     gurobi_alone_parameters: GurobiAloneParameters = GurobiAloneParameters(),
     local_branching_parameters: LocalBranchingParameters = LocalBranchingParameters(),
-    variable_fixing_parameters: AssignmentFixingParamters = AssignmentFixingParamters(),
+    variable_fixing_parameters: AssignmentFixingParameters = AssignmentFixingParameters(),
     seed: int = 0,
 ):
     check_whether_instances_exist(instances)
@@ -173,11 +173,11 @@ def benchmark(
 if __name__ == "__main__":
     benchmark(
         name="test",
-        run_gurobi_alone=True,
-        run_local_branching=True,
+        run_gurobi_alone=False,
+        run_local_branching=False,
         run_variable_fixing=True,
-        instances=[(i * 10, i * 100, j) for i in [3, 7, 10] for j in range(0, 1)],
+        instances=[(i * 10, i * 100, j) for i in [10] for j in range(0, 1)],
         gurobi_alone_parameters=GurobiAloneParameters(time_limit=60),
         local_branching_parameters=LocalBranchingParameters(time_limit=180),
-        variable_fixing_parameters=AssignmentFixingParamters(time_limit=180),
+        variable_fixing_parameters=AssignmentFixingParameters(time_limit=3_600),
     )

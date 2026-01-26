@@ -24,6 +24,7 @@ def instance_summary_heuristic(
     num_projects: int,
     num_students: int,
     instance_index: int,
+    time_limit: int | float,
 ) -> InstanceSummaryHeuristic:
     summaries = results[f"{num_projects}_{num_students}_{instance_index}"]
     correctness_indicator = summaries.pop()
@@ -36,8 +37,12 @@ def instance_summary_heuristic(
 
         curr_objective = summary["objective"]
         curr_runtime = summary["runtime"]
+        if not isinstance(curr_runtime, float):
+            raise TypeError()
+        if curr_runtime > time_limit:
+            break
 
-        if not isinstance(curr_objective, int) or not isinstance(curr_runtime, float):
+        if not isinstance(curr_objective, int):
             raise TypeError()
         if curr_objective < best_objective or curr_runtime < runtime_best_objective:
             raise ValueError()
@@ -54,6 +59,7 @@ def instance_summary_gurobi(
     num_projects: int,
     num_students: int,
     instance_index: int,
+    time_limit: int | float,
 ) -> InstanceSummaryGurobi:
     summaries = results[f"{num_projects}_{num_students}_{instance_index}"]
     correctness_indicator = summaries.pop()
@@ -70,11 +76,13 @@ def instance_summary_gurobi(
         curr_bound = summary["bound"]
         curr_runtime = summary["runtime"]
 
-        if (
-            not isinstance(curr_objective, int)
-            or not isinstance(curr_bound, int)
-            or not isinstance(curr_runtime, float)
-        ):
+        if not isinstance(curr_runtime, float):
+            raise TypeError()
+
+        if curr_runtime > time_limit:
+            break
+
+        if not isinstance(curr_objective, int) or not isinstance(curr_bound, int):
             raise TypeError()
         if (
             curr_objective < best_objective
@@ -95,6 +103,7 @@ def granular_all_methods(
     num_projects: int,
     num_students: int,
     instance_indexes: range,
+    time_limit: int | float,
     gurobi_path: Path,
     lb_path: Path,
     vf_path: Path,
@@ -104,15 +113,15 @@ def granular_all_methods(
     vf_res = json.loads(vf_path.read_text("utf-8"))
 
     gurobi_summaries = [
-        instance_summary_gurobi(gurobi_res, num_projects, num_students, instance_index)
+        instance_summary_gurobi(gurobi_res, num_projects, num_students, instance_index, time_limit)
         for instance_index in instance_indexes
     ]
     lb_summaries = [
-        instance_summary_heuristic(lb_res, num_projects, num_students, instance_index)
+        instance_summary_heuristic(lb_res, num_projects, num_students, instance_index, time_limit)
         for instance_index in instance_indexes
     ]
     vf_summaries = [
-        instance_summary_heuristic(vf_res, num_projects, num_students, instance_index)
+        instance_summary_heuristic(vf_res, num_projects, num_students, instance_index, time_limit)
         for instance_index in instance_indexes
     ]
     bests_grb = [summary.best_objective for summary in gurobi_summaries]
