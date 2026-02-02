@@ -1,4 +1,4 @@
-"""A wrapper for a Gurobi model used for VNS with Variable Fixing."""
+"""A class which offers commands that influence or decide which variables are fixed."""
 
 import functools
 import random
@@ -17,7 +17,17 @@ from solving_utilities.solution_reminder import SolutionReminder
 
 
 class AssignmentFixer(ModelWrapper):
-    """A wrapper for a Gurobi model used for VNS with Variable Fixing."""
+    """Offers high-level commands that influence or decide which variables are fixed.
+
+    Attributes additional to ModelWrapper:
+        config: Data that defines the problem instance
+        derived: Iterables and hash-table backed containers useful during optimization that are
+            derived from config.
+        current_sol_fixing_data: The data points needed for proper fixation of variables if the
+            solution current_solution points to is the reference point.
+        best_sol_fixing_data: ... if the solution best_found_solution points to is the reference
+            point.
+    """
 
     def __init__(
         self,
@@ -36,7 +46,7 @@ class AssignmentFixer(ModelWrapper):
         self.current_sol_fixing_data = fixing_data
         self.best_sol_fixing_data = fixing_data
 
-    def store_solution(self):
+    def store_solution(self) -> None:
         self.current_solution = SolutionReminder(
             objective_value=self.objective_value,
             assign_students_var_values=utilities.var_values(self.assign_students_vars),
@@ -49,16 +59,16 @@ class AssignmentFixer(ModelWrapper):
             model=self.model,
         )
 
-    def make_current_solution_best_solution(self):
+    def make_current_solution_best_solution(self) -> None:
         self.best_found_solution = self.current_solution
         self.best_sol_fixing_data = self.current_sol_fixing_data
 
-    def make_best_solution_current_solution(self):
+    def make_best_solution_current_solution(self) -> None:
         self.current_solution = self.best_found_solution
         self.current_sol_fixing_data = self.best_sol_fixing_data
 
     @functools.lru_cache(maxsize=128)
-    def zones(self, num_zones: int) -> list[tuple[int, int]]:
+    def _zones(self, num_zones: int) -> list[tuple[int, int]]:
         """Return the index boundaries of the zones within the ranked line up of assignments.
 
         E.g. 3 zones and 15 students: [(0, 5), (5, 10), (10, 15)]. This is compatible with
@@ -96,7 +106,7 @@ class AssignmentFixer(ModelWrapper):
         Returns:
             (assignments that are free, assignments that are fixed)
         """
-        start_a, end_a = (zones := self.zones(num_zones))[zone_a]
+        start_a, end_a = (zones := self._zones(num_zones))[zone_a]
         start_b, end_b = zones[zone_b]
         return (
             line_up[start_a:end_a] + line_up[start_b:end_b],
@@ -132,7 +142,7 @@ class AssignmentFixer(ModelWrapper):
         )
         return groups_of_free.difference(groups_of_fixed), groups_of_fixed
 
-    def fix_rest(self, zone_a: int, zone_b: int, num_zones: int):
+    def fix_rest(self, zone_a: int, zone_b: int, num_zones: int) -> None:
         """Fix all students which are not in the two zones.
 
         Also the start values of the assignment variables are set such that Gurobi starts at a
@@ -184,15 +194,26 @@ class AssignmentFixer(ModelWrapper):
         ]
         self.model.setAttr("UB", self.assign_students_vars, upper_bounds)
 
-    def delete_zoning_rules(self):
+    def delete_zoning_rules(self) -> None:
         """Delete the pairs of boundary indexes which delimit the zones.
 
         These boundary indexes are in random if the number of students is not divisible by the number
         of zones (see help(self.zones))
         """
-        self.zones.cache_clear()
+        self._zones.cache_clear()
 
-    def force_k_worst_to_change(self, k: int):
+    def force_k_worst_to_change(self, k: int) -> None:
+        """Force the k students with the worst individual assignment score to change assignment.
+
+        This is a preparatory step for the optimization during the shake. It consists of the
+        following temporary changes to the optimization problem.
+
+        1. All students which are not part of the worst k are free to move
+        2. Those that are in the worst k are only prohibited from keeping their current assignment
+            or to stay unassigned
+        3. For all students which are not in the worst k the start assignment is their current
+            assignment
+        """
         self.model.setAttr(
             "UB",
             self.assign_students_vars,
@@ -220,16 +241,17 @@ class AssignmentFixer(ModelWrapper):
 
         self.model.setAttr("Start", self.assign_students_vars, start_values)
 
-    def free_all_unassigned_vars(self):
+    def free_all_unassigned_vars(self) -> None:
         """Free all the variables that specify whether a student is unassigned or not.
 
-        Necessary only after shaking since the are not fixed elsewhere.
+        Necessary only after shaking since they are not fixed elsewhere.
         """
         variables = list(self.model_components.variables.unassigned_students.values())
         self.model.setAttr("UB", variables, [1] * len(variables))
 
     @classmethod
-    def get(cls, initializer: Initializer):
+    def get(cls, initializer: Initializer) -> "AssignmentFixer":
+        """Return an instance of AssignmentFixer after the initial optimization."""
         return cls(
             config=initializer.config,
             derived=initializer.derived,

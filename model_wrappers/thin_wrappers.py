@@ -1,3 +1,5 @@
+"""2 classes: One performs the initial optimization, the other is for running Gurobi alone."""
+
 import functools
 import time
 
@@ -11,6 +13,27 @@ from solving_utilities.solution_reminder import SolutionReminder
 
 
 class Initializer:
+    """For initial optimization and as basis for instantiating LocalBrancher or AssignmentFixer.
+
+    Local Brancher and AssignmentFixer both need a first solution to be instantiated.
+    AssignmentFixer additionally needs an instance of AssignmentFixingData to know which variables
+    to fix according to the assignment fixing VNS algorithm.
+
+    Attributes:
+        config: Data that defines the problem instance
+        derived: Iterables and hash-table backed containers useful during optimization that are
+            derived from config.
+        model_components: Variables, the linear expressions that make up the objective as well as
+            the constraints of the model.
+        model: A Gurobi model.
+        start_time: The epoch the model was built and optimization started in the initializer
+        solution_summaries: Recordings of when a new best solution was found. Consists of the
+            objective value, the runtime when it was found, whether it was found during VND, shake
+            or initial_optimization and how many shakes had already occurred before.
+        required_sol_count: The number of solution that has to be found before the initial
+            optimization is allowed to stop. Is supposed to give local branching and assignment
+            fixing a halfway decent solution to begin with.
+    """
 
     def __init__(
         self, config: Configuration, derived: DerivedModelingData, required_sol_count: int
@@ -24,10 +47,27 @@ class Initializer:
         self.solution_summaries: list[dict[str, int | float | str]] = []
         self.required_sol_count = required_sol_count
 
-    def set_time_limit(self, total_time_limit: int | float):
+    def set_time_limit(self, total_time_limit: int | float) -> None:
+        """Ensure that the solver does not run longer than the total time limit allows."""
         self.model.Params.TimeLimit = max(0, total_time_limit - (time.time() - self.start_time))
 
-    def optimize(self, patience: int | float):
+    def optimize(self, patience: int | float) -> None:
+        """Optimize with a given patience while recording new best solutions.
+
+        Args:
+            patience: The time the solver is allowed to run without finding improvements. See
+                below for further information.
+
+        Example for patience:
+        If the patience were 5 seconds and the solver were to find an improvement every 4 seconds,
+        the solver run would never stop, unless there is a separate hard time limit. If only once
+        no improvement is found within 5 seconds, the solver run terminates.
+
+        Patience does not apply during preprocessing:
+        The patience only applies once the progress information on the branch-and-cut tree
+        search is displayed, since only then Gurobi potentially finds improvements. Any
+        preprocessing is allowed to run as long as it takes.
+        """
         callback = Patience(
             patience=patience,
             solution_summaries=self.solution_summaries,
@@ -47,6 +87,7 @@ class Initializer:
 
     @functools.cached_property
     def current_solution(self) -> SolutionReminder:
+        """The objective value and assignment variable values for the best solution yet."""
         variables = self.model_components.variables
         return SolutionReminder(
             objective_value=utilities.gurobi_round(self.model.ObjVal),
@@ -55,6 +96,7 @@ class Initializer:
 
     @functools.cached_property
     def fixing_data(self) -> AssignmentFixingData:
+        """The data to know which variables to fix according to the assignment fixing algorithm."""
         return AssignmentFixingData.get(
             config=self.config,
             derived=self.derived,
@@ -65,6 +107,17 @@ class Initializer:
 
 
 class GurobiAloneWrapper:
+    """For running Gurobi outside of any further algorithm.
+
+    Attributes:
+        model_components: Variables, the linear expressions that make up the objective as well as
+            the constraints of the model.
+        model: A Gurobi model.
+        start_time: The epoch the model was built and optimization started in the initializer
+        solution_summaries: Recordings of when a new best solution was found. Consists of the
+            objective value, the runtime when it was found, whether it was found during VND, shake
+            or initial_optimization and how many shakes had already occurred before.
+    """
 
     def __init__(self, config: Configuration, derived: DerivedModelingData):
         self.model_components, self.model = BaseModelBuilder(config, derived).get_base_model()
@@ -73,12 +126,15 @@ class GurobiAloneWrapper:
 
     @property
     def objective_value(self) -> int:
+        """The objective value of the model."""
         return utilities.gurobi_round(self.model.ObjVal)
 
-    def set_time_limit(self, time_limit: int | float):
+    def set_time_limit(self, time_limit: int | float) -> None:
+        """Ensure that the solver does not run longer than the total time limit allows."""
         self.model.Params.TimeLimit = time_limit
 
-    def optimize(self):
+    def optimize(self) -> None:
+        """Optimize while recording new best solutions and lowerings of the upper bound."""
         self.model.optimize(GurobiAloneProgressTracker(self.start_time, self.solution_summaries))
         summary: dict[str, int | float] = {
             "objective": utilities.gurobi_round(self.model.ObjVal),

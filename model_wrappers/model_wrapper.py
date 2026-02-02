@@ -1,3 +1,5 @@
+"""A class that provides actions and checks needed during local branching and assignment fixing."""
+
 import abc
 import time
 
@@ -10,6 +12,22 @@ from utilities import Stations, gurobi_round
 
 
 class ModelWrapper(abc.ABC):
+    """Provides actions and checks needed during both local branching and assignment fixing.
+
+
+    Attributes:
+        model_components: Variables, the linear expressions that make up the objective as well as
+            the constraints of the model.
+        model: A Gurobi model.
+        start_time: The epoch the model was built and optimization started in the initializer
+        solution_summaries: Recordings of when a new best solution was found. Consists of the
+            objective value, the runtime when it was found, whether it was found during VND, shake
+            or initial_optimization and how many shakes had already occurred before.
+        current_solution: The objective value and the values of the assignment variables for the
+            solution which is the current point of reference during VND or before the shake
+        best_found_solution: The objective value and the values of the assignment variables for the
+            solution with the best objective value in the current run of the algorithm.
+    """
 
     def __init__(
         self,
@@ -29,16 +47,38 @@ class ModelWrapper(abc.ABC):
 
     @property
     def objective_value(self) -> int:
+        """The objective value of the model."""
         return gurobi_round(self.model.ObjVal)
 
     @property
     def solution_count(self) -> int:
+        """The solution count in the last solver run."""
         return self.model.SolCount
 
     def set_time_limit(self, total_time_limit: int | float):
+        """Ensure that the solver does not run longer than the total time limit allows."""
         self.model.Params.TimeLimit = max(0, total_time_limit - (time.time() - self.start_time))
 
-    def optimize(self, patience: int | float, shake: bool = False, required_sol_count: int = 0):
+    def optimize(self, patience: int | float, shake: bool = False) -> None:
+        """Optimize with a given patience while recording new best solutions.
+
+        Args:
+            patience: The time the solver is allowed to run without finding improvements. See
+                below for further information.
+            shake: Is the current optimization in a shake or not. Only matters for the recording
+                of new best solutions. If shake is True, it will be noted that a new best solution
+                was found during a shake. Otherwise it is recorded as found during VND.
+
+        Example for patience:
+        If the patience were 5 seconds and the solver were to find an improvement every 4 seconds,
+        the solver run would never stop, unless there is a separate hard time limit. If only once
+        no improvement is found within 5 seconds, the solver run terminates.
+
+        Patience does not apply during preprocessing:
+        The patience only applies once the progress information on the branch-and-cut tree
+        search is displayed, since only then Gurobi potentially finds improvements. Any
+        preprocessing is allowed to run as long as it takes.
+        """
         callback = Patience(
             patience=patience,
             start_time=self.start_time,
@@ -47,7 +87,6 @@ class ModelWrapper(abc.ABC):
             best_obj=max(
                 self.best_found_solution.objective_value, self.current_solution.objective_value
             ),
-            required_sol_count=required_sol_count,
         )
         self.model.optimize(callback)
         if self.solution_count > 0 and self.objective_value > callback.best_obj:
@@ -60,15 +99,23 @@ class ModelWrapper(abc.ABC):
             self.solution_summaries.append(summary)
 
     def new_best_found(self) -> bool:
+        """Return whether the current solution is the best yet in this run of the algorithm."""
         return self.current_solution.objective_value > self.best_found_solution.objective_value
 
-    def increment_random_seed(self):
+    def increment_random_seed(self) -> None:
+        """Increase the random seed of the Gurobi model by 1."""
         self.model.Params.Seed += 1
 
     def improvement_found(self) -> bool:
+        """Return whether the objective value is the best yet in the current VND."""
         return self.objective_value > self.current_solution.objective_value
 
-    def recover_to_best_found(self):
+    def recover_to_best_found(self) -> None:
+        """Let Gurobi get back to a solution with the best objective in this run of the algorithm.
+
+        Fix all assignment variable values at those of the best solution. Let Gurobi figure out the
+        according value of the rest of the variables, which is computationally rather inexpensive.
+        """
         assignment_var_values = self.best_found_solution.assign_students_var_values
         self.model.setAttr("LB", self.assign_students_vars, assignment_var_values)
         self.model.setAttr("UB", self.assign_students_vars, assignment_var_values)
@@ -77,13 +124,13 @@ class ModelWrapper(abc.ABC):
         self.model.optimize()
 
     @abc.abstractmethod
-    def store_solution(self):
-        pass
+    def store_solution(self) -> None:
+        """Store the values necessary to recreate it and to use it as a reference point."""
 
     @abc.abstractmethod
-    def make_current_solution_best_solution(self):
-        pass
+    def make_current_solution_best_solution(self) -> None:
+        """If a new best solution was found during shake or VND, save it as such."""
 
     @abc.abstractmethod
-    def make_best_solution_current_solution(self):
-        pass
+    def make_best_solution_current_solution(self) -> None:
+        """Make the best solution the reference point before the shake."""

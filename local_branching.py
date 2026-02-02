@@ -80,6 +80,10 @@ def local_branching(
 
             if model.improvement_infeasible():
                 if rhs > rhs_min:
+                    # This means an excluding branching constrains with the same solution as
+                    # reference and a smaller right-hand side is now on top of the constraints
+                    # stack. This one will be redundant once we add one with with a larger
+                    # right-hand side.
                     model.pop_branching_constraints_stack()
                 model.add_excluding_branching_constraint(rhs)
                 if rhs == rhs_max:
