@@ -18,15 +18,9 @@ class ModelWrapper(abc.ABC):
     Attributes:
         model_components: Variables, the linear expressions that make up the objective as well as
             the constraints of the model.
-        model: A Gurobi model.
-        start_time: The epoch the model was built and optimization started in the initializer
         solution_summaries: Recordings of when a new best solution was found. Consists of the
             objective value, the runtime when it was found, whether it was found during VND, shake
             or initial_optimization and how many shakes had already occurred before.
-        current_solution: The objective value and the values of the assignment variables for the
-            solution which is the current point of reference during VND or before the shake
-        best_found_solution: The objective value and the values of the assignment variables for the
-            solution with the best objective value in the current run of the algorithm.
     """
 
     def __init__(
@@ -38,26 +32,28 @@ class ModelWrapper(abc.ABC):
         sol_reminder: SolutionReminder,
     ):
         self.model_components = model_components
-        self.model = model
-        self.start_time = start_time
+        self._model = model
+        self._start_time = start_time
         self.solution_summaries = solution_summaries
-        self.current_solution = sol_reminder
-        self.best_found_solution = sol_reminder
-        self.assign_students_vars = tuple(self.model_components.variables.assign_students.values())
+        self._current_solution = sol_reminder
+        self._best_found_solution = sol_reminder
+        self._assign_students_vars = tuple(
+            self.model_components.variables.assign_students.values()
+        )
 
     @property
     def objective_value(self) -> int:
         """The objective value of the model."""
-        return gurobi_round(self.model.ObjVal)
+        return gurobi_round(self._model.ObjVal)
 
     @property
     def solution_count(self) -> int:
         """The solution count in the last solver run."""
-        return self.model.SolCount
+        return self._model.SolCount
 
     def set_time_limit(self, total_time_limit: int | float):
         """Ensure that the solver does not run longer than the total time limit allows."""
-        self.model.Params.TimeLimit = max(0, total_time_limit - (time.time() - self.start_time))
+        self._model.Params.TimeLimit = max(0, total_time_limit - (time.time() - self._start_time))
 
     def optimize(self, patience: int | float, shake: bool = False) -> None:
         """Optimize with a given patience while recording new best solutions.
@@ -81,34 +77,34 @@ class ModelWrapper(abc.ABC):
         """
         callback = Patience(
             patience=patience,
-            start_time=self.start_time,
+            start_time=self._start_time,
             solution_summaries=self.solution_summaries,
             station=Stations.SHAKE if shake else Stations.VND,
             best_obj=max(
-                self.best_found_solution.objective_value, self.current_solution.objective_value
+                self._best_found_solution.objective_value, self._current_solution.objective_value
             ),
         )
-        self.model.optimize(callback)
+        self._model.optimize(callback)
         if self.solution_count > 0 and self.objective_value > callback.best_obj:
             summary: dict[str, int | float | str] = {
                 "objective": self.objective_value,
-                "runtime": time.time() - self.start_time,
+                "runtime": time.time() - self._start_time,
                 "station": Stations.SHAKE if shake else Stations.VND,
-                "shakes": self.model.Params.Seed,
+                "shakes": self._model.Params.Seed,
             }
             self.solution_summaries.append(summary)
 
     def new_best_found(self) -> bool:
         """Return whether the current solution is the best yet in this run of the algorithm."""
-        return self.current_solution.objective_value > self.best_found_solution.objective_value
+        return self._current_solution.objective_value > self._best_found_solution.objective_value
 
     def increment_random_seed(self) -> None:
         """Increase the random seed of the Gurobi model by 1."""
-        self.model.Params.Seed += 1
+        self._model.Params.Seed += 1
 
     def improvement_found(self) -> bool:
         """Return whether the objective value is the best yet in the current VND."""
-        return self.objective_value > self.current_solution.objective_value
+        return self.objective_value > self._current_solution.objective_value
 
     def recover_to_best_found(self) -> None:
         """Let Gurobi get back to a solution with the best objective in this run of the algorithm.
@@ -116,12 +112,12 @@ class ModelWrapper(abc.ABC):
         Fix all assignment variable values at those of the best solution. Let Gurobi figure out the
         according value of the rest of the variables, which is computationally rather inexpensive.
         """
-        assignment_var_values = self.best_found_solution.assign_students_var_values
-        self.model.setAttr("LB", self.assign_students_vars, assignment_var_values)
-        self.model.setAttr("UB", self.assign_students_vars, assignment_var_values)
+        assignment_var_values = self._best_found_solution.assign_students_var_values
+        self._model.setAttr("LB", self._assign_students_vars, assignment_var_values)
+        self._model.setAttr("UB", self._assign_students_vars, assignment_var_values)
 
-        self.model.Params.TimeLimit = float("inf")
-        self.model.optimize()
+        self._model.Params.TimeLimit = float("inf")
+        self._model.optimize()
 
     @abc.abstractmethod
     def store_solution(self) -> None:

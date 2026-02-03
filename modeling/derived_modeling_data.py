@@ -1,4 +1,4 @@
-"""A class that bundles information on how rewards can be achieved."""
+"""A dataclass with iterables and hash-table backed containers useful during optimization."""
 
 from dataclasses import dataclass
 
@@ -7,6 +7,8 @@ from modeling.configuration import Configuration
 
 @dataclass(frozen=True)
 class DerivedModelingData:
+    """Iterables and hash-table backed containers useful during optimization."""
+
     project_ids: range
     student_ids: range
     group_ids: dict[int, range]
@@ -18,6 +20,7 @@ class DerivedModelingData:
 
     @classmethod
     def get(cls, config: Configuration):
+        """Alternative initializer for a frozen dataclass."""
         project_ids = range(len(config.projects_info))
         student_ids = range(len(config.students_info))
         group_ids = {

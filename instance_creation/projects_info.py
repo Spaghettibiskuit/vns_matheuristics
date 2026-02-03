@@ -59,7 +59,7 @@ def random_projects_df(
 
         Returns:
             Each project's constraints, whishes and penalties regarding the number of groups and
-            group sizes. THE INDEX POSITION IN THE DATAFRAME LATER BECOMES THE PROJECT'S ID.
+            group sizes. THE INDEX POSITION IN THE DATAFRAME IS THE PROJECT'S ID.
     """
 
     desired_nums_groups = [

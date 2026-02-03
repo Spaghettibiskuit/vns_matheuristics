@@ -17,17 +17,7 @@ from solving_utilities.solution_reminder import SolutionReminder
 
 
 class AssignmentFixer(ModelWrapper):
-    """Offers high-level commands that influence or decide which variables are fixed.
-
-    Attributes additional to ModelWrapper:
-        config: Data that defines the problem instance
-        derived: Iterables and hash-table backed containers useful during optimization that are
-            derived from config.
-        current_sol_fixing_data: The data points needed for proper fixation of variables if the
-            solution current_solution points to is the reference point.
-        best_sol_fixing_data: ... if the solution best_found_solution points to is the reference
-            point.
-    """
+    """Offers high-level commands that influence or decide which variables are fixed."""
 
     def __init__(
         self,
@@ -41,31 +31,31 @@ class AssignmentFixer(ModelWrapper):
         fixing_data: AssignmentFixingData,
     ):
         super().__init__(model_components, model, start_time, solution_summaries, sol_reminder)
-        self.config = config
-        self.derived = derived
-        self.current_sol_fixing_data = fixing_data
-        self.best_sol_fixing_data = fixing_data
+        self._config = config
+        self._derived = derived
+        self._current_sol_fixing_data = fixing_data
+        self._best_sol_fixing_data = fixing_data
 
     def store_solution(self) -> None:
-        self.current_solution = SolutionReminder(
+        self._current_solution = SolutionReminder(
             objective_value=self.objective_value,
-            assign_students_var_values=utilities.var_values(self.assign_students_vars),
+            assign_students_var_values=utilities.var_values(self._assign_students_vars),
         )
-        self.current_sol_fixing_data = AssignmentFixingData.get(
-            config=self.config,
-            derived=self.derived,
+        self._current_sol_fixing_data = AssignmentFixingData.get(
+            config=self._config,
+            derived=self._derived,
             variables=self.model_components.variables,
             lin_expressions=self.model_components.lin_expressions,
-            model=self.model,
+            model=self._model,
         )
 
     def make_current_solution_best_solution(self) -> None:
-        self.best_found_solution = self.current_solution
-        self.best_sol_fixing_data = self.current_sol_fixing_data
+        self._best_found_solution = self._current_solution
+        self._best_sol_fixing_data = self._current_sol_fixing_data
 
     def make_best_solution_current_solution(self) -> None:
-        self.current_solution = self.best_found_solution
-        self.current_sol_fixing_data = self.best_sol_fixing_data
+        self._current_solution = self._best_found_solution
+        self._current_sol_fixing_data = self._best_sol_fixing_data
 
     @functools.lru_cache(maxsize=128)
     def _zones(self, num_zones: int) -> list[tuple[int, int]]:
@@ -76,7 +66,7 @@ class AssignmentFixer(ModelWrapper):
         sizes are randomly floor(num_students / zones) or ceil(num_students / zones) so that the
         zones stretch over the entire line up of assignments.
         """
-        num_students = self.config.number_of_students
+        num_students = self._config.number_of_students
         floor_size = num_students // num_zones
         ceil_size = floor_size + 1
         num_ceil = num_students - (floor_size * num_zones)
@@ -160,16 +150,16 @@ class AssignmentFixer(ModelWrapper):
         that have at least one fixed student.
         """
         free_assignments, fixed_assignments = self._separate_assignments(
-            zone_a, zone_b, num_zones, self.current_sol_fixing_data.line_up_assignments
+            zone_a, zone_b, num_zones, self._current_sol_fixing_data.line_up_assignments
         )
         groups_only_free, groups_mixed = self._separate_groups(free_assignments, fixed_assignments)
         if groups_only_free:
             group_shifter = GroupShifter(
                 groups_only_free=groups_only_free,
                 groups_mixed=groups_mixed,
-                line_up_assignments=self.current_sol_fixing_data.line_up_assignments,
-                project_group_student_triples=self.derived.project_group_student_triples,
-                assign_students_var_values=self.current_solution.assign_students_var_values,
+                line_up_assignments=self._current_sol_fixing_data.line_up_assignments,
+                project_group_student_triples=self._derived.project_group_student_triples,
+                assign_students_var_values=self._current_solution.assign_students_var_values,
             )
             start_values = group_shifter.adjusted_start_values
             free_assignments, fixed_assignments = self._separate_assignments(
@@ -177,10 +167,10 @@ class AssignmentFixer(ModelWrapper):
             )
             assignments = set(free_assignments + fixed_assignments)
         else:
-            start_values = self.current_solution.assign_students_var_values
-            assignments = self.current_sol_fixing_data.assignments
+            start_values = self._current_solution.assign_students_var_values
+            assignments = self._current_sol_fixing_data.assignments
 
-        self.model.setAttr("Start", self.assign_students_vars, start_values)
+        self._model.setAttr("Start", self._assign_students_vars, start_values)
 
         free_student_ids = set(student_id for _, _, student_id in free_assignments)
         upper_bounds = [
@@ -190,9 +180,9 @@ class AssignmentFixer(ModelWrapper):
                 or (project_id, group_id, student_id) in assignments
                 else 0
             )
-            for project_id, group_id, student_id in self.derived.project_group_student_triples
+            for project_id, group_id, student_id in self._derived.project_group_student_triples
         ]
-        self.model.setAttr("UB", self.assign_students_vars, upper_bounds)
+        self._model.setAttr("UB", self._assign_students_vars, upper_bounds)
 
     def delete_zoning_rules(self) -> None:
         """Delete the pairs of boundary indexes which delimit the zones.
@@ -214,13 +204,13 @@ class AssignmentFixer(ModelWrapper):
         3. For all students which are not in the worst k the start assignment is their current
             assignment
         """
-        self.model.setAttr(
+        self._model.setAttr(
             "UB",
-            self.assign_students_vars,
-            [1] * len(self.assign_students_vars),
+            self._assign_students_vars,
+            [1] * len(self._assign_students_vars),
         )
 
-        worst_k_assignments = self.current_sol_fixing_data.line_up_assignments[:k]
+        worst_k_assignments = self._current_sol_fixing_data.line_up_assignments[:k]
         variables = self.model_components.variables
 
         for project_id, group_id, student_id in worst_k_assignments:
@@ -234,12 +224,12 @@ class AssignmentFixer(ModelWrapper):
         start_values = [
             gurobipy.GRB.UNDEFINED if student_id in worst_k_student_ids else value
             for (_, _, student_id), value in zip(
-                self.derived.project_group_student_triples,
-                self.current_solution.assign_students_var_values,
+                self._derived.project_group_student_triples,
+                self._current_solution.assign_students_var_values,
             )
         ]
 
-        self.model.setAttr("Start", self.assign_students_vars, start_values)
+        self._model.setAttr("Start", self._assign_students_vars, start_values)
 
     def free_all_unassigned_vars(self) -> None:
         """Free all the variables that specify whether a student is unassigned or not.
@@ -247,7 +237,7 @@ class AssignmentFixer(ModelWrapper):
         Necessary only after shaking since they are not fixed elsewhere.
         """
         variables = list(self.model_components.variables.unassigned_students.values())
-        self.model.setAttr("UB", variables, [1] * len(variables))
+        self._model.setAttr("UB", variables, [1] * len(variables))
 
     @classmethod
     def get(cls, initializer: Initializer) -> "AssignmentFixer":

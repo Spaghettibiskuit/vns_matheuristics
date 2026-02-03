@@ -30,9 +30,6 @@ class Initializer:
         solution_summaries: Recordings of when a new best solution was found. Consists of the
             objective value, the runtime when it was found, whether it was found during VND, shake
             or initial_optimization and how many shakes had already occurred before.
-        required_sol_count: The number of solution that has to be found before the initial
-            optimization is allowed to stop. Is supposed to give local branching and assignment
-            fixing a halfway decent solution to begin with.
     """
 
     def __init__(
@@ -45,7 +42,7 @@ class Initializer:
         ).get_base_model()
         self.start_time = time.time()
         self.solution_summaries: list[dict[str, int | float | str]] = []
-        self.required_sol_count = required_sol_count
+        self._required_sol_count = required_sol_count
 
     def set_time_limit(self, total_time_limit: int | float) -> None:
         """Ensure that the solver does not run longer than the total time limit allows."""
@@ -73,7 +70,7 @@ class Initializer:
             solution_summaries=self.solution_summaries,
             start_time=self.start_time,
             station=utilities.Stations.INITIAL_OPTIMIZATION,
-            required_sol_count=self.required_sol_count,
+            required_sol_count=self._required_sol_count,
         )
         self.model.optimize(callback)
         if (obj := utilities.gurobi_round(self.model.ObjVal)) > callback.best_obj:

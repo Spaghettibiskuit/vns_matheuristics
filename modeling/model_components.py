@@ -1,4 +1,4 @@
-"""Central place where linear expressions for the SPAwGBP are created."""
+"""Dataclasses that provide references to the components of an instance of the SSPAGDP."""
 
 import dataclasses
 
@@ -7,6 +7,8 @@ import gurobipy
 
 @dataclasses.dataclass(frozen=True)
 class Variables:
+    """Access to variables by their indexes."""
+
     assign_students: gurobipy.tupledict[tuple[int, int, int], gurobipy.Var]
     establish_groups: gurobipy.tupledict[tuple[int, int], gurobipy.Var]
     mutual_unrealized: gurobipy.tupledict[tuple[int, int], gurobipy.Var]
@@ -17,6 +19,8 @@ class Variables:
 
 @dataclasses.dataclass(frozen=True)
 class LinExpressions:
+    """Access to linear expressions."""
+
     sum_realized_project_preferences: gurobipy.LinExpr
     sum_reward_mutual: gurobipy.LinExpr
     sum_penalties_unassigned: gurobipy.LinExpr
@@ -26,6 +30,8 @@ class LinExpressions:
 
 @dataclasses.dataclass(frozen=True)
 class InitialConstraints:
+    """Access to constraints of the base model by their indexes."""
+
     one_assignment_or_unassigned: gurobipy.tupledict[int, gurobipy.Constr]
     open_groups_consecutively: gurobipy.tupledict[int, gurobipy.Constr]
     min_group_size_if_open: gurobipy.tupledict[tuple[int, int, int], gurobipy.Constr]
@@ -38,6 +44,8 @@ class InitialConstraints:
 
 @dataclasses.dataclass(frozen=True)
 class ModelComponents:
+    """Access to the components of an instance of the SSPAGDP"""
+
     variables: Variables
     lin_expressions: LinExpressions
     initial_constraints: InitialConstraints

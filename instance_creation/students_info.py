@@ -143,7 +143,7 @@ def random_students_df(
     Returns:
         For all students the project preference for every project and the preferred partners
         i.e., the students the student wants to work with. THE INDEX POSITION IN THE DATAFRAME
-        LATER BECOMES THE STUDENT'S ID.
+        IS THE STUDENT'S ID.
     """
     partner_preferences = _random_partner_preferences(
         num_students,
