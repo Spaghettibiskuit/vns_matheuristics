@@ -1,4 +1,4 @@
-"""A dataclass with iterables and hash-table backed containers useful during optimization."""
+"""A class with iterables and hash-table backed containers that derive from the configuration."""
 
 from dataclasses import dataclass
 
@@ -7,7 +7,24 @@ from modeling.configuration import Configuration
 
 @dataclass(frozen=True)
 class DerivedModelingData:
-    """Iterables and hash-table backed containers useful during optimization."""
+    """Iterables and hash-table backed containers that derive from the configuration.
+
+    Attributes:
+        project_ids: The range of project IDs.
+        student_ids: The range of student IDs.
+        project_group_pairs: All potential groups specified with tuples of (project_id, group_id).
+            These make up the indexes for for the following variables in
+            modeling.model_components.Variables: establish_groups, group_size_surplus,
+            group_size_deficit.
+        project_group_student_triples: All possible assignments of students to groups specified
+            with (project_id, group_id, student). Indexes for
+            modeling.model_components.Variables.assign_students.
+        mutual_pairs_ordered: all tuples of (student_id_a, student_id_b) were both students want
+            to work with each other i.e. they form a bilateral pair.
+        mutual_pairs_items: As above tuples are in a set for faster lookup during optimization.
+        project_preferences: Preference value of every student for each project.
+            Each key is tuple of (student_id, project_id).
+    """
 
     project_ids: range
     student_ids: range

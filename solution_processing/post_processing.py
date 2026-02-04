@@ -1,3 +1,14 @@
+"""Function that checks correctness and instantiates objects to assess solution.
+
+Correct means that the solution is valid and that the objective value is calculated correctly.
+To the solution summaries (a list of the best solutions at the time they were found) a final
+dictionary is appended which states whether the solution was correct (1) or not (0).
+
+The solution can be assessed via an instance of
+solution_processing.solution_access.SolutionAccess which is a composite of objects which serve that
+purpose.
+"""
+
 import time
 
 from model_wrappers.model_wrapper import ModelWrapper
@@ -15,7 +26,13 @@ def post_processing(
     config: Configuration,
     derived: DerivedModelingData,
     model: ModelWrapper | GurobiAloneWrapper,
-):
+) -> SolutionAccess:
+    """Check whether solution is correct and return a composite of objects to assess the solution.
+
+    Correct means that the solution is valid and that the objective value is calculated correctly.
+    To the solution summaries (a list of the best solutions at the time they were found) a final
+    dictionary is appended which states whether the solution was correct (1) or not (0).
+    """
     retriever = SolutionInformationRetriever(
         config=config,
         derived=derived,

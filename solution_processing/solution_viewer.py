@@ -1,4 +1,4 @@
-"""A class that allows to view the soltution of a Gurobi model."""
+"""A class that allows to view the solution of a Gurobi model."""
 
 import functools
 import statistics
@@ -10,17 +10,36 @@ from solution_processing.solution_info_retriever import SolutionInformationRetri
 
 
 class SolutionViewer:
+    """."""
 
     def __init__(self, retriever: SolutionInformationRetriever):
-        self.derived = retriever.derived
-        self.retriever = retriever
+        self._derived = retriever.derived
+        self._retriever = retriever
 
     @functools.cached_property
     def solution_summary(self) -> pandas.DataFrame:
+        """Summary stats about the solution quality.
+
+        The row index is not necessarily the project ID. If no group is populated in the project no
+        summary statistics are shown for it.
+
+        For every project the following is stated:
+        ID: The ID of the project.
+        #students: The number of students in the project.
+        #groups: The number of groups in the project.
+        max_size: The maximum number of students in a group in the project.
+        min_size: The minimum...
+        mean_size: The mean...
+        max_pref: The maximum preference for the project among the students in the project.
+        min_pref: The minimum...
+        mean_pref: The mean...
+        #mutual_pairs: The number of pairs of students that want to work together that are in the
+            same group across all groups in the project.
+        """
         open_projects = {
             project_id: self.summary_table_project(project_id)
-            for project_id in self.derived.project_ids
-            if self.retriever.groups_in_project[project_id]
+            for project_id in self._derived.project_ids
+            if self._retriever.groups_in_project[project_id]
         }
         summary_tables = open_projects.values()
         group_quantities = [len(summary_table) for summary_table in summary_tables]
@@ -50,22 +69,30 @@ class SolutionViewer:
 
     @functools.lru_cache(maxsize=128)
     def summary_table_project(self, project_id: int) -> pandas.DataFrame:
+        """Summary stats about the solution quality for a project.
 
+        The row index is the group ID. For every group the following is stated:
+        #students: The number of students in the group.
+        max_pref: The maximum preference for the project among the students in the group.
+        min_pref: The minimum...
+        mean_pref: The mean...
+        #mutual_pairs: The number of pairs of students that want to work together.
+        """
         pref_vals_in_groups = [
-            list(self.retriever.pref_vals_students_in_group(project_id, group_id).values())
-            for group_id in self.retriever.groups_in_project[project_id]
+            list(self._retriever.pref_vals_students_in_group(project_id, group_id).values())
+            for group_id in self._retriever.groups_in_project[project_id]
         ]
         summaries: dict[str, list[int | float]] = {
             "#students": [
-                len(self.retriever.students_in_group[project_id, group_id])
-                for group_id in self.retriever.groups_in_project[project_id]
+                len(self._retriever.students_in_group[project_id, group_id])
+                for group_id in self._retriever.groups_in_project[project_id]
             ],
             "max_pref": [max(pref_vals) for pref_vals in pref_vals_in_groups],
             "min_pref": [min(pref_vals) for pref_vals in pref_vals_in_groups],
             "mean_pref": [statistics.mean(pref_vals) for pref_vals in pref_vals_in_groups],
             "#mutual_pairs": [
-                len(self.retriever.mutual_pairs_in_group(project_id, group_id))
-                for group_id in self.retriever.groups_in_project[project_id]
+                len(self._retriever.mutual_pairs_in_group(project_id, group_id))
+                for group_id in self._retriever.groups_in_project[project_id]
             ],
         }
 

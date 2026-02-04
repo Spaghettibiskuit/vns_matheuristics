@@ -16,6 +16,8 @@ class Configuration:
         number_of_students: The number of students.
         instance_index: The index of the instance among those with the same number of projects and
             and number of students.
+        reward_mutual_pair: Reward when two students that want to work with each other are in the
+            same group.
         penalty_unassigned: Penalty per student who is not assigned to any group.
         projects_info: Each project's constraints, whishes and penalties regarding the number of
             groups and group sizes. THE INDEX POSITION IN THE DATAFRAME IS THE PROJECT'S ID.
