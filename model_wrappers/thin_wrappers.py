@@ -33,7 +33,7 @@ class Initializer:
     """
 
     def __init__(
-        self, config: Configuration, derived: DerivedModelingData, required_sol_count: int
+        self, config: Configuration, derived: DerivedModelingData, required_solution_count: int
     ):
         self.config = config
         self.derived = derived
@@ -42,7 +42,7 @@ class Initializer:
         ).get_base_model()
         self.start_time = time.time()
         self.solution_summaries: list[dict[str, int | float | str]] = []
-        self._required_sol_count = required_sol_count
+        self._required_solution_count = required_solution_count
 
     def set_time_limit(self, total_time_limit: int | float) -> None:
         """Ensure that the solver does not run longer than the total time limit allows."""
@@ -70,7 +70,7 @@ class Initializer:
             solution_summaries=self.solution_summaries,
             start_time=self.start_time,
             station=utilities.Stations.INITIAL_OPTIMIZATION,
-            required_sol_count=self._required_sol_count,
+            required_solution_count=self._required_solution_count,
         )
         self.model.optimize(callback)
         if (obj := utilities.gurobi_round(self.model.ObjVal)) > callback.best_obj:

@@ -71,7 +71,7 @@ def assignment_fixing(
                 new_pairs = False
 
             if (free_zones_pair := next(free_zones_pairs, None)) is None:
-                patience_manager.adjust_patience(current_num_zones)
+                patience_manager.adjust_patiences(current_num_zones)
                 if current_num_zones == min_num_zones:
                     break
                 new_pairs = True

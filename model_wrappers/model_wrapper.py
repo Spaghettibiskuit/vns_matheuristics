@@ -71,9 +71,9 @@ class ModelWrapper(abc.ABC):
         no improvement is found within 5 seconds, the solver run terminates.
 
         Patience does not apply during preprocessing:
-        The patience only applies once the progress information on the branch-and-cut tree
-        search is displayed, since only then Gurobi potentially finds improvements. Any
-        preprocessing is allowed to run as long as it takes.
+        The patience only applies once the progress information on the branch-and-cut tree search
+        is displayed, since only then Gurobi potentially finds improvements. Any preprocessing is
+        allowed to run as long as it takes.
         """
         callback = Patience(
             patience=patience,

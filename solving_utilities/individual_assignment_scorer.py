@@ -1,4 +1,4 @@
-"""Class that handles assigning a score to the assignments of students."""
+"""Class to get an individual assignment score for every assignment."""
 
 import functools
 
@@ -9,6 +9,7 @@ from solution_processing.solution_info_retriever import SolutionInformationRetri
 
 
 class IndividualAssignmentScorer:
+    """Get an individual assignment score for every assignment."""
 
     def __init__(
         self,
@@ -25,6 +26,22 @@ class IndividualAssignmentScorer:
 
     @functools.cached_property
     def assignment_scores(self) -> dict[tuple[int, int, int], float]:
+        """Individual assignment score for every assignment.
+
+        Each assignment is of the form (project_id, group_id, student_id).
+
+        The score consists of the following:
+        - The student's preference for the project
+        - The number of students he wants to work with that also want to work with him times the
+            reward for a mutual pair divided by 2
+        - The penalty for additional groups of in the project divided by the number of students in
+            the project
+        - The penalty on the group for deviation from the ideal number of students divided by the
+            number of students in the group
+
+        This way, the sum of individual assignment scores minus the penalty for unassigned students
+        (penalty times the number of unassigned students) equals the objective.
+        """
         scores = {
             assignment: self._individual_score(*assignment)
             for assignment in self.retriever.assignments

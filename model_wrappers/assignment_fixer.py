@@ -187,8 +187,8 @@ class AssignmentFixer(ModelWrapper):
     def delete_zoning_rules(self) -> None:
         """Delete the pairs of boundary indexes which delimit the zones.
 
-        These boundary indexes are in random if the number of students is not divisible by the number
-        of zones (see help(self.zones))
+        These boundary indexes are in random if the number of students is not divisible by the
+        number of zones (see help(self.zones))
         """
         self._zones.cache_clear()
 

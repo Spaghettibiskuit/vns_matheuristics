@@ -1,3 +1,5 @@
+"""A class with data that is the basis for which assignments are fixed when."""
+
 import random
 from dataclasses import dataclass
 
@@ -11,12 +13,19 @@ from solving_utilities.individual_assignment_scorer import IndividualAssignmentS
 
 @dataclass(frozen=True)
 class AssignmentFixingData:
+    """Data that is the basis for which assignments are fixed when.
 
-    scores: dict[tuple[int, int, int], float]
-    ranked_assignments: list[tuple[int, int, int]]
+    Attributes:
+        assignments: The current assignments of the form (project_id, group_id, student_id)
+        line_up_assignments: The assignments ranked in ascending order by their individual
+            assignment score. For more on the individual assignment score see
+            solving_utilities.individual_assignment_scorer. If there are unassigned students they
+            are randomly positioned among this line_up. Those pseudo-assignments are of the form
+            (project_id=-1, group_id=-1, student_id=foo).
+    """
+
     assignments: set[tuple[int, int, int]]
     line_up_assignments: list[tuple[int, int, int]]
-    line_up_ids: list[int]
 
     @classmethod
     def get(
@@ -27,6 +36,7 @@ class AssignmentFixingData:
         lin_expressions: LinExpressions,
         model: gurobipy.Model,
     ):
+        """Alternative initializer for a frozen dataclass."""
         scores = IndividualAssignmentScorer(
             config, derived, variables, lin_expressions
         ).assignment_scores
@@ -38,22 +48,19 @@ class AssignmentFixingData:
             raise ValueError(f"derived {derived_obj_val} is not real {model.ObjVal}")
 
         if unassigned_ids:
-            line_up_assignments = fixing_line_up_assignments(
+            line_up_assignments = _fixing_line_up_assignments(
                 config, derived, ranked_assignments, unassigned_ids
             )
         else:
             line_up_assignments = ranked_assignments
 
         return cls(
-            scores=scores,
-            ranked_assignments=ranked_assignments,
             assignments=set(ranked_assignments),
             line_up_assignments=line_up_assignments,
-            line_up_ids=[student_id for _, _, student_id in line_up_assignments],
         )
 
 
-def fixing_line_up_assignments(
+def _fixing_line_up_assignments(
     config: Configuration,
     derived: DerivedModelingData,
     ranked_assignments: list[tuple[int, int, int]],
