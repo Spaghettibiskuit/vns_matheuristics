@@ -41,14 +41,13 @@ class LocalBrancher(ModelWrapper):
         self._counter = itertools.count()
 
     @property
-    def status(self) -> int:
-        """The optimization status code of the Gurobi model."""
-        return self._model.Status
-
-    @property
     def bound(self) -> int:
         """The best (lowest) bound for the objective value."""
         return int(min(self._model.ObjBound, gurobipy.GRB.MAXINT) + 1e-4)
+
+    def solution_is_optimal(self) -> bool:
+        """Return whether it is optimal within the constraints of the last optimization."""
+        return self._model.Status == gurobipy.GRB.OPTIMAL
 
     def improvement_infeasible(self) -> bool:
         """Return wether improvement is impossible within the bounding constraint."""

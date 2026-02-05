@@ -1,7 +1,10 @@
+"""The assignment-based local branching algorithm for the SSPAGDP.
+
+SSPAGDP := Simultaneous Student-Project Allocation and Group Design Problem
+"""
+
 import random
 import time
-
-import gurobipy
 
 from model_wrappers.local_brancher import LocalBrancher
 from model_wrappers.thin_wrappers import Initializer
@@ -31,6 +34,54 @@ def local_branching(
     step_optimization_patience: int | float = 0.6,
     required_initial_solutions: int = 5,
 ) -> SolutionAccess:
+    """Return class that allows to view, save and assess solution after running heuristic.
+
+    Args:
+        number_of_project: The number of projects.
+        number_of_students: The number of students.
+        instance_index: The index of the instance among those with the same dimension, i.e the same
+            number of projects as well as the same number of students.
+        reward_mutual_pair: The reward for when two students that want to work with each other are
+            in the same group.
+        penalty_unassigned: The penalty per student who is not assigned to any group.
+        time_limit: The time the algorithm is allowed to run.
+        shake_min_perc: In each shake, for a solution to be valid, for the percentage p of
+            assignments that are different from the best solution
+            shake_current_perc <= p <= shake_current_perc + shake_step_perc. shake_min_perc is the
+            minimum for shake_current_perc.
+        shake_step_perc: The size of the subproblems during the shake, since for a solution to be
+            valid, for the percentage p of assignments that are different from the best solution
+            shake_current_perc <= p <= shake_current_perc + shake_step_perc. If no new best
+            solution is found in the VND after a shake and shake_current_perc is not yet at its
+            maximum value, for the next shake,
+            shake_current_perc = min(shake_current_perc + shake_step_perc, shake_max_perc).
+        shake_max_perc: In each shake, for a solution to be valid, for the percentage p of
+            assignments that are different from the best solution
+            shake_current_perc <= p <= shake_current_perc + shake_step_perc. shake_max_perc is the
+            maximum for shake_current_perc. If shake_current_perc == shake_max_perc,
+            shake_cur_percentage == shake_min_perc for the next shake.
+        rhs_min_perc: During VND for, a solution to be valid, the percentage p of assignments that
+            are different from the current solution p <= rhs_perc. rhs_min_perc is the minimum for
+            rhs_perc.
+        rhs_step_perc: During VND, for a solution to be valid, the percentage p of assignments that
+            are different from the current solution p <= rhs_perc. If it was proven that for any
+            p <= rhs_perc an improvement is infeasible, the rhs_perc += rhs_step_perc for the next
+            search during VND.
+        rhs_max_perc: During VND, for a solution to be valid, the percentage p of assignments that
+            are different from the current solution p <= rhs_perc. rhs_max_perc is the maximum for
+            rhs_perc.
+        initial_patience: The patience in seconds during the initial optimization.
+        shake_patience: The patience in seconds during the shake before any increases.
+        shake_patience_step: The increase in seconds of the patience during the shake for every new
+            shake i.e. after each shake, shake_patience += shake_patience_step.
+        base_optimization_patience: The patience inside VND at the beginning if
+            rhs_perc == rhs_min_perc. The patience grows proportional with rhs_perc.
+        step_optimization_patience: The increase in patience for every new VND after the first for
+            rhs_perc == rhs_min_perc. The patience grows proportional with rhs_perc, hence for
+            rhs_perc == 2 * rhs_min_perc, the increase is double.
+        required_initial_solutions: The number of solutions Gurobi has to find before initial
+            optimization can stop.
+    """
     config = Configuration.get(
         number_of_projects=number_of_projects,
         number_of_students=number_of_students,
@@ -91,11 +142,11 @@ def local_branching(
                 rhs = min(rhs + rhs_step, rhs_max)
 
             elif model.improvement_found():
-                model.store_solution()
-                if model.status == gurobipy.GRB.OPTIMAL:
+                if model.solution_is_optimal():
                     if rhs > rhs_min:
                         model.pop_branching_constraints_stack()
                     model.add_excluding_branching_constraint(rhs)
+                model.store_solution()
                 rhs = rhs_min
 
             else:

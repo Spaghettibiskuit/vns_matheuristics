@@ -41,6 +41,13 @@ class PatienceManager:
     of zones are made if necessary. This can be seen as an anticipatory intensification and
     therefore a mild counterweight to the overall rather conservative increase in patience as the
     number of zones decreases.
+
+    Args:
+        min_num_zones: The minimum number of zones
+        max_num_zones: The maximum...
+        min_patience: The minimum patience per pair i.e. the patience for each pair when the number
+            of zones equals max_num_zones at the beginning.
+        min_patience_step: The step in patience per pair for max_num_zones.
     """
 
     def __init__(
@@ -66,7 +73,7 @@ class PatienceManager:
             for num_zones, num_pairs in self._nums_pairs.items()
         }
 
-    def _align_patiences(self):
+    def _align_patiences(self) -> None:
         for greater_num_zones, lesser_num_zones in itertools.pairwise(self._nums_zones):
             sum_patience_smaller_problems = (
                 self.patiences[greater_num_zones] * self._nums_pairs[greater_num_zones]
@@ -80,7 +87,13 @@ class PatienceManager:
                 / self._nums_pairs[lesser_num_zones]
             )
 
-    def adjust_patiences(self, current_num_zones: int):
+    def adjust_patiences(self, current_num_zones: int) -> None:
+        """Increase the patience patience per pair for the given number of zones.
+
+        If necessary also increase the the patience per pair for lower numbers of zones so that
+        their sum of patiences over all pairs is not lower than that for the current number of
+        zones.
+        """
         self.patiences[current_num_zones] += self._patience_steps[current_num_zones]
 
         self._align_patiences()

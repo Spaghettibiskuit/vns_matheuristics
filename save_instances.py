@@ -1,3 +1,8 @@
+"""Generate and save instances of the SSPAGDP.
+
+SSPAGDP := Simultaneous Student-Project Allocation and Group Design Problem
+"""
+
 import json
 import random
 
