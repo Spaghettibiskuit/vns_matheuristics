@@ -12,7 +12,7 @@ In the SSPAGDP a weighted sum of total satisfaction with the assignment of stude
 The heuristics that rely on Gurobi and Gurobi on its own then assign students to groups in projects so as to maximize the weighted sum of total satisfaction. For more details, **base_model_builder.py** in the **modeling** folder is a good starting point.
 
 ## ⛏️ What was done?
-First, an existent Variable Neighborhood Search (VNS) based heuristic for 0-1 MIPs called VNS with Local Branching was adapted so that it is viable for the SSPAGDP (see **local_branching.py**). Since the results were still not better than running Gurobi alone (see **gurobi_alone.py**), a heuristic that temporarily fixates parts of the variable (variable fixing), was developed (see **assignment_fixing.py**). The performance of the latter heuristic is significantly better than Gurobi alone in the early stages, as the instances grow larger.
+First, an existent Variable Neighborhood Search (VNS) based heuristic for 0-1 MIPs called VNS with Local Branching was adapted so that it is viable for the SSPAGDP (see **local_branching.py**). Since the results were still not better than running Gurobi alone (see **gurobi_alone.py**), a heuristic that temporarily fixates parts of the variables (variable fixing), was developed (see **assignment_fixing.py**). More specifically part of the assignment variables are fixed which state whether student x is in group y of project z. The performance of the latter heuristic is significantly better than Gurobi alone in the early stages, as the instances grow larger.
 
 Instances were created randomly within parameters that seemed reasonable. Also, some measures were taken to imitate dynamic students, albeit rudimentarily. See the modules in the folder **instance_creation** for more.
 
@@ -36,9 +36,20 @@ python -m pip install gurobipy==13.0.0
 
 The Gurobi version 13.0.0 was installed separately.
 
+## 🚀 Usage
+If your current work directory is the root folder of the project, you may run 
+```
+>>> from assignment_fixing import assignment_fixing
+>>> from local_branching import local_branching
+>>> from gurobi_alone import gurobi_alone
+>>> solution_fixing = assignment_fixing(30, 300, 0, time_limit=60)
+>>> solution_branching = local_branching(30, 300, 0, time_limit=60)
+>>> solution_gurobi = gurobi_alone(30, 300, 0, time_limit=60)
+```
 
+Here you would have solved the instance with 30 projects and 300 students with the instance index 0. The instance index is needed to differentiate instances that were created with the same parameters that only differ due to randomness. All instances that were already created are in the folder **instances**. If you want save new instances, take a look at **save_instances.py**.
 
+The return value of `assignment_fixing`, `local_branching` and `gurobi_alone` is an object which allows you to assess the solution (see **solution_processing/solution_access.py** for more).
 
-
-
+The benchmark ran on *specify computer and specs here* are in the **benchmarks** folder. If you want to run new benchmarks, take a look at **benchmark.py**.
 
