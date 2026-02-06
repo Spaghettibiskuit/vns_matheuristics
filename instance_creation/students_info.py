@@ -121,28 +121,29 @@ def random_students_df(
         num_students: The number of students.
 
         min_num_partner_preferences: The minimum number of peers any student specifies as those
-            he/she would like to work together with.
+            he/she would like to work with.
         max_num_partner_preferences: The maximum...
 
-        percentage_reciprocity: Roughly the 'probability' of reciprocating a partner preference.
+        percentage_reciprocity: Roughly the "probability" of reciprocating a partner preference.
             The partner preferences are generated for one student after another. If at the time at
             which the partner preferences for a given student are generated that student has
             already been specified by another student, this is the probability with which the
             student will reciprocate it. Unless more other students have specified the student
             than his/her number of partner preferences. Then this probability only applies to a
-            random sample of that size.
+            random sample where the size equals the student's number of partner preferences.
 
-        percentage_peer_influenced_project_preferences: The probability that a preference of the
-            student is that of one of his/her preferred partners that have already specified their
-            project preferences. If the preference is influenced by peers it is the maximum or
-            minimum preference value among the peers with a 50/50 chance.
+        percentage_peer_influenced_project_preferences: The "probability" that a project preference
+            of the student is that of one of his/her preferred partners that have already specified
+            their project preferences (project preferences are created subsequently student after
+            student). If the preference is influenced by peers it is the maximum or minimum
+            preference value among the peers with a 50/50 chance.
 
         min_project_preference: The lowest possible project preference.
-        max_project_preference: The highest possible project preference.
+        max_project_preference: The highest...
 
     Returns:
-        For all students the project preference for every project and the preferred partners
-        i.e., the students the student wants to work with. THE INDEX POSITION IN THE DATAFRAME
+        For all students the project preference for every project and their preferred partners
+        i.e., the students each student wants to work with. THE INDEX POSITION IN THE DATAFRAME
         IS THE STUDENT'S ID.
     """
     partner_preferences = _random_partner_preferences(

@@ -50,11 +50,11 @@ def random_projects_df(
         max_tolerable_group_size_surplus: The maximum...
 
         min_pen_num_groups: The minimum penalty for each group exceeding the number of groups the
-            project whishes to supervise. This random penalty is specific to each project.
+            project whishes to supervise for any project.
         max_pen_num_groups: The maximum...
 
         min_pen_group_size: The minimum coefficient with which deviation from ideal_group_size is
-            penalized. The random coefficient is specific to each project.
+            penalized for any project.
         max_pen_group_size: The maximum...
 
         Returns:
