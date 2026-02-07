@@ -2,8 +2,6 @@
 
 Usage example:
 model_components, model = BaseModelBuilder(config, derived).get_base_model()
-model_components: modeling.model_components.ModelComponents
-model: gurobipy.Model
 """
 
 from typing import cast
@@ -39,7 +37,11 @@ class BaseModelBuilder:
         self._model = gp.Model()
 
     def get_base_model(self) -> tuple[ModelComponents, gp.Model]:
-        """Return the model and references to its variables, linear expressions and constraints."""
+        """Return the model and references to its variables, linear expressions and constraints.
+
+        The variables and constraints can be by retrieved via tuples of indexes e.g.
+        (project_id, group_id, student_id) since they are instances of gurobipy.tupledict.
+        """
         variables = self._add_variables()
         lin_expressions = self._construct_linear_expressions(variables=variables)
         self._set_objective(lin_expressions=lin_expressions)

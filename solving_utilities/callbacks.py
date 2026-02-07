@@ -12,8 +12,9 @@ class GurobiAloneProgressTracker:
     """Records whenever a new best solution was found or the upper bound was lowered.
 
     Knowing that solutions can only be integer valued, a lower upper bound is only found if
-    floor(bound) has been lowered. Every record consists of the objective, bound and the time
-    elapsed so far. Those records are stored in the solution_summaries passed to the constructor.
+    floor(bound) has been lowered. Every record consists of the objective, the bound and the time
+    elapsed since building the model was finished. Those records are stored in the
+    solution_summaries passed to the constructor.
     """
 
     def __init__(self, start_time: float, solution_summaries: list[dict[str, int | float]]):
@@ -56,7 +57,7 @@ class Patience:
     Each record includes the following:
     - The objective value
     - The time elapsed since building the model was finished
-    - The place in the algorithm the solution was found: Initial optimization, VND or Shake
+    - The station in the algorithm the solution was found: Initial optimization, VND or Shake
     - The number of shakes that preceded the finding of that solution
     """
 

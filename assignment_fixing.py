@@ -35,31 +35,39 @@ def assignment_fixing(
     base_optimization_patience_step: float = 0.3,
     required_initial_solutions: int = 5,
 ) -> SolutionAccess:
-    """Return class that allows to view, save and assess solution after running heuristic.
+    """Return class that allows to assess and or save solution after running heuristic.
 
     Args:
         number_of_project: The number of projects.
         number_of_students: The number of students.
-        instance_index: The index of the instance among those with the same dimension, i.e the same
-            number of projects as well as the same number of students.
+        instance_index: The index of the instance among those with the same number of projects as
+            well as the same number of students.
+
         reward_mutual_pair: The reward for when two students that want to work with each other are
             in the same group.
         penalty_unassigned: The penalty per student who is not assigned to any group.
+
         time_limit: The time the algorithm is allowed to run.
+
         min_num_zones: The minimum number of zones from which pairs are chosen.
         max_num_zones: The maximum...
+
         min_shake_perc: At each shake, the bottom k percent by individual assignment score are
             forced to change their assignment. This is the minimum for k. If a new best solution is
             found this is the k for the next shake.
         step_shake_perc: If no new best solution was found after a shake, the bottom k percent that
             are forced change their assignment increases. This is the m for which k += m before
-            the next shake if no new best improvement was found after the last shake.
+            the next shake if no new best solution was found after the last shake.
         max_shake_perc: At each shake, the bottom k percent by individual assignment score are
-            forced to change their assignment. This is the maximum for k.
+            forced to change their assignment. This is the maximum for k. If no new best solution
+            was found after a shake with k = max_shake_perc, k = min_shake_perc for the next shake.
+
         initial_patience: The patience in seconds during the initial optimization.
+
         shake_patience: The patience in seconds during the shake before any increases.
         shake_patience_step: The increase in seconds of the patience during the shake for every new
             shake i.e. after each shake, shake_patience += shake_patience_step.
+
         base_optimization_patience: The patience per pair for the maximum number of zones before
             any increases.
         base_optimization_patience_step: The increase in patience per pair for the maximum number
@@ -67,8 +75,12 @@ def assignment_fixing(
             This step in patience per pair is greater for lower numbers of zones. An increase in
             patience may also increase the patience per pair for lower numbers of zones. For
             details see solving.utilities.patience_manager.
+
         required_initial_solutions: The number of solutions Gurobi has to find before initial
             optimization can stop.
+
+        In the algorithm, the shake parameters in percentages are translated to absolute values and
+            are subject to rounding to tne nearest integer.
     """
     config = Configuration.get(
         number_of_projects=number_of_projects,

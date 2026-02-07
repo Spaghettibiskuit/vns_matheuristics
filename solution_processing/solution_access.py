@@ -1,6 +1,6 @@
 """Class that allows to view and save solution and has classes to assess solution as attributes.
 
-It is returned at the end of both heuristic algorithms and solving with Gurobi alone.
+It is returned at the end of both heuristic algorithms and after solving with Gurobi alone.
 """
 
 from dataclasses import fields
@@ -19,7 +19,7 @@ from solution_processing.solution_viewer import SolutionViewer
 class SolutionAccess:
     """Allows to view and save solution and has classes to assess solution as attributes.
 
-    Is returned at the end of both heuristic algorithms and solving with Gurobi alone.
+    Is returned at the end of both heuristic algorithms and after solving with Gurobi alone.
     """
 
     def __init__(
@@ -38,26 +38,30 @@ class SolutionAccess:
 
     @cached_property
     def solution_table(self) -> pandas.DataFrame:
-        """Rows are project IDs, columns group IDs, lists of student IDS are in the cells.
+        """Rows are project IDs, columns group IDs, lists of student IDs are in the cells.
 
-        Those student IDs are the IDs of the students that are in that group in that project.
+        Those student IDs are of the students that are in that group in this specific project.
         """
         max_group_id = max(self.config.projects_info["max#groups"])
-        students_in_groups = {}
-        for group_id in range(max_group_id):
-            students_in_groups[group_id] = [
-                self.retriever.students_in_group[project_id, group_id]
+        students_in_groups = {
+            group_id: [
+                self.retriever.students_in_group.get((project_id, group_id), [])
                 for project_id in self.derived.project_ids
             ]
+            for group_id in range(max_group_id)
+        }
         return pandas.DataFrame(students_in_groups)
 
     def save_as_csv(self, filename: str, suffix: str = "csv") -> None:
         """Save solution_table as a csv with info on how the objective was reached as comments.
 
-        These infos include the values of the linear expressions which make up the objective. Also
-        the penalty per unassigned student and reward per materialized mutual pair which cannot be
-        looked up in the csv files of that instance. Finally the mutual pairs where both work
-        together and the the student IDs are printed.
+        These comments that inform how the objective was reached include:
+        - The objective value itself
+        - The penalty per unassigned student
+        - The reward per materialized mutual pair
+        - The values of the linear expressions which make up the objective
+        - The mutual pairs where both work together (as pairs of IDs)
+        - The IDs of the students that are not assigned to any group
         """
         target_folder = Path("solutions") / "custom"
         path = target_folder / f"{filename}.{suffix}"

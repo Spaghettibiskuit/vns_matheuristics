@@ -25,12 +25,14 @@ def gurobi_alone(
     Args:
         number_of_project: The number of projects.
         number_of_students: The number of students.
-        instance_index: The index of the instance among those with the same dimension, i.e the same
-            number of projects as well as the same number of students.
+        instance_index: The index of the instance among those with the same number of projects as
+            well as the same number of students.
+
         reward_mutual_pair: The reward for when two students that want to work with each other are
             in the same group.
         penalty_unassigned: The penalty per student who is not assigned to any group.
-        time_limit: The time Gurobi is allowed to run.
+
+        time_limit: The time the algorithm is allowed to run.
     """
     config = Configuration.get(
         number_of_projects=number_of_projects,

@@ -1,4 +1,4 @@
-"""Function that checks correctness and instantiates objects to assess solution.
+"""Function that checks the correctness of the solution and instantiates objects to assess it.
 
 Correct means that the solution is valid and that the objective value is calculated correctly.
 To the solution summaries (a list of the best solutions at the time they were found) a final
@@ -27,11 +27,14 @@ def post_processing(
     derived: DerivedModelingData,
     model: ModelWrapper | GurobiAloneWrapper,
 ) -> SolutionAccess:
-    """Check whether solution is correct and return a composite of objects to assess the solution.
+    """Checks the correctness of the solution and instantiate objects to assess it.
 
     Correct means that the solution is valid and that the objective value is calculated correctly.
-    To the solution summaries (a list of the best solutions at the time they were found) a final
-    dictionary is appended which states whether the solution was correct (1) or not (0).
+    To the solution summaries used for benchmarking (see folder benchmarks for examples) a
+    final dictionary is appended which states whether the solution was correct or not.
+
+    Returns:
+        A composite of objects to assess the solution.
     """
     retriever = SolutionInformationRetriever(
         config=config,

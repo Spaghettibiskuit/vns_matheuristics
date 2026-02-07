@@ -1,4 +1,4 @@
-"""A class that retrieves information regarding the solution within a Gurobi model."""
+"""A class that retrieves information regarding the solution inside a Gurobi model."""
 
 import functools
 import itertools
@@ -9,11 +9,11 @@ from modeling.model_components import Variables
 
 
 class SolutionInformationRetriever:
-    """Retrieves information regarding the solution within a Gurobi model.
+    """Retrieves information regarding the solution inside a Gurobi model.
 
     Attributes:
-        config: Contains all all specifications that define an instance of the SSPAGDP.
-        derived: Iterables and hash-table backed containers that derive from the configuration.
+        config: Contains all specifications that define an instance of the SSPAGDP.
+        derived: Iterables and hash-table backed containers that derive from config.
     """
 
     def __init__(
@@ -43,14 +43,16 @@ class SolutionInformationRetriever:
 
     @functools.cached_property
     def students_in_group(self) -> dict[tuple[int, int], list[int]]:
-        """The IDs of students in a group for any group in all projects.
+        """The IDs of the students in the group for all groups in all projects.
 
         (project_id, group_id) -> IDs of students assigned to the group
+
+        If the group is not populated, the value is an empty list.
         """
         in_group: dict[tuple[int, int], list[int]] = {
             (project_id, group_id): []
             for project_id in self.derived.project_ids
-            for group_id in range(max(self.config.projects_info["max#groups"]))
+            for group_id in range(self.config.projects_info["max#groups"][project_id])
         }
         for project_id, group_id, student_id in self.assignments:
             in_group[project_id, group_id].append(student_id)
@@ -60,7 +62,9 @@ class SolutionInformationRetriever:
     def groups_in_project(self) -> dict[int, list[int]]:
         """The IDs of groups that are populated in a project for all projects.
 
-        project_id -> IDs of groups in the project that are populated.
+        project_id -> IDs of groups in the project that are populated
+
+        If no group is populated, the value is an empty list.
         """
         in_project: dict[int, list[int]] = {project: [] for project in self.derived.project_ids}
         for project_id, group_id in self.established_groups:
@@ -71,18 +75,20 @@ class SolutionInformationRetriever:
     def students_in_project(self) -> dict[int, list[int]]:
         """The IDs of the students that are in any group for all projects.
 
-        project_id -> IDs of students in any group in the project.
+        project_id -> IDs of students in any group in the project
+
+        If no student is in the project, the value is an empty list.
         """
         in_project: dict[int, list[int]] = {project: [] for project in self.derived.project_ids}
         for project_id, _, student_id in self.assignments:
             in_project[project_id].append(student_id)
         return in_project
 
-    @functools.lru_cache(maxsize=1_280)
+    @functools.lru_cache(maxsize=1024)
     def pref_vals_students_in_group(self, project_id: int, group_id: int) -> dict[int, int]:
         """The preference value of the students in a group for the project the group is in.
 
-        student_id -> Preference value for the project the group is part of.
+        student_id -> Preference value for the project the group is part of
         """
         project_preferences = self.derived.project_preferences
         return {
@@ -90,7 +96,7 @@ class SolutionInformationRetriever:
             for student_id in self.students_in_group[project_id, group_id]
         }
 
-    @functools.lru_cache(maxsize=1_280)
+    @functools.lru_cache(maxsize=1024)
     def mutual_pairs_in_group(self, project_id: int, group_id: int) -> list[tuple[int, int]]:
         """Pairs of students that want to work together in a group in a specific project."""
         mutual_pairs = self.derived.mutual_pairs_items

@@ -9,19 +9,19 @@ from modeling.configuration import Configuration
 class DerivedModelingData:
     """Iterables and hash-table backed containers that derive from the configuration.
 
+    The configuration is an instance of modeling.configuration.Configuration.
+
     Attributes:
         project_ids: The range of project IDs.
         student_ids: The range of student IDs.
+        group_ids: The range of potential group IDs for every project.
         project_group_pairs: All potential groups specified with tuples of (project_id, group_id).
-            These make up the indexes for for the following variables in
-            modeling.model_components.Variables: establish_groups, group_size_surplus,
-            group_size_deficit.
+            The tuples are sorted.
         project_group_student_triples: All possible assignments of students to groups specified
-            with (project_id, group_id, student). Indexes for
-            modeling.model_components.Variables.assign_students.
-        mutual_pairs_ordered: all tuples of (student_id_a, student_id_b) were both students want
-            to work with each other i.e. they form a bilateral pair.
-        mutual_pairs_items: As above tuples are in a set for faster lookup during optimization.
+            with (project_id, group_id, student). The tuples are sorted.
+        mutual_pairs_ordered: All tuples of (student_id_a, student_id_b) where both students want
+            to work with each other. Always student_id_a < student_id_b.
+        mutual_pairs_items: Tuples as above but in a set for faster lookup during optimization.
         project_preferences: Preference value of every student for each project.
             Each key is tuple of (student_id, project_id).
     """

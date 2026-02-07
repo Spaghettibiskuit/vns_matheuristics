@@ -1,4 +1,4 @@
-"""A class that allows to view the solution of a Gurobi model."""
+"""A class that allows to view summary statistics of the best solution."""
 
 import functools
 import statistics
@@ -10,7 +10,7 @@ from solution_processing.solution_info_retriever import SolutionInformationRetri
 
 
 class SolutionViewer:
-    """."""
+    """Allows to view summary statistics of the best solution."""
 
     def __init__(self, retriever: SolutionInformationRetriever):
         self._derived = retriever.derived
@@ -18,7 +18,7 @@ class SolutionViewer:
 
     @functools.cached_property
     def solution_summary(self) -> pandas.DataFrame:
-        """Summary stats about the solution quality.
+        """Summary stats about the solution quality for all projects.
 
         The row index is not necessarily the project ID. If no group is populated in the project no
         summary statistics are shown for it.
@@ -34,7 +34,7 @@ class SolutionViewer:
         min_pref: The minimum...
         mean_pref: The mean...
         #mutual_pairs: The number of pairs of students that want to work together that are in the
-            same group across all groups in the project.
+            same group summed over all groups in the project.
         """
         open_projects = {
             project_id: self.summary_table_project(project_id)

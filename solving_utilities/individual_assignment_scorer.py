@@ -32,15 +32,15 @@ class IndividualAssignmentScorer:
 
         The score consists of the following:
         - The student's preference for the project
-        - The number of students he wants to work with that also want to work with him times the
-            reward for a mutual pair divided by 2
-        - The penalty for additional groups of in the project divided by the number of students in
-            the project
-        - The penalty on the group for deviation from the ideal number of students divided by the
-            number of students in the group
+        - The number of mutual pairs in the group that the student is part of times the reward for
+            a mutual pair divided by 2, since the reward is divided among each pair.
+        - The penalty for additional groups the project has to supervise divided by the number of
+            students in the project.
+        - The penalty for deviation from the ideal group size divided by the number of students in
+            the group
 
         This way, the sum of individual assignment scores minus the penalty for unassigned students
-        (penalty times the number of unassigned students) equals the objective.
+        equals the objective.
         """
         scores = {
             assignment: self._individual_score(*assignment)
@@ -100,7 +100,7 @@ class IndividualAssignmentScorer:
         total_num_students = len(self.retriever.students_in_project[project_id])
         return penalty * max(0, num_groups - num_desired_groups) / total_num_students
 
-    @functools.lru_cache(maxsize=1_280)
+    @functools.lru_cache(maxsize=1024)
     def _individual_penalty_group_size(self, project_id: int, group_id: int) -> float:
         projects_info = self.config.projects_info
         ideal_group_size = projects_info["ideal_group_size"][project_id]
@@ -108,7 +108,7 @@ class IndividualAssignmentScorer:
         num_students = len(self.retriever.students_in_group[project_id, group_id])
         return penalty * abs(ideal_group_size - num_students) / num_students
 
-    @functools.lru_cache(maxsize=12_800)
+    @functools.lru_cache(maxsize=4096)
     def _individual_reward_mutual(self, project_id: int, group_id: int, student_id: int) -> float:
         reward_mutual = self.config.reward_mutual_pair
         mutual_pairs_in_group = self.retriever.mutual_pairs_in_group(project_id, group_id)

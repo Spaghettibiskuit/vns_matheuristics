@@ -1,13 +1,16 @@
+"""A class that generates data to let Gurobi start with an equivalent, more convenient solution."""
+
 import functools
 
 
 class GroupShifter:
-    """Generates data to let Gurobi start at an equivalent, more convenient solution.
+    """Generates data to let Gurobi start with an equivalent, more convenient solution.
 
-    More convenient because group indexes are such that the group indexes of those groups which
-    only have free students are always greater than the group index of any group in the same
-    project in which there is at least one fixed student. This way the project has to retain only
-    those groups populated in which at least one student is fixed.
+
+    More convenient because group indexes are such that the group indexes of those groups in which
+    all students are free are always greater than the group index of any group in the same project
+    with at least one fixed student. This way the project has to retain only those groups populated
+    in which at least one student is fixed.
 
     Equivalent, because only group indexes are switched. No group has changed members or project.
     """
@@ -30,7 +33,7 @@ class GroupShifter:
     def _shifted_groups(self) -> dict[tuple[int, int], tuple[int, int]]:
         """New group indexes where those of groups with only free students are always greater.*
 
-        *Than that of any group in the same project in which there is at least one fixed student.
+        *Than the index of any group in the same project with at least one fixed student.
 
         The mapping is from (project_id, old_group_id) to (project_id, new_group_id).
         """
@@ -58,8 +61,8 @@ class GroupShifter:
         """The line up by ascending individual assignment score with new group indexes.
 
         The group indexes are such that the group indexes of those groups which only have free
-        students are always greater than the group index of any group in the same project in which
-        there is at least one fixed student.
+        students are always greater than the group index of any group in the same project with at
+        least one fixed student.
         """
         shifted_groups = self._shifted_groups
         return [

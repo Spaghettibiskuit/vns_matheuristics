@@ -21,8 +21,7 @@ class Initializer:
 
     Attributes:
         config: Data that defines the problem instance.
-        derived: Iterables and hash-table backed containers useful during optimization that are
-            derived from config.
+        derived: Iterables and hash-table backed containers that derive from config.
         model_components: The model variables, the linear expressions that make up the objective,
             as well as the constraints of the model.
         model: A Gurobi model.
