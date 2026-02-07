@@ -38,7 +38,7 @@ The Gurobi version 13.0.0 was installed separately.
 
 ## 🚀 Usage
 If your current working directory is the root folder of the project, you may run 
-```
+```python
 >>> from assignment_fixing import assignment_fixing
 >>> from local_branching import local_branching
 >>> from gurobi_alone import gurobi_alone
