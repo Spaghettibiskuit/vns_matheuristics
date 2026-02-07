@@ -3,47 +3,45 @@
 import abc
 import time
 
-import gurobipy
-
-from modeling.model_components import ModelComponents
+from model_wrappers.thin_wrappers import Initializer
 from solving_utilities.callbacks import Patience
-from solving_utilities.solution_reminder import SolutionReminder
 from utilities import Stations, gurobi_round
 
 
 class ModelWrapper(abc.ABC):
-    """Provides actions and checks needed during both local branching and assignment fixing.
+    """Provides actions and checks needed during both local branching and assignment fixing."""
 
-
-    Attributes:
-        model_components: Variables, the linear expressions that make up the objective as well as
-            the constraints of the model.
-        solution_summaries: Recordings of when a new best solution was found. Consists of the
-            objective value, the runtime when it was found, whether it was found during VND, shake
-            or initial_optimization and how many shakes had already occurred before.
-    """
-
-    def __init__(
-        self,
-        model_components: ModelComponents,
-        model: gurobipy.Model,
-        start_time: float,
-        solution_summaries: list[dict[str, int | float | str]],
-        sol_reminder: SolutionReminder,
-    ):
-        self.model_components = model_components
-        self._model = model
-        self._start_time = start_time
-        self.solution_summaries = solution_summaries
-        self._current_solution = sol_reminder
-        self._best_found_solution = sol_reminder
+    def __init__(self, initializer: Initializer):
+        self._model_components = initializer.model_components
+        self._model = initializer.model
+        self._start_time = initializer.start_time
+        self._solution_summaries = initializer.solution_summaries
+        self._current_solution = initializer.current_solution
+        self._best_found_solution = initializer.current_solution
         self._assign_students_vars = tuple(
-            self.model_components.variables.assign_students.values()
+            self._model_components.variables.assign_students.values()
         )
 
     @property
+    def model_components(self):
+        """The model's variables, the linear expressions of the objective, and the constraints."""
+        return self._model_components
+
+    @property
+    def solution_summaries(self):
+        """Recordings at the point of time when a new best solution was found.
+
+        Those consist of the following:
+            - The objective value,
+            - the time elapsed when it was found,
+            - whether it was found during VND,shake or initial_optimization,
+            - and how many shakes had already occurred before.
+        """
+        return self._solution_summaries
+
+    @property
     def objective_value(self) -> int:
-        """The objective value of the model."""
+        """The objective value of the solution in the model."""
         return gurobi_round(self._model.ObjVal)
 
     @property
@@ -67,7 +65,7 @@ class ModelWrapper(abc.ABC):
 
         Example for patience:
         If the patience were 5 seconds and the solver were to find an improvement every 4 seconds,
-        the solver run would never stop, unless there is a separate hard time limit. If only once
+        the solver run would never stop, unless there is a separate, hard time limit. If only once
         no improvement is found within 5 seconds, the solver run terminates.
 
         Patience does not apply during preprocessing:
@@ -103,11 +101,11 @@ class ModelWrapper(abc.ABC):
         self._model.Params.Seed += 1
 
     def improvement_found(self) -> bool:
-        """Return whether the objective value is the best yet in the current VND."""
+        """Return whether the solution in the model is the best yet in the current VND."""
         return self.objective_value > self._current_solution.objective_value
 
     def recover_to_best_found(self) -> None:
-        """Let Gurobi get back to a solution with the best objective in this run of the algorithm.
+        """Make Gurobi get back to the best solution in this run of the algorithm.
 
         Fix all assignment variable values at those of the best solution. Let Gurobi figure out the
         according value of the rest of the variables, which is computationally rather inexpensive.
@@ -121,7 +119,7 @@ class ModelWrapper(abc.ABC):
 
     @abc.abstractmethod
     def store_solution(self) -> None:
-        """Store the values necessary to recreate it and to use it as a reference point."""
+        """Store the data necessary to recreate it and to use it as a reference point."""
 
     @abc.abstractmethod
     def make_current_solution_best_solution(self) -> None:

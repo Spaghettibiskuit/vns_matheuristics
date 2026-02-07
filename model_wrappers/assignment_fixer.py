@@ -1,4 +1,4 @@
-"""A class which offers commands that influence or decide which variables are fixed."""
+"""A class that offers commands which influence or decide which variables are fixed."""
 
 import functools
 import random
@@ -8,9 +8,6 @@ import gurobipy
 import utilities
 from model_wrappers.model_wrapper import ModelWrapper
 from model_wrappers.thin_wrappers import Initializer
-from modeling.configuration import Configuration
-from modeling.derived_modeling_data import DerivedModelingData
-from modeling.model_components import ModelComponents
 from solving_utilities.assignment_fixing_data import AssignmentFixingData
 from solving_utilities.group_shifter import GroupShifter
 from solving_utilities.solution_reminder import SolutionReminder
@@ -19,22 +16,13 @@ from solving_utilities.solution_reminder import SolutionReminder
 class AssignmentFixer(ModelWrapper):
     """Offers high-level commands that influence or decide which variables are fixed."""
 
-    def __init__(
-        self,
-        model_components: ModelComponents,
-        model: gurobipy.Model,
-        start_time: float,
-        solution_summaries: list[dict[str, int | float | str]],
-        config: Configuration,
-        derived: DerivedModelingData,
-        sol_reminder: SolutionReminder,
-        fixing_data: AssignmentFixingData,
-    ):
-        super().__init__(model_components, model, start_time, solution_summaries, sol_reminder)
-        self._config = config
-        self._derived = derived
-        self._current_sol_fixing_data = fixing_data
-        self._best_sol_fixing_data = fixing_data
+    def __init__(self, initializer: Initializer):
+
+        super().__init__(initializer)
+        self._config = initializer.config
+        self._derived = initializer.derived
+        self._current_sol_fixing_data = initializer.fixing_data
+        self._best_sol_fixing_data = initializer.fixing_data
 
     def store_solution(self) -> None:
         self._current_solution = SolutionReminder(
@@ -44,8 +32,8 @@ class AssignmentFixer(ModelWrapper):
         self._current_sol_fixing_data = AssignmentFixingData.get(
             config=self._config,
             derived=self._derived,
-            variables=self.model_components.variables,
-            lin_expressions=self.model_components.lin_expressions,
+            variables=self._model_components.variables,
+            lin_expressions=self._model_components.lin_expressions,
             model=self._model,
         )
 
@@ -61,8 +49,8 @@ class AssignmentFixer(ModelWrapper):
     def _zones(self, num_zones: int) -> list[tuple[int, int]]:
         """Return the index boundaries of the zones within the ranked line up of assignments.
 
-        E.g. 3 zones and 15 students: [(0, 5), (5, 10), (10, 15)]. This is compatible with
-        list-splitting. If the number of students is not divisible by the number of zones, the
+        E.g. 3 zones and 15 students: [(0, 5), (5, 10), (10, 15)]. These indexes are compatible
+        with list-splitting. If the number of students is not divisible by the number of zones, the
         sizes are randomly floor(num_students / zones) or ceil(num_students / zones) so that the
         zones stretch over the entire line up of assignments.
         """
@@ -84,14 +72,15 @@ class AssignmentFixer(ModelWrapper):
     def _separate_assignments(
         self, zone_a: int, zone_b: int, num_zones: int, line_up: list[tuple[int, int, int]]
     ) -> tuple[list[tuple[int, int, int]], list[tuple[int, int, int]]]:
-        """Return the assignments that will free and those that will be fixed separately.
+        """Return the assignments that will be free and those that will be fixed separately.
 
         Args:
             zone_a, zone_b: A pair of zones in which the students will be free.
             num_zones: The overall number of zones. Influences the size of each zone which are
-                roughly of equal size (see help(self.zones))
-            line_up: Assignments in ascending order of individual assignment quality (See
-                module individual_assignment_scorer)
+                roughly of equal size (see docstring of self.zones)
+            line_up: Assignments in ascending order by individual assignment score (See
+                module individual_assignment_scorer). Each assignment has the form
+                (project_id, group_id, student_id).
 
         Returns:
             (assignments that are free, assignments that are fixed)
@@ -108,17 +97,17 @@ class AssignmentFixer(ModelWrapper):
         free_assignments: list[tuple[int, int, int]],
         fixed_assignments: list[tuple[int, int, int]],
     ) -> tuple[set[tuple[int, int]], set[tuple[int, int]]]:
-        """Return the groups with only students which are free and those that are mixed separately.
+        """Return the groups where all students are free and those that are mixed separately.
 
         A group is mixed as soon as one student that is fixed is in it. This means it will have
         to remain open.
 
         Args:
-            free_assignments: project id, group_id and student_id for every free student.
-            fixed_assignments: The same for every student that is fixed.
+            free_assignments: (project id, group_id, student_id) for every free student.
+            fixed_assignments: (project id, group_id, student_id) for every student that is fixed.
 
         Returns:
-            (groups with only free students, groups with at least one fixed_student in them)
+            (groups where all students are free, groups with at least one fixed student in them)
         """
         groups_of_free = set(
             (project_id, group_id)
@@ -135,19 +124,18 @@ class AssignmentFixer(ModelWrapper):
     def fix_rest(self, zone_a: int, zone_b: int, num_zones: int) -> None:
         """Fix all students which are not in the two zones.
 
-        Also the start values of the assignment variables are set such that Gurobi starts at a
-        solution equivalent to the current solution.
+        Also the groups within each project may be shuffled. This beneficial because the MIP model
+        demands that if a group with an index n is open, that all groups with an index < n are also
+        open. This is done to break symmetry. The downside is that if only one student in group n
+        is fixed, the project has to have at least n + 1 groups. This can necessitate groups with
+        an index < n and only free students in them to remain open even if a better solution would
+        be possible when the group would be closed. To avoid this, groups are shuffled such that
+        groups where all students are free always have a higher group_id than those that have at
+        least one fixed student.
 
-        The solution is only equivalent and not identical, since groups within projects may be
-        shuffled.
-
-        This beneficial because the MIP model demands that if a group with an index n  > 0 is open,
-        that all groups with an index < n are also open. This is done to break symmetry.
-        But if only one student in group n is fixed, the project has to have at least n + 1 groups.
-        This can necessitate groups with an index < n and only free students in them to remain open
-        even if a better solution would be possible when the group would be closed. Therefore it is
-        ensured that groups which only have free students always have a higher group_id than those
-        that have at least one fixed student.
+        The start values of the assignment variables are set to such an equivalent solution. It is
+        equivalent because neither for the objective nor for the validity of the solution the order
+        of the groups in the project has any relevance.
         """
         free_assignments, fixed_assignments = self._separate_assignments(
             zone_a, zone_b, num_zones, self._current_sol_fixing_data.line_up_assignments
@@ -185,10 +173,10 @@ class AssignmentFixer(ModelWrapper):
         self._model.setAttr("UB", self._assign_students_vars, upper_bounds)
 
     def delete_zoning_rules(self) -> None:
-        """Delete the pairs of boundary indexes which delimit the zones.
+        """Delete the cached pairs of indexes which delimit the zones.
 
-        These boundary indexes are in random if the number of students is not divisible by the
-        number of zones (see help(self.zones))
+        These boundary indexes are slightly random if the number of students is not divisible by
+        the number of zones (see docstring of self.zones).
         """
         self._zones.cache_clear()
 
@@ -211,7 +199,7 @@ class AssignmentFixer(ModelWrapper):
         )
 
         worst_k_assignments = self._current_sol_fixing_data.line_up_assignments[:k]
-        variables = self.model_components.variables
+        variables = self._model_components.variables
 
         for project_id, group_id, student_id in worst_k_assignments:
             if project_id == -1:  # It is a pseudo_assignment
@@ -236,19 +224,5 @@ class AssignmentFixer(ModelWrapper):
 
         Necessary only after shaking since they are not fixed elsewhere.
         """
-        variables = list(self.model_components.variables.unassigned_students.values())
+        variables = list(self._model_components.variables.unassigned_students.values())
         self._model.setAttr("UB", variables, [1] * len(variables))
-
-    @classmethod
-    def get(cls, initializer: Initializer) -> "AssignmentFixer":
-        """Return an instance of AssignmentFixer after the initial optimization."""
-        return cls(
-            config=initializer.config,
-            derived=initializer.derived,
-            model_components=initializer.model_components,
-            model=initializer.model,
-            sol_reminder=initializer.current_solution,
-            fixing_data=initializer.fixing_data,
-            start_time=initializer.start_time,
-            solution_summaries=initializer.solution_summaries,
-        )

@@ -13,23 +13,26 @@ from solving_utilities.solution_reminder import SolutionReminder
 
 
 class Initializer:
-    """For initial optimization and as basis for instantiating LocalBrancher or AssignmentFixer.
+    """For initial optimization and as the basis for constructing LocalBrancher or AssignmentFixer.
 
     Local Brancher and AssignmentFixer both need a first solution to be instantiated.
     AssignmentFixer additionally needs an instance of AssignmentFixingData to know which variables
-    to fix according to the assignment fixing VNS algorithm.
+    to fix. Instances of this class are used to obtain those prerequisites.
 
     Attributes:
-        config: Data that defines the problem instance
+        config: Data that defines the problem instance.
         derived: Iterables and hash-table backed containers useful during optimization that are
             derived from config.
-        model_components: Variables, the linear expressions that make up the objective as well as
-            the constraints of the model.
+        model_components: The model variables, the linear expressions that make up the objective,
+            as well as the constraints of the model.
         model: A Gurobi model.
-        start_time: The epoch the model was built and optimization started in the initializer
-        solution_summaries: Recordings of when a new best solution was found. Consists of the
-            objective value, the runtime when it was found, whether it was found during VND, shake
-            or initial_optimization and how many shakes had already occurred before.
+        start_time: The epoch right after the model was built.
+        solution_summaries: Recordings at the point of time when a new best solution was found.
+            Those consist of the following:
+            - The objective value,
+            - the time elapsed when it was found,
+            - whether it was found during VND,shake or initial_optimization,
+            - and how many shakes had already occurred before.
     """
 
     def __init__(
@@ -57,7 +60,7 @@ class Initializer:
 
         Example for patience:
         If the patience were 5 seconds and the solver were to find an improvement every 4 seconds,
-        the solver run would never stop, unless there is a separate hard time limit. If only once
+        the solver run would never stop, unless there is a separate, hard time limit. If only once
         no improvement is found within 5 seconds, the solver run terminates.
 
         Patience does not apply during preprocessing:
@@ -104,16 +107,19 @@ class Initializer:
 
 
 class GurobiAloneWrapper:
-    """For running Gurobi outside of any further algorithm.
+    """For running Gurobi without any further algorithm.
 
     Attributes:
-        model_components: Variables, the linear expressions that make up the objective as well as
-            the constraints of the model.
+        model_components: The model variables, the linear expressions that make up the objective,
+            as well as the constraints of the model.
         model: A Gurobi model.
-        start_time: The epoch the model was built and optimization started in the initializer
-        solution_summaries: Recordings of when a new best solution was found. Consists of the
-            objective value, the runtime when it was found, whether it was found during VND, shake
-            or initial_optimization and how many shakes had already occurred before.
+        start_time: The epoch right after the model was built.
+        solution_summaries: Recordings at the point of time when a new best solution was found.
+            Those consist of the following:
+            - The objective value,
+            - the time elapsed when it was found,
+            - whether it was found during VND,shake or initial_optimization,
+            - and how many shakes had already occurred before.
     """
 
     def __init__(self, config: Configuration, derived: DerivedModelingData):
@@ -123,7 +129,7 @@ class GurobiAloneWrapper:
 
     @property
     def objective_value(self) -> int:
-        """The objective value of the model."""
+        """The objective value of the solution in the model."""
         return utilities.gurobi_round(self.model.ObjVal)
 
     def set_time_limit(self, time_limit: int | float) -> None:

@@ -1,6 +1,6 @@
 """A class mainly to construct, add, and remove branching constraints.
 
-It also allows to save key data on solutions and provides checks specific to local branching.
+It also provides checks relevant to the control flow inside local branching.
 """
 
 import itertools
@@ -10,32 +10,17 @@ import gurobipy
 import utilities
 from model_wrappers.model_wrapper import ModelWrapper
 from model_wrappers.thin_wrappers import Initializer
-from modeling.model_components import ModelComponents
 from solving_utilities.solution_reminder import SolutionReminder
 
 
 class LocalBrancher(ModelWrapper):
     """Offers commands to construct branching constraints and to add or remove them from the model.
 
-    Also provides checks specific to local branching.
+    Also provides checks relevant to the control flow inside local branching.
     """
 
-    def __init__(
-        self,
-        model_components: ModelComponents,
-        model: gurobipy.Model,
-        start_time: float,
-        solution_summaries: list[dict[str, int | float | str]],
-        sol_reminder: SolutionReminder,
-    ):
-        super().__init__(
-            model_components=model_components,
-            model=model,
-            start_time=start_time,
-            solution_summaries=solution_summaries,
-            sol_reminder=sol_reminder,
-        )
-
+    def __init__(self, initializer: Initializer):
+        super().__init__(initializer)
         self._branching_constraints: list[gurobipy.Constr] = []
         self._shake_constraints: tuple[gurobipy.Constr, gurobipy.Constr] | None = None
         self._counter = itertools.count()
@@ -46,7 +31,7 @@ class LocalBrancher(ModelWrapper):
         return int(min(self._model.ObjBound, gurobipy.GRB.MAXINT) + 1e-4)
 
     def solution_is_optimal(self) -> bool:
-        """Return whether it is optimal within the constraints of the last optimization."""
+        """Return whether it is optimal within the bounding constraint."""
         return self._model.Status == gurobipy.GRB.OPTIMAL
 
     def improvement_infeasible(self) -> bool:
@@ -104,7 +89,10 @@ class LocalBrancher(ModelWrapper):
         self._branching_constraints.clear()
 
     def add_shaking_constraints(self, k_cur: int, k_step: int) -> None:
-        """Only allow k_cur <= hamming distance <= k_cur + k_step to the best solution"""
+        """Only allow hamming distance h with k_cur <= h <= k_cur + k_step to the best solution.
+
+        The current solution has to point to the best solution when this method is called.
+        """
         lin_expr = self.branching_lin_expression()
         smaller_radius = self._model.addConstr(
             lin_expr >= k_cur,
@@ -116,22 +104,8 @@ class LocalBrancher(ModelWrapper):
         self._shake_constraints = smaller_radius, bigger_radius
 
     def remove_shaking_constraints(self) -> None:
-        """Remove constraints for the shake once shake is over."""
+        """Remove the shaking constraints once the shake is over."""
         if self._shake_constraints is None:
             raise TypeError("Cannot remove shake constraints if None.")
         self._model.remove(self._shake_constraints)
         self._shake_constraints = None
-
-    @classmethod
-    def get(
-        cls,
-        initializer: Initializer,
-    ) -> "LocalBrancher":
-        """Return an instance of LocalBrancher after the initial optimization."""
-        return cls(
-            model_components=initializer.model_components,
-            model=initializer.model,
-            sol_reminder=initializer.current_solution,
-            start_time=initializer.start_time,
-            solution_summaries=initializer.solution_summaries,
-        )

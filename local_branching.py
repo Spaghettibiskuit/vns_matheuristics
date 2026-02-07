@@ -111,7 +111,7 @@ def local_branching(
     initial_model.set_time_limit(time_limit)
     initial_model.optimize(patience=initial_patience)
 
-    model = LocalBrancher.get(initial_model)
+    model = LocalBrancher(initial_model)
 
     while time.time() - start_time < time_limit:
         rhs = rhs_min

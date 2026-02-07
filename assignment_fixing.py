@@ -91,7 +91,7 @@ def assignment_fixing(
     initial_model.set_time_limit(time_limit)
     initial_model.optimize(initial_patience)
 
-    model = AssignmentFixer.get(initial_model)
+    model = AssignmentFixer(initial_model)
     patience_manager = PatienceManager(
         min_num_zones,
         max_num_zones,
