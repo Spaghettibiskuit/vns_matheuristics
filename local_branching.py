@@ -99,9 +99,9 @@ def local_branching(
         penalty_unassigned=penalty_unassigned,
     )
     derived = DerivedModelingData.get(config=config)
-    max_num_assignment_changes = config.number_of_students * 2
+    max_num_assignment_var_changes = config.number_of_students * 2
     shake_min, shake_step, shake_max, rhs_min, rhs_step, rhs_max = (
-        round(percentage / 100 * max_num_assignment_changes)
+        round(percentage / 100 * max_num_assignment_var_changes)
         for percentage in (
             shake_min_perc,
             shake_step_perc,
