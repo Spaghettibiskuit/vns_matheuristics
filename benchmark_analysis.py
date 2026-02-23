@@ -96,6 +96,10 @@ def instance_summary_gurobi(
             runtime_best_objective = curr_runtime
         best_bound = min(best_bound, curr_bound)
 
+    best_bound = summaries[-1]["bound"]
+    if not isinstance(best_bound, int):
+        raise TypeError
+
     return InstanceSummaryGurobi(best_objective, best_bound, runtime_best_objective)
 
 
