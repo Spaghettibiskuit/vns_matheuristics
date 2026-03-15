@@ -1,3 +1,5 @@
+"""Code for running the benchmarks."""
+
 import dataclasses
 import enum
 import json
@@ -14,6 +16,8 @@ from model_wrappers.thin_wrappers import GurobiAloneWrapper
 
 
 class Subfolders(enum.StrEnum):
+    """The respective subfolders in the benchmark folder."""
+
     GUROBI = "gurobi"
     LOCAL_BRANCHING = "local_branching"
     VARIABLE_FIXING = "variable_fixing"
@@ -21,6 +25,8 @@ class Subfolders(enum.StrEnum):
 
 @dataclasses.dataclass
 class LocalBranchingParameters:
+    """The parameters for local branching which are not constant over all benchmarks."""
+
     time_limit: int | float = 60
     initial_patience: float | int = 0
     shake_patience: float | int = 0
@@ -31,6 +37,8 @@ class LocalBranchingParameters:
 
 @dataclasses.dataclass
 class AssignmentFixingParameters:
+    """The parameters for assignment fixing which are not constant over all benchmarks."""
+
     time_limit: int | float = 60
     min_num_zones: int = 4
     max_num_zones: int = 6
@@ -43,10 +51,12 @@ class AssignmentFixingParameters:
 
 @dataclasses.dataclass
 class GurobiAloneParameters:
+    """The parameters for Gurobi alone which are not constant over all benchmarks."""
+
     time_limit: int | float = 60
 
 
-def check_whether_instances_exist(instances: list[tuple[int, int, int]]):
+def _check_whether_instances_exist(instances: list[tuple[int, int, int]]):
     for instance in instances:
         path_projects, path_students = utilities.build_paths(*instance)
         if not path_projects.exists():
@@ -55,11 +65,11 @@ def check_whether_instances_exist(instances: list[tuple[int, int, int]]):
             raise ValueError(f"{path_students} does not exist")
 
 
-def get_path(method: str, name: str):
+def _get_path(method: str, name: str):
     return Path("benchmarks") / method / (name + ".json")
 
 
-def benchmark_instance_gurobi_alone(
+def _benchmark_instance_gurobi_alone(
     instance: tuple[int, int, int], parameters: GurobiAloneParameters
 ) -> list[dict[str, int | float]]:
     solution_access = gurobi_alone(*instance, **dataclasses.asdict(parameters))
@@ -68,7 +78,7 @@ def benchmark_instance_gurobi_alone(
     return solution_access.model.solution_summaries
 
 
-def benchmark_instance_local_branching(
+def _benchmark_instance_local_branching(
     instance: tuple[int, int, int], parameters: LocalBranchingParameters
 ) -> list[dict[str, int | float | str]]:
     solution_access = local_branching(*instance, **dataclasses.asdict(parameters))
@@ -77,7 +87,7 @@ def benchmark_instance_local_branching(
     return solution_access.model.solution_summaries
 
 
-def benchmark_instance_variable_fixing(
+def _benchmark_instance_variable_fixing(
     instance: tuple[int, int, int], parameters: AssignmentFixingParameters
 ) -> list[dict[str, int | float | str]]:
     solution_access = assignment_fixing(*instance, **dataclasses.asdict(parameters))
@@ -97,11 +107,12 @@ def benchmark(
     variable_fixing_parameters: AssignmentFixingParameters = AssignmentFixingParameters(),
     seed: int = 0,
 ):
-    check_whether_instances_exist(instances)
+    """Run the benchmarks and save the results in JSON."""
+    _check_whether_instances_exist(instances)
 
-    gurobi_path = get_path(Subfolders.GUROBI, name)
-    local_branching_path = get_path(Subfolders.LOCAL_BRANCHING, name)
-    variable_fixing_path = get_path(Subfolders.VARIABLE_FIXING, name)
+    gurobi_path = _get_path(Subfolders.GUROBI, name)
+    local_branching_path = _get_path(Subfolders.LOCAL_BRANCHING, name)
+    variable_fixing_path = _get_path(Subfolders.VARIABLE_FIXING, name)
 
     for path, will_be_written_to in (
         (gurobi_path, run_gurobi_alone),
@@ -121,7 +132,7 @@ def benchmark(
 
         if run_gurobi_alone:
             random.seed(seed)
-            gurobi_solutions[key] = benchmark_instance_gurobi_alone(
+            gurobi_solutions[key] = _benchmark_instance_gurobi_alone(
                 instance, gurobi_alone_parameters
             )
             gurobi_path.write_text(json.dumps(gurobi_solutions, indent=4), encoding="utf-8")
@@ -138,7 +149,7 @@ def benchmark(
             local_branching_parameters.step_shake_patience = patience / 10
             local_branching_parameters.step_optimization_patience = patience / 10
 
-            local_branching_solutions[key] = benchmark_instance_local_branching(
+            local_branching_solutions[key] = _benchmark_instance_local_branching(
                 instance, local_branching_parameters
             )
             local_branching_path.write_text(
@@ -162,7 +173,7 @@ def benchmark(
                 / 10
             )
 
-            variable_fixing_solutions[key] = benchmark_instance_variable_fixing(
+            variable_fixing_solutions[key] = _benchmark_instance_variable_fixing(
                 instance, variable_fixing_parameters
             )
             variable_fixing_path.write_text(
@@ -176,8 +187,8 @@ if __name__ == "__main__":
         run_gurobi_alone=False,
         run_local_branching=False,
         run_variable_fixing=True,
-        instances=[(i * 10, i * 100, j) for i in [10] for j in range(0, 1)],
-        gurobi_alone_parameters=GurobiAloneParameters(time_limit=60),
-        local_branching_parameters=LocalBranchingParameters(time_limit=180),
+        instances=[(i * 10, i * 100, j) for i in range(1, 11) for j in range(5)],
+        gurobi_alone_parameters=GurobiAloneParameters(time_limit=3_600),
+        local_branching_parameters=LocalBranchingParameters(time_limit=3_600),
         variable_fixing_parameters=AssignmentFixingParameters(time_limit=3_600),
     )

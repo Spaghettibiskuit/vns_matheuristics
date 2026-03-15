@@ -12,7 +12,7 @@ class SolutionInformationRetriever:
     """Retrieves information regarding the solution inside a Gurobi model.
 
     Attributes:
-        config: Contains all specifications that define an instance of the SSPAGDP.
+        config: Contains all specifications that define an instance of the SGPAP.
         derived: Iterables and hash-table backed containers that derive from config.
     """
 

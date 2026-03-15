@@ -1,18 +1,18 @@
 # 👨‍🎓 This is the Code for my Thesis on Matheuristics
 
-Title: ***Matheuristics Within the Variable Neighborhood Search Framework: Applied on the Simultaneous Student-Project Allocation and Group Design Problem***
+Title: ***Matheuristics Within the Variable Neighborhood Search Framework: Applied on the Student-Group-Project Allocation Problem***
 
-Two heuristics were developed for the Simultaneous Student-Project Allocation and Group Design Problem (SSPAGDP). They are matheuristics since they are model-based. Both pass subproblems to the state-of-the art solver Gurobi. The point of reference for the benchmarks was Gurobi when run without any further algorithm. The heuristic based on variable fixing showed superior performance in the early stages of optimization.
+Two heuristics were developed for the Student-Group-Project Allocation Problem (SGPAP). They are matheuristics since they are model-based. Both pass subproblems to the state-of-the art solver Gurobi. The point of reference for the benchmarks was Gurobi when run without any further algorithm. The heuristic based on variable fixing showed superior performance in the early stages of optimization.
 
-## 🤔 What is the SSPAGDP about?
+## 🤔 What is the SGPAP about?
 Projects that have rather general topics are offered to students e.g Operations Management or Marketing. Within a project groups of students work on specific topics e.g. "The Effect of X on Marketing Strategies in Industry Y". Those offering the project supervise the groups in their project work.
 
-In the SSPAGDP a weighted sum of total satisfaction with the assignment of students to groups in projects is maximized. The students state their preference for each project and specify students they would like to work with. Those responsible for the projects state preferences and constraints regarding the number of groups they supervise and the size of those groups.
+In the SGPAP a weighted sum of total satisfaction with the assignment of students to groups in projects is maximized. The students state their preference for each project and specify students they would like to work with. Those responsible for the projects state preferences and constraints regarding the number of groups they supervise and the size of those groups.
 
 The two heuristics that rely on Gurobi and Gurobi on its own then assign students to groups in projects so as to maximize the weighted sum of total satisfaction. For more details, **base_model_builder.py** in the **modeling** folder is a good starting point.
 
 ## ⛏️ What was done?
-First, an existent Variable Neighborhood Search (VNS) based heuristic for 0-1 MIPs called VNS with Local Branching was adapted so that it is viable for the SSPAGDP (see **local_branching.py**). Since the results were not much if at all better than running Gurobi alone (see **gurobi_alone.py**), a new heuristic was developed. In it parts of the variables are temporarily fixated (variable fixing). More specifically part of the assignment variables are fixed which state whether student x is in group y of project z (see heuristic at **assignment_fixing.py**). The performance of the variable fixing heuristic gets significantly better than Gurobi alone in the early stages of the optimization, as the instances grow larger.
+First, an existent Variable Neighborhood Search (VNS) based heuristic for 0-1 MIPs called VNS with Local Branching was adapted so that it is viable for the SGPAP (see **local_branching.py**). Since the results were not much if at all better than running Gurobi alone (see **gurobi_alone.py**), a new heuristic was developed. In it parts of the variables are temporarily fixated (variable fixing). More specifically part of the assignment variables are fixed which state whether student x is in group y of project z (see heuristic at **assignment_fixing.py**). The performance of the variable fixing heuristic gets significantly better than Gurobi alone in the early stages of the optimization, as the instances grow larger.
 
 Instances were created randomly within parameters that seemed reasonable. Also, some measures were taken to imitate real-life dynamics among students, albeit rudimentarily. See the modules in the folder **instance_creation** for more.
 

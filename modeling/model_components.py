@@ -1,4 +1,4 @@
-"""Dataclasses that provide references to the components of an instance of the SSPAGDP."""
+"""Dataclasses that provide references to the components of an instance of the SGPAP."""
 
 import dataclasses
 
@@ -44,7 +44,7 @@ class InitialConstraints:
 
 @dataclasses.dataclass(frozen=True)
 class ModelComponents:
-    """Access to the components of the model of an instance of the SSPAGDP"""
+    """Access to the components of the model of an instance of the SGPAP"""
 
     variables: Variables
     lin_expressions: LinExpressions

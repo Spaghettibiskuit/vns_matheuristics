@@ -1,4 +1,4 @@
-"""A class to build the base model for an instance of the SSPAGDP and get the components of it.
+"""A class to build the base model for an instance of the SGPAP and get the components of it.
 
 Usage example:
 model_components, model = BaseModelBuilder(config, derived).get_base_model()
@@ -20,7 +20,7 @@ from modeling.model_components import (
 
 
 class BaseModelBuilder:
-    """Build the base model for an instance of the SSPAGDP and get the components of it."""
+    """Build the base model for an instance of the SGPAP and get the components of it."""
 
     def __init__(self, config: Configuration, derived: DerivedModelingData):
         self._penalty_unassigned = config.penalty_unassigned

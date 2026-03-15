@@ -1,3 +1,5 @@
+"""Code"""
+
 import dataclasses
 import json
 from pathlib import Path
@@ -8,18 +10,22 @@ from gurobipy import GRB
 
 @dataclasses.dataclass
 class InstanceSummaryHeuristic:
+    """The information that is considered regarding a solution found with a heuristic"""
+
     best_objective: int
     runtime: float
 
 
 @dataclasses.dataclass
 class InstanceSummaryGurobi:
+    """The information that is considered regarding a solution found with Gurobi"""
+
     best_objective: int
     best_bound: int
     runtime: float
 
 
-def instance_summary_heuristic(
+def _instance_summary_heuristic(
     results: dict[str, list[dict[str, int | float | str]]],
     num_projects: int,
     num_students: int,
@@ -54,7 +60,7 @@ def instance_summary_heuristic(
     return InstanceSummaryHeuristic(best_objective, runtime_best_objective)
 
 
-def instance_summary_gurobi(
+def _instance_summary_gurobi(
     results: dict[str, list[dict[str, int | float | str]]],
     num_projects: int,
     num_students: int,
@@ -112,20 +118,33 @@ def granular_all_methods(
     lb_path: Path,
     vf_path: Path,
 ) -> tuple[pandas.DataFrame, pandas.DataFrame, pandas.DataFrame]:
+    """Return the granular results for all solution methods for instances of a given size.
+
+    The size is determined by the number of projects and number of students.
+
+    Returns:
+        - The objective value of the best solution each solution method found within the time limit
+            for each of the instances
+        - The time it took to find those best found solutions
+        - The gap of each of those objective values to the lowest upper bound proven by Gurobi at the
+            end of the optimization (not at the time limit)
+    """
     gurobi_res = json.loads(gurobi_path.read_text("utf-8"))
     lb_res = json.loads(lb_path.read_text("utf-8"))
     vf_res = json.loads(vf_path.read_text("utf-8"))
 
     gurobi_summaries = [
-        instance_summary_gurobi(gurobi_res, num_projects, num_students, instance_index, time_limit)
+        _instance_summary_gurobi(
+            gurobi_res, num_projects, num_students, instance_index, time_limit
+        )
         for instance_index in instance_indexes
     ]
     lb_summaries = [
-        instance_summary_heuristic(lb_res, num_projects, num_students, instance_index, time_limit)
+        _instance_summary_heuristic(lb_res, num_projects, num_students, instance_index, time_limit)
         for instance_index in instance_indexes
     ]
     vf_summaries = [
-        instance_summary_heuristic(vf_res, num_projects, num_students, instance_index, time_limit)
+        _instance_summary_heuristic(vf_res, num_projects, num_students, instance_index, time_limit)
         for instance_index in instance_indexes
     ]
     bests_grb = [summary.best_objective for summary in gurobi_summaries]

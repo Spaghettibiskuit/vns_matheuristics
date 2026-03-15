@@ -1,6 +1,6 @@
-"""Generate and save instances of the SSPAGDP.
+"""Generate and save instances of the SGPAP.
 
-SSPAGDP := Simultaneous Student-Project Allocation and Group Design Problem
+SGPAP := Student-Group-Project Allocation Problem
 """
 
 import json

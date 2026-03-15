@@ -1,6 +1,6 @@
-"""The assignment-based local branching algorithm for the SSPAGDP.
+"""The assignment-based local branching algorithm for the SGPAP.
 
-SSPAGDP := Simultaneous Student-Project Allocation and Group Design Problem
+SGPAP := Student-Group-Project Allocation Problem
 """
 
 import random

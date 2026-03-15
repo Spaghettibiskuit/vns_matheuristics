@@ -54,7 +54,7 @@ def build_paths(
 def load_instance(
     num_projects: int, num_students: int, instance_index: int
 ) -> tuple[pandas.DataFrame, pandas.DataFrame]:
-    """Return the specified instance of the SSPAGDP."""
+    """Return the specified instance of the SGPAP."""
     path_projects, path_students = build_paths(num_projects, num_students, instance_index)
     projects: pandas.DataFrame = pandas.read_csv(path_projects)  # type: ignore
     students: pandas.DataFrame = pandas.read_csv(path_students)  # type: ignore

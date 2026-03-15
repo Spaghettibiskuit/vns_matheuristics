@@ -1,6 +1,6 @@
-"""The assignment fixing algorithm for the SSPAGDP.
+"""The assignment fixing algorithm for the SGPAP.
 
-SSPAGDP := Simultaneous Student-Project Allocation and Group Design Problem
+SGPAP := Student-Group-Project Allocation Problem
 """
 
 import itertools

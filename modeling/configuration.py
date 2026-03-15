@@ -1,4 +1,4 @@
-"""A class that contains all specifications that define an instance of the SSPAGDP."""
+"""A class that contains all specifications that define an instance of the SGPAP."""
 
 import dataclasses
 
@@ -9,7 +9,7 @@ import utilities
 
 @dataclasses.dataclass(frozen=True)
 class Configuration:
-    """Contains all specifications that define an instance of the SSPAGDP.
+    """Contains all specifications that define an instance of the SGPAP.
 
     Attributes:
         number_of_projects: The number of projects.

@@ -1,6 +1,6 @@
-"""Solving instances of the SSPAGDP with Gurobi alone outside further algorithms.
+"""Solving instances of the SGPAP with Gurobi alone outside further algorithms.
 
-SSPAGDP := Simultaneous Student-Project Allocation and Group Design Problem
+SGPAP := Student-Group-Project Allocation Problem
 """
 
 import random
